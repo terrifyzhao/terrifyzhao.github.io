@@ -9,4 +9,28 @@ tags: 机器学习 神经网络
 ---
 
 
-Church-key blog messenger bag, selfies umami man braid mlkshk. Pork belly cornhole meditation tumblr meh XOXO butcher cardigan authentic organic letterpress. Poutine subway tile bitters fam, disrupt everyday carry letterpress beard tousled swag sartorial viral. Retro af 3 wolf moon heirloom, pork belly man bun DIY chillwave. Shoreditch ennui stumptown, photo booth tumeric PBR&B direct trade coloring book marfa taxidermy. Gentrify brunch typewriter woke freegan. Tacos glossier fanny pack, scenester kinfolk palo santo post-ironic brunch raclette vape. Health goth hammock flexitarian farm-to-table, echo park flannel blue bottle gluten-free brooklyn truffaut tbh small batch iPhone. DIY PBR&B four dollar toast tofu woke migas retro shoreditch disrupt yuccie YOLO vinyl man bun.
+## 1、为什么需要循环神经网络
+
+普通的神经网络只能对单一时刻的数据就行处理，但是，当任务需要处理序列信息时，例如一段文字，音频，视频，即前面的输入与后面的输入是有关联的。
+
+举个例子：现在我们要对“我爱你”与“这就是爱”中的“爱”字进行词性分析，在不同的语境下，爱的词性是不同的，在前一句中是动词，后一句中是名词，如果用普通的神经网络进行识别，是无法准确判断的。在词性判断中，前一个词会对后一个词的词性判断产生很大的影响，在“这就是爱”这种文字中，“是“是一个动词，那么“爱”是名词的概率就会大大提高，因为动词后面一般接名词，而动词后接动词就很少见。
+
+显然，普通的神经网路无法建立前后关系，为了能更好的处理序列信息，循环神经网络就诞生了。
+
+## 2、循环神经网络结构
+
+RNN听名字，看似很复杂，但相对于CNN来说，结构反而简单许多。
+
+我们先从一个简单的神经网络说起
+    <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/cnn_1.jpg" width = "100" height = "210" alt="图片名称"/>
+
+这是一个最简单的神经网络模型，x为输入，h是隐藏层，y是输出层，U与V是我们需要学习的参数。公式如下：
+隐藏层:
+`h = f(x*U+bias)`
+
+输出层:
+`y = f(h*V+bias2)`
+
+
+
+
