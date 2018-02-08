@@ -1,37 +1,91 @@
-title: Welcome to AI World
-description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-permalink: ':title/'
-baseurl: / # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-site-twitter: #if your site has a twitter account, enter it here
+# Site settings 配置站点
+title: 'Welcome to AI World'
+description: '个人AI技术博客'
+keyword: 'AI 机器学习 神经网络'
+url: '' # your host
 
-# Author Settings
-author: Joe # add your name
-author-img: photo.jpeg # add your photo
-about-author: 勿忘初心 方得始终 # add description
-twitter: # add your Twitter handle
-facebook: # add your Facebook handle
-github: terrifyzhao # add your Github handle
-linkedin: 九州-赵-742276152/
-email: zjiuz@qq.com
+# if you don't need baseurl, you should leave this value blank.
+baseurl: ''
 
-# Disqus
-discus-identifier: mr-brown # add your discus identifier
+# Navigation links
+nav:
+  home: '/'
+  tags: '/tags.html'
 
-# Tracker
-analytics: # Google Analytics
+# Footer
+footer:
+  since: 2017
 
-# Build Settings
+# Author 配置博主信息
+author: 'Joe'
+nickname: ''
+bio: '移动客户端开发者，热爱AI技术'
+avatar: '/assets/img/profile.jpeg'
+
+# Search
+search: true
+
+# Night mode
+nightMode: true
+
+# Comments
+disqus: false
+disqus_url: 'https://liaokeyu.disqus.com/embed.js'
+
+livere: true
+livere_uid: MTAyMC8yODEwMC80Njcz
+
+# Reward 赞赏功能 by Ray-Eldath
+reward:
+  enable: true
+  reward_comment: '真诚赞赏 手有余香'
+  wechatpay: 'http://ray-eldath.image.alimmdn.com/basic/wechatpay.jpg'
+  alipay: 'http://ray-eldath.image.alimmdn.com/basic/alipay.jpg'
+
+# b2t 回到顶部 by Ray-Eldath
+b2t: true
+
+# Share
+social-share: true
+social-share-items: ['wechat', 'weibo', 'douban', 'twitter']
+
+# theme color 主题皮肤
+theme-color: 'default'  # pink or default
+
+cover: '/assets/img/hero.jpg'
+
+# Post header background patterns (when the post no cover): circuitBoard, overlappingCircles, food, glamorous, ticTacToe, seaOfClouds
+postPatterns: 'circuitBoard'
+
+# SNS settings 配置社交网站url: email, weibo, zhihu, twitter, instagram, juejin, github, douban, facebook, dribble, uicn, jianshu, medium, linkedin
+sns:
+  email: 'mailto:ray.eldath@aol.com'
+  weibo: '//weibo.com/lovecolcol'
+  juejin: '//juejin.im/user/57a6f434165abd006159b4cc'
+  instagram: '//www.instagram.com/steveliaocn'
+  github: '//github.com/kaeyleo'
+
+# Tags 设置标签
+recommend-tags: true # whether or not display recommend-tags on the sidebar
+recommend-condition-size: 12 # a tag will be recommended if the size of it is more than this value
+
+# Build settings
+paginate: 6
+paginate_path: 'page:num'
+exclude: ['node_modules', 'dev', 'package.json', 'gulpfile.js', '.gitignore', 'README.md']
+
+# Markdown
 markdown: kramdown
-plugins:
-  - jekyll-sitemap
-  - jekyll-paginate
-  - jemoji
+highlighter: rouge
+kramdown:
+  input: GFM
 
-paginate: 8
-paginate_path: "/page/:num"
+# RSS
+RSS: false
 
-exclude: ["node_modules", "gulpfile.js", "package.json", "yarn.lock"]
+# Permalink
+# See: https://github.com/kaeyleo/jekyll-theme-H2O/issues/35
+permalink: /:year/:month/:day/:title.html
+
+# Plugins
+plugins: [jekyll-paginate]
