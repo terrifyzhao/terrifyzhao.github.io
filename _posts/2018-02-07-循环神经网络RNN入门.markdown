@@ -2,9 +2,9 @@
 layout: post
 title: '循环神经网络RNN入门'
 subtitle: 'RNN基础讲解'
-date: 2017-02-07
+date: 2018-02-07
 categories: 神经网络
-cover: '/assets/img/2018-02-07-循环神经网络RNN入门/rnn_copy.png'
+cover: ''
 tags: 机器学习 神经网络
 ---
 
