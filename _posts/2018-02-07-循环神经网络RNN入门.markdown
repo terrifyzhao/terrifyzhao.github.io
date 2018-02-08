@@ -1,7 +1,7 @@
 ---
 layout: post
-title: '环神经网络RNN入门'
-subtitle: '环神经网络RNN入门'
+title: '循环神经网络RNN入门'
+subtitle: ''
 date: 2017-02-07
 categories: 神经网络
 cover: '/assets/img/rnn_copy.png'
@@ -22,14 +22,24 @@ tags: 机器学习 神经网络
 RNN听名字，看似很复杂，但相对于CNN来说，结构反而简单许多。
 
 我们先从一个简单的神经网络说起
-    <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/cnn_1.jpg" width = "100" height = "210" alt="图片名称"/>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/cnn_1.jpg" width = "100" height = "210" alt="图片名称"/>
 
 这是一个最简单的神经网络模型，x为输入，h是隐藏层，y是输出层，U与V是我们需要学习的参数。公式如下：
+
 隐藏层:
-`h = f(x*U+bias)`
+
+```
+h = f(x*U+bias)
+```
 
 输出层:
-`y = f(h*V+bias2)`
+
+```
+y = f(h*V+bias2)
+```
+
+我们再来看看RNN的结构
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/cnn_1.jpg" width = "100" height = "210" alt="图片名称"/>
 
 
 
