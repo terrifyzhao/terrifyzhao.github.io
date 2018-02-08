@@ -46,6 +46,12 @@ y = 100000x<sub>1</sub> + 500x<sub>2</sub>
 
 x1的轻微变化就会对结果产生巨大的影响，其次，在BP过程中，x2的系数相对较小，收敛过程就会变慢。如果我们把系数都变为同一个范围，那么x1与x2对结果的影响就是一样的，收敛速度就会变快。
 
+未归一化：
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization1.jpg" with=200, height=200>
+
+归一化：
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization2.jpg" with=200, height=200>
+
 ## Batch Normalization算法讲解
 
 
