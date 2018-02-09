@@ -113,36 +113,36 @@
 
 <p>未归一化：</p>
 
-<p>&lt;img src=”https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization1.jpg” with=”200”, height=”200”/&gt;</p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization1.jpg" width="200" height="200" /></p>
 
 <p>归一化：</p>
 
-<p>&lt;img src=”https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization2.jpg” with=”200”, height=”200”/&gt;</p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization2.jpg" width="200" height="200" /></p>
 
 <h2 id="batch-normalization算法讲解">Batch Normalization算法讲解</h2>
 <p>在神经网络中，我们会在输入层对数据进行归一化，Batch Normalization则是在每一层输出的时候插入了一个归一化层，将输入数据的归一化为均值为0,方差为1的分布</p>
 
-<p>&lt;img src=”https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn1.jpg” with=100, height=60/&gt;</p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn1.jpg" width="200" height="60" /></p>
 
 <p>其中，x<sup>(k)</sup>表示输入数据的第k维，E[x<sup>(k)</sup>]表示该维的平均值，√Var[x<sup>(k)</sup>]表示标准差。归一化之后把数据送入下一层。</p>
 
 <p>但是这样是会影响到本层网络所学习到的特征的。打个比方，比如我网络中间某一层学习到特征数据本身就分布在S型激活函数的两侧，你强制把它给我归一化处理、标准差也限制在了1，把数据变换成分布于s函数的中间部分，这样就相当于我这一层网络所学习到的特征分布被你搞坏了，这可怎么办？BN还有另一招：变换重构，引入了可学习参数γ、β，这就是算法关键之处：</p>
 
-<p>&lt;img src=”https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn2.jpg” with=100, height=50/&gt;</p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn2.jpg" width="300" height="60" /></p>
 
 <p>每一个神经元都对应着xy，当</p>
 
-<p>&lt;img src=”https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn3.jpg” with=100, height=50/&gt;</p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn3.jpg" width="300" height="50" /></p>
 
 <p>时是可以恢复出原始的某一层所学到的特征的。因此我们引入了这个可学习重构参数γ、β，让我们的网络可以学习恢复出原始网络所要学习的特征分布。这里的γ、β我们可以理解为w和b，也是需要训练出来的。最后我们看下总的推导公式。</p>
 
-<p>&lt;img src=”https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/batch_normalization_cover.jpg” with=300, height=300/&gt;</p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/batch_normalization_cover.jpg" width="420" height="350" /></p>
 
 <p>求x时，公式中的ε是一个及其小的数，这里引入是为了防止分母为0。m指的是mini-batch size。</p>
 
 <p>需要注意的是，上述的计算方法用于在训练过程中。在测试时，所使用的均值和标准差是整个训练集的均值和标准差. 由于训练集的数量较大，均值和标准差的计算量是很大的，所以一般会使用移动平均法来计算。以下是整一个BN算法。</p>
 
-<p>&lt;img src=”https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn4.jpg” with=300, height=500/&gt;</p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn4.jpg" width="400" height="500" /></p>
 
 <p>在神经网络训练时遇到收敛速度很慢，或梯度爆炸等无法训练的状况时可以尝试BN来解决。另外，在一般使用情况下也可以加入BN来加快训练速度，提高模型精度。</p>
 
