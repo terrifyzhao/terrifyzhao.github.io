@@ -48,11 +48,11 @@ x1的轻微变化就会对结果产生巨大的影响，其次，在BP过程中�
 
 未归一化：
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization1.jpg" width = "200" height="200"/>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization1.jpg" width = "230" height="200"/>
 
 归一化：
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization2.jpg" width="200" height="200"/>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/normalization2.jpg" width="220" height="200"/>
 
 ## Batch Normalization算法讲解
 在神经网络中，我们会在输入层对数据进行归一化，Batch Normalization则是在每一层输出的时候插入了一个归一化层，将输入数据的归一化为均值为0,方差为1的分布
