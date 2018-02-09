@@ -73,9 +73,9 @@ x1的轻微变化就会对结果产生巨大的影响，其次，在BP过程中�
 
 求x时，公式中的ε是一个及其小的数，这里引入是为了防止分母为0。m指的是mini-batch size。
 
-需要注意的是，上述的计算方法用于在训练过程中。在测试时，所使用的均值和标准差是整个训练集的均值和标准差. 由于训练集的数量较大，均值和标准差的计算量是很大的，所以一般会使用移动平均法来计算.以下是整一个BN算法。
+需要注意的是，上述的计算方法用于在训练过程中。在测试时，所使用的均值和标准差是整个训练集的均值和标准差. 由于训练集的数量较大，均值和标准差的计算量是很大的，所以一般会使用移动平均法来计算。以下是整一个BN算法。
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/batch_normalization_cover.jpg" with=300, height=300>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/bn4.jpg" with=300, height=500>
 
 在神经网络训练时遇到收敛速度很慢，或梯度爆炸等无法训练的状况时可以尝试BN来解决。另外，在一般使用情况下也可以加入BN来加快训练速度，提高模型精度。
 
