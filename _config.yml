@@ -33,14 +33,14 @@ disqus: false
 disqus_url: 'https://liaokeyu.disqus.com/embed.js'
 
 livere: true
-livere_uid: MTAyMC8yODEwMC80Njcz
+livere_uid: MTAyMC8zNDAzNi8xMDU3NA
 
 # Reward 赞赏功能 by Ray-Eldath
 reward:
   enable: true
-  reward_comment: '真诚赞赏 手有余香'
-  wechatpay: 'http://ray-eldath.image.alimmdn.com/basic/wechatpay.jpg'
-  alipay: 'http://ray-eldath.image.alimmdn.com/basic/alipay.jpg'
+  reward_comment: '真诚赞赏 手留余香'
+  wechatpay: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/wechat.jpeg'
+  # alipay: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/alipay.jpeg'
 
 # b2t 回到顶部 by Ray-Eldath
 b2t: true
@@ -59,11 +59,11 @@ postPatterns: 'circuitBoard'
 
 # SNS settings 配置社交网站url: email, weibo, zhihu, twitter, instagram, juejin, github, douban, facebook, dribble, uicn, jianshu, medium, linkedin
 sns:
-  email: 'mailto:ray.eldath@aol.com'
-  weibo: '//weibo.com/lovecolcol'
-  juejin: '//juejin.im/user/57a6f434165abd006159b4cc'
-  instagram: '//www.instagram.com/steveliaocn'
-  github: '//github.com/kaeyleo'
+  email: 'mailto:zjiuzhou@gmail.com'
+  weibo: '//weibo.com/u/2265751480?refer_flag=1001030101_'
+  linkedin: '//www.linkedin.com/in/%E4%B9%9D%E5%B7%9E-%E8%B5%B5-742276152/'
+  instagram: '//www.instagram.com/joe.zhao520/'
+  github: '//github.com/terrifyzhao'
 
 # Tags 设置标签
 recommend-tags: true # whether or not display recommend-tags on the sidebar
