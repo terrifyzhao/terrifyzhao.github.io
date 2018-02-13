@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Batch Normalization浅析'
-subtitle: ''
+subtitle: 'BN算法讲解'
 date: 2018-02-08
 categories: 神经网络
 cover: ''

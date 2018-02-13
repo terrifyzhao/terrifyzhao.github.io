@@ -1,13 +1,15 @@
 ---
 layout: post
 title: 'LSTM网络'
-subtitle: ''
+subtitle: 'LSTM网络讲解'
 date: 2018-02-13
 categories: 神经网络
 cover: ''
-tags: 神经网络
+tags: 神经网络 RNN
 ---
 
 
-## LSTM
+## LSTM 网络
+长短期记忆网络（Long Short Term）通常也被简称为LSTM，是一种特殊类型的 RNN，能够学习长期的依赖关系。LSTM 通过刻意的设计来避免长期依赖问题。记住长期的信息在实践中是 LSTM 的默认行为，而非需要付出很大代价才能获得的能力！
+所有 RNN 都具有一种重复神经网络模块的链式的形式。在标准的 RNN 中，这个重复的模块只有一个非常简单的结构，例如一个 tanh 层。
 
