@@ -1,11 +1,11 @@
 ---
 layout: post
 title: 'Batch Normalization浅析'
-subtitle: 'Batch Normalization算法讲解'
+subtitle: ''
 date: 2018-02-08
 categories: 神经网络
 cover: ''
-tags: 机器学习 神经网络 trick
+tags: 神经网络 trick
 postPatterns: 'overlappingCircles'
 ---
 

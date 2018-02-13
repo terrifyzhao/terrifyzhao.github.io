@@ -1,11 +1,11 @@
 ---
 layout: post
 title: '循环神经网络RNN进阶'
-subtitle: 'RNN进阶讲解'
+subtitle: ''
 date: 2018-02-13
 categories: 神经网络
 cover: ''
-tags: 机器学习 神经网络
+tags: 神经网络
 ---
 
 
