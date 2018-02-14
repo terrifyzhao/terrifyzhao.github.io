@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '循环神经网络RNN进阶'
+title: '循环神经网络RNN(下)'
 subtitle: 'RNN BP算法讲解'
 date: 2018-02-13
 categories: 神经网络
@@ -11,7 +11,7 @@ tags: 神经网络 RNN
 
 ## 1、前言
 
-在上一篇[循环神经网络RNN入门](https://terrifyzhao.github.io/2018/02/07/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8.html)中，我们简单讲解了RNN的运用背景与结构，这一节，我们会继续深入讲解RNN，包括RNN的BP与不同类型的RNN
+在上一篇[循环神经网络RNN(上)）](https://terrifyzhao.github.io/2018/02/07/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8.html)中，我们简单讲解了RNN的运用背景与结构，这一节，我们会继续深入讲解RNN，包括RNN的BP与不同类型的RNN
 
 
 ## 2、RNN的反向传播BPTT 

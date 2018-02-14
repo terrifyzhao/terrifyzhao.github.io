@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>循环神经网络RNN入门 - Welcome to AI World</title>
+    <title>循环神经网络RNN(上) - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="循环神经网络RNN入门">
+    <meta name="description" content="循环神经网络RNN(上)">
     <meta name="keywords"  content="神经网络, RNN">
     <!-- Open Graph -->
-    <meta property="og:title" content="循环神经网络RNN入门 - Welcome to AI World">
+    <meta property="og:title" content="循环神经网络RNN(上) - Welcome to AI World">
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://localhost:4000/2018/02/07/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8.html">
     <meta property="og:description" content="个人AI技术博客">
@@ -55,7 +55,7 @@
           
         
       </div>
-      <h1>循环神经网络RNN入门</h1>
+      <h1>循环神经网络RNN(上)</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
         <time class="post-meta-item" datetime="18-02-07"><i class="iconfont icon-date"></i>07 Feb 2018</time>
@@ -88,37 +88,41 @@
 <p>我们先从一个简单的浅层神经网络说起
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_1.jpg" width="100" height="210" alt="图片名称" /></p>
 
-<p>这是一个最简单的神经网络模型，x为输入，h是隐藏层，y是输出层，U与V是我们需要学习的参数。公式如下：</p>
+<p>这是一个最简单的神经网络模型， $x$ 为输入，$h$是隐藏层，$y$是输出层，$U$与$V$是我们需要学习的参数。公式如下：</p>
 
 <p>隐藏层:</p>
 
-<p>h = f(x*U+bias)</p>
+<script type="math/tex; mode=display">h=f(x*U + b)</script>
 
 <p>输出层:</p>
 
-<p>y = f(h*V+bias2)</p>
+<script type="math/tex; mode=display">y = f(h*V+c)</script>
 
-<p>我们再来看看RNN的结构
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_2.jpg" width="100" height="210" alt="图片名称" />
-RNN的结构和浅层神经网络很类似，唯一的区别是在隐藏层，多了一个递归的圈，同时这个圈带着一个W参数，接下来我们把该圈展开看一看
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_3.jpg" width="600" height="210" alt="图片名称" />
-展开后可以看到隐藏层h的输入变为了2个部分，我们以中间的h<sub>t</sub>为例，此时公式为:</p>
+<p>我们再来看看RNN的结构</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_2.jpg" width="100" height="210" /></p>
+
+<p>RNN的结构和浅层神经网络很类似，唯一的区别是在隐藏层，多了一个递归的圈，同时这个圈带着一个$W$参数，接下来我们把该圈展开看一看</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_3.jpg" width="600" height="210" /></p>
+
+<p>展开后可以看到隐藏层$h$的输入变为了2个部分，我们以中间的$h_t$为例，此时公式为:</p>
 
 <p>隐藏层:</p>
 
-<p>h<sub>t</sub> = f(U * x<sub>t</sub> + W * h<sub>t-1</sub> + bias1)</p>
+<script type="math/tex; mode=display">h_t = f(U * x_t + W * h_t + b)</script>
 
 <p>输出层:</p>
 
-<p>y<sub>t</sub> = f(V * h<sub>t</sub> + bias2)</p>
+<script type="math/tex; mode=display">y_t = f(V * h_t + c)</script>
 
-<p>是不是和浅层神经网络很像，只是在计算隐藏层的时候多了一项，隐藏层的值不仅仅取决于当前这次的输入x，还取决于上一次隐藏层的值h。权重矩阵W就是隐藏层上一次的值作为这一次的输入的权重。</p>
+<p>是不是和浅层神经网络很像，只是在计算隐藏层的时候多了一项，隐藏层的值不仅仅取决于当前这次的输入$x$，还取决于上一次隐藏层的值$h$。权重矩阵$W$就是隐藏层上一次的值作为这一次的输入的权重。</p>
 
 <h2 id="3总结">3、总结</h2>
 <p>循环神经网络（recurrent neural network，RNN）源自于1982年由Saratha Sathasivam提出的霍普菲尔德网络。霍普菲尔德网络因为实现困难，在其提出的时候并且没有被合适地应用。该网络结构也于1986年后被全连接神经网络以及一些传统的机器学习算法所取代。然而，传统的机器学习算法非常依赖于人工提取的特征，使得基于传统机器学习的图像识别、语音识别以及自然语言处理等问题存在特征提取的瓶颈。而基于全连接神经网络的方法也存在参数太多、无法利用数据中时间序列信息等问题。随着更加有效的循环神经网络结构被不断提出，循环神经网络挖掘数据中的时序信息以及语义信息的深度表达能力被充分利用，并在语音识别、语言模型、机器翻译以及时序分析等方面实现了突破。</p>
 
-<p>好了，到这里大概讲解了RNN最基本的几个知识点，能够帮助大家直观的感受RNN和了解为什么需要RNN。下一篇博客<a href="https://terrifyzhao.github.io/2018/02/13/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6.html">循环神经网络RNN进阶
-</a>将会为大家介绍RNN的进阶内容。</p>
+<p>好了，到这里大概讲解了RNN最基本的几个知识点，能够帮助大家直观的感受RNN和了解为什么需要RNN。下一篇博客<a href="https://terrifyzhao.github.io/2018/02/13/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6.html">循环神经网络RNN(下)
+</a>将会为大家介绍RNN的更多内容。</p>
 
 
     </article>
@@ -414,6 +418,16 @@ refer to:
   <noscript>为正常使用评论功能请激活JavaScript。</noscript>
   <script src="/assets/js/prism.js"></script>
   <script src="/assets/js/index.min.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+      }
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
 </body>
 
 </html>
