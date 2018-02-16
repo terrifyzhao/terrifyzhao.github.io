@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>循环神经网络RNN(下) - Welcome to AI World</title>
+    <title>动量梯度下降法Momentum - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="循环神经网络RNN(下)">
-    <meta name="keywords"  content="神经网络, RNN">
+    <meta name="description" content="动量梯度下降法Momentum">
+    <meta name="keywords"  content="神经网络, trick">
     <!-- Open Graph -->
-    <meta property="og:title" content="循环神经网络RNN(下) - Welcome to AI World">
+    <meta property="og:title" content="动量梯度下降法Momentum - Welcome to AI World">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/02/13/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6.html">
+    <meta property="og:url" content="http://localhost:4000/2018/02/14/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html">
     <meta property="og:description" content="个人AI技术博客">
     <meta property="og:site_name" content="Welcome to AI World">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -51,14 +51,14 @@
           
             <a href="http://localhost:4000/tags#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C" class="post-tag">神经网络</a>
           
-            <a href="http://localhost:4000/tags#RNN" class="post-tag">RNN</a>
+            <a href="http://localhost:4000/tags#trick" class="post-tag">trick</a>
           
         
       </div>
-      <h1>循环神经网络RNN(下)</h1>
+      <h1>动量梯度下降法Momentum</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
-        <time class="post-meta-item" datetime="18-02-13"><i class="iconfont icon-date"></i>13 Feb 2018</time>
+        <time class="post-meta-item" datetime="18-02-14"><i class="iconfont icon-date"></i>14 Feb 2018</time>
       </div>
     </div>
     
@@ -69,69 +69,12 @@
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">RNN BP算法讲解</h2>
+    <h2 class="post-subtitle">Momentum算法讲解</h2>
     
 
     <article class="markdown-body">
-      <h2 id="1前言">1、前言</h2>
-
-<p>在上一篇<a href="https://terrifyzhao.github.io/2018/02/07/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8.html">循环神经网络RNN(上)）</a>中，我们简单讲解了RNN的运用背景与结构，这一节，我们会继续深入讲解RNN，包括RNN的BP与不同类型的RNN</p>
-
-<h2 id="2rnn的反向传播bptt">2、RNN的反向传播BPTT</h2>
-
-<p>RNN反向传播算法的思路和DNN是一样的，即通过梯度下降法一轮轮的迭代，得到合适的RNN模型参数。由于我们是基于时间反向传播，所以RNN的反向传播有一个很炫酷的名字BPTT(back-propagation through time)。当然这里的BPTT和DNN也有很大的不同点，即这里所有的参数在序列的各个位置是共享的，反向传播时我们更新的是相同的参数。</p>
-
-<p>首先我们先回顾下前向传播，隐藏层为：</p>
-
-<script type="math/tex; mode=display">{h^{(t)}} = \sigma(Ux^{(t)}+Wh^{(t-1)}+b)</script>
-
-<p>其中$\sigma$为RNN的激活函数，一般为$tanh$, $b$为偏移量。
-输出中层为：</p>
-
-<script type="math/tex; mode=display">o^{(t)} = Vh^{(t)}+c</script>
-
-<p>激活后：</p>
-
-<script type="math/tex; mode=display">\hat{y^{(t)}} = \sigma(o^{(t)})</script>
-
-<p>注意，通常由于RNN是识别类的分类模型，所以上面这个激活函数一般是softmax。</p>
-
-<p>接下来我们来看反向传播。为了简化描述，这里的损失函数我们为对数损失函数，输出的激活函数为softmax函数，隐藏层的激活函数为tanh函数。对于RNN，由于我们在序列的每个位置都有损失函数，我们假设每个序列的损失函数为${\ L^{(t)}}$ 因此最终的损失${\ L}$为：</p>
-
-<script type="math/tex; mode=display">{\ L} = \sum_{t=1}^{\tau}L^{(t)}</script>
-
-<p>其中$V, c$的梯度计算是比较简单的：</p>
-
-<script type="math/tex; mode=display">\frac{\partial{L}}{\partial{c}}=\sum_{t=1}^{\tau}\frac{\partial{L^{(t)}}}{\partial{o^{(t)}}}\frac{\partial{o^{(t)}}}{\partial{c^{(t)}}}=\sum_{t=1}^{\tau}\hat{y^{(t)}}-y^{(t)}</script>
-
-<script type="math/tex; mode=display">\frac{\partial{L}}{\partial{V}}=\sum_{t=1}^{\tau}\frac{\partial{L^{(t)}}}{\partial{o^{(t)}}}\frac{\partial{o^{(t)}}}{\partial{V^{(t)}}}=\sum_{t=1}^{\tau}(\hat{y^{(t)}}-y^{(t)})(h^{(t)})^T</script>
-
-<p>对于$W，U, b$的梯度，计算起来相对复杂些，在某一序列位置t的梯度损失由当前位置的输出对应的梯度损失和序列索引位置t+1t+1时的梯度损失两部分共同决定，对于WW在某一序列位置t的梯度损失需要反向传播一步步的计算。我们定义序列索引tt位置的隐藏状态的梯度为：</p>
-
-<script type="math/tex; mode=display">\delta^{t}=\frac{\partial{L}}{\partial{h^{t}}}=\frac{\partial{L^{(t)}}}{\partial{o^{(t)}}}\frac{\partial{o^{(t)}}}{\partial{h^{(t)}}} + \frac{\partial{L^{(t)}}}{\partial{h^{(t+1)}}}\frac{\partial{h^{(t+1)}}}{\partial{h^{(t)}}}=V^{T}(\hat{y^{(\tau)}}-y^{(\tau)})</script>
-
-<p>有了$\delta^{(t)}$,计算$W,U,b$就容易了，这里给出$W,U,b$的梯度计算表达式：</p>
-
-<script type="math/tex; mode=display">\frac{\partial{L}}{\partial{W}} = \sum_{t=1}^{\tau}\frac{\partial{L}}{\partial{h^{(t)}}}\frac{\partial{h^{(t)}}}{\partial{W}}=\sum_{t=1}^{\tau}diag(1-(h^{(t)})^2)\delta^{(t)}(h^{(t-1)})^T</script>
-
-<script type="math/tex; mode=display">\frac{\partial{L}}{\partial{b}} = \sum_{t=1}^{\tau}\frac{\partial{L}}{\partial{h^{(t)}}}\frac{\partial{h^{(t)}}}{\partial{b}}=\sum_{t=1}^{\tau}diag(1-(h^{(t)})^2)\delta^{(t)}</script>
-
-<script type="math/tex; mode=display">\frac{\partial{L}}{\partial{U}} = \sum_{t=1}^{\tau}\frac{\partial{L}}{\partial{h^{(t)}}}\frac{\partial{h^{(t)}}}{\partial{U}}=\sum_{t=1}^{\tau}diag(1-(h^{(t)})^2)\delta^{(t)}(x^{(t)})^T</script>
-
-<h2 id="3不同类型的rnn">3、不同类型的RNN</h2>
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-13-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6/rnn1.jpg" /></p>
-
-<p>RNN一共有五种不同的类型</p>
-
-<ul>
-  <li>一对一 这种类型不需要使用RNN</li>
-  <li>一对多 例如音乐生成</li>
-  <li>多对一 例如情感分析，读取一段影评，输出用户是否喜欢这个电影</li>
-  <li>多对多 输入条目数=输出条目数 例如机器翻译</li>
-  <li>多对多 输入条目数!=输出条目数 例如输入一段视频，输出视频的一些标签</li>
-</ul>
-
-<p>只要合理的使用RNN的基本模块，把他们组合起来，就可以构建出各种各样的模型。</p>
+      <h2 id="前言">前言</h2>
+<p>动量梯度下降法是对梯度下降法的一种优化算法，能让收敛的速度更快，学习率可以选择更大的值。</p>
 
 
     </article>
@@ -282,25 +225,13 @@ refer to:
     </section>
     <section class="post-footer-item read-next">
       
-      <div class="read-next-item">
-        <a href="/2018/02/14/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html" class="read-next-link"></a>
-        <section>
-          <span>动量梯度下降法Momentum</span>
-          <p>前言动量梯度下降法是对梯度下降法的一种优化算法，能让收敛的速度更快，学习率可以选择更大的值。</p>
-        </section>
-        
-        <div class="filter"></div>
-        <img src="" alt="">
-        
-     </div>
-      
 
       
       <div class="read-next-item">
-        <a href="/2018/02/13/LSTM%E7%BD%91%E7%BB%9C.html" class="read-next-link"></a>
+        <a href="/2018/02/13/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6.html" class="read-next-link"></a>
           <section>
-            <span>LSTM网络</span>
-            <p>LSTM 网络长短期记忆网络（Long Short Term）通常也被简称为LSTM，是一种特殊类型的RNN，能够...</p>
+            <span>循环神经网络RNN(下)</span>
+            <p>1、前言</p>
           </section>
           
           <div class="filter"></div>

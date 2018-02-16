@@ -1,6 +1,12 @@
 [
   
     {
+      "title"    : "动量梯度下降法Momentum",
+      "tags"     : "神经网络 trick",
+      "url"      : "/2018/02/14/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html"
+    } ,
+  
+    {
       "title"    : "循环神经网络RNN(下)",
       "tags"     : "神经网络 RNN",
       "url"      : "/2018/02/13/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6.html"

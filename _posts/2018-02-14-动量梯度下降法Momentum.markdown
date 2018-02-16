@@ -1,0 +1,16 @@
+---
+layout: post
+title: '动量梯度下降法Momentum'
+subtitle: 'Momentum算法讲解'
+date: 2018-02-14
+categories: 神经网络
+cover: ''
+tags: 神经网络 trick
+---
+
+
+## 前言
+动量梯度下降法是对梯度下降法的一种优化算法，能让收敛的速度更快，学习率可以选择更大的值。
+
+
+
