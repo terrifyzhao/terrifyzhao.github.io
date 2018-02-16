@@ -10,7 +10,7 @@
     <!-- Open Graph -->
     <meta property="og:title" content="动量梯度下降法Momentum - Welcome to AI World">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/02/14/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html">
+    <meta property="og:url" content="http://localhost:4000/2018/02/16/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html">
     <meta property="og:description" content="个人AI技术博客">
     <meta property="og:site_name" content="Welcome to AI World">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -58,7 +58,7 @@
       <h1>动量梯度下降法Momentum</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
-        <time class="post-meta-item" datetime="18-02-14"><i class="iconfont icon-date"></i>14 Feb 2018</time>
+        <time class="post-meta-item" datetime="18-02-16"><i class="iconfont icon-date"></i>16 Feb 2018</time>
       </div>
     </div>
     
@@ -74,12 +74,12 @@
 
     <article class="markdown-body">
       <h2 id="前言">前言</h2>
-<p>动量梯度下降法是对梯度下降法的一种优化算法，学习率可以选择更大的值，能让收敛的速度更快。梯度下降法就像下面这张图，通过不断的跟新w与b，从而让函数移动到红点，但是要到达最优解，需要我们不断的迭代或者调整学习率来达到最后到达最优解的目的。但是调大学习率会导致每一次迭代的步长过大，也就是摆动过大，误差较大。而增加迭代次数则明显的增加了训练时间。动量梯度下降法就是通过解决这个问题来达到优化。</p>
+<p>动量梯度下降法是对梯度下降法的一种优化算法，该方法学习率可以选择更大的值，函数的收敛速度也更快。梯度下降法就像下面这张图，通过不断的跟新w与b，从而让函数移动到红点，但是要到达最优解，需要我们不断的迭代或者调整学习率来达到最后到达最优解的目的。但是调大学习率会导致每一次迭代的步长过大，也就是摆动过大，误差较大。调小学利率会让迭代次数增加。而增加迭代次数则明显的增加了训练时间。动量梯度下降法不但能使用较大的学习率，其迭代次数也较少。</p>
 
 <p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum1.jpg" width="630" height="140" /></p>
 
-<h2 id="指数加权平均值">指数加权平均值</h2>
-<p>动量梯度下降法的关键就是指数加权平均值，那么，什么是指数加权平均数呢，我们这里举例说明。</p>
+<h2 id="指数加权平均数">指数加权平均数</h2>
+<p>在理解动量梯度下降法之前，我们首先要了解指数加权平均数，这是动量梯度下降法的核心。那么，什么是指数加权平均数呢，我们这里举例说明。</p>
 
 <p>下面是一个同学的某一科的考试成绩： 
 平时测验 80， 期中 90， 期末 95 
@@ -139,7 +139,13 @@
 
 <script type="math/tex; mode=display">w = w - \alpha v_{dW}</script>
 
+<p>这里我们又引入了一个超参数$\beta$，经过实践，这个超参数建议取0.9效果较好，大家也可以根据实际情况进行调整。</p>
+
 <p>那么，为什么乘加权平均数就可以加快收敛的速度呢，我们再看下这张图</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum6.png" width="630" height="140" /></p>
+
+<p>正常情况下(图中蓝色线段)，函数会在纵轴上不停的波动，但实际上纵轴上的这些波动的平均值是接近于0的，我们更希望其波动较小，在横轴上能快速前进。动量梯度就是通过计算其加权平均值，把这些在纵轴上多余的波动去除，从而让函数尽可能快的朝着横轴移动，因此其收敛的速度也会很快，学习率也可以适当的提高。</p>
 
 
     </article>
