@@ -14,10 +14,36 @@ tags: 神经网络 trick
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum1.jpg" width="630" height="140"/>
 
-## 指数加权平均数
-动量梯度下降法的关键就是指数加权平均数，我们这里举例说明。
-这是一个城市每天的温度
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum1.jpg" width="630" height="140"/>
+## 指数加权平均值
+动量梯度下降法的关键就是指数加权平均值，那么，什么是指数加权平均数呢，我们这里举例说明。
+
+下面是一个同学的某一科的考试成绩： 
+平时测验 80， 期中 90， 期末 95 
+学校规定的科目成绩的计算方式是： 
+平时测验占 20%； 
+期中成绩占 30%； 
+期末成绩占 50%； 
+这里，每个成绩所占的比重叫做权数或权重。那么， 
+加权平均值 = 80 * 20% + 90 * 30% + 95 * 50% = 90.5 
+算数平均值 = (80 + 90 + 95)/3 = 88.3
+
+我们再看一个例子，这是一个城市每天的温度
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum2.jpg" width="130" height="240"/>
+
+普通的温度平均值是
+
+$$ \theta = \frac{1}{n} \sum_{i=1}^{n}\theta_n$$
+
+在计算加权平均数时，我们引入了一个变量$\beta$作为权重，就好比上一个例子的成绩占比，我们先看下公式
+
+$$ v_t =  \beta v_{t-1} + (1-\beta)\theta_{t}$$
+
+其中$v_t$代表前$t$天的平均温度，$\theta_{t}$代表第$t$天的温度，其中$v_0=0$。在坐标轴中绘出其形状，蓝点是每天的具体温度，红线是指数加权平均数。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum3.jpg" width="500" height="240"/>
+
+接下来我们详细讲解下这个公式，首相，我们把公式展开
 
 
 
