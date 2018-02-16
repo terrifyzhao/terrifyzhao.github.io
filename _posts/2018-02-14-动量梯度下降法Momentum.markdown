@@ -10,7 +10,18 @@ tags: 神经网络 trick
 
 
 ## 前言
-动量梯度下降法是对梯度下降法的一种优化算法，能让收敛的速度更快，学习率可以选择更大的值。
+动量梯度下降法是对梯度下降法的一种优化算法，学习率可以选择更大的值，能让收敛的速度更快。梯度下降法就像下面这张图，通过不断的跟新w与b，从而让函数移动到红点，但是要到达最优解，需要我们不断的迭代或者调整学习率来达到最后到达最优解的目的。但是调大学习率会导致每一次迭代的步长过大，也就是摆动过大，误差较大。而增加迭代次数则明显的增加了训练时间。动量梯度下降法就是通过解决这个问题来达到优化。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum1.jpg" width="630" height="140"/>
+
+## 指数加权平均数
+动量梯度下降法的关键就是指数加权平均数，我们这里举例说明。
+这是一个城市每天的温度
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum1.jpg" width="630" height="140"/>
+
+
+
+
 
 
 
