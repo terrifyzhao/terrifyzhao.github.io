@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>动量梯度下降法Momentum - Welcome to AI World</title>
+    <title>Adam优化算法 - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="动量梯度下降法Momentum">
+    <meta name="description" content="Adam优化算法">
     <meta name="keywords"  content="神经网络, trick">
     <!-- Open Graph -->
-    <meta property="og:title" content="动量梯度下降法Momentum - Welcome to AI World">
+    <meta property="og:title" content="Adam优化算法 - Welcome to AI World">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/02/16/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html">
+    <meta property="og:url" content="http://localhost:4000/2018/02/20/Adam%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95.html">
     <meta property="og:description" content="个人AI技术博客">
     <meta property="og:site_name" content="Welcome to AI World">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -55,10 +55,10 @@
           
         
       </div>
-      <h1>动量梯度下降法Momentum</h1>
+      <h1>Adam优化算法</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
-        <time class="post-meta-item" datetime="18-02-16"><i class="iconfont icon-date"></i>16 Feb 2018</time>
+        <time class="post-meta-item" datetime="18-02-20"><i class="iconfont icon-date"></i>20 Feb 2018</time>
       </div>
     </div>
     
@@ -69,83 +69,14 @@
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">Momentum算法讲解</h2>
+    <h2 class="post-subtitle">Adam算法讲解</h2>
     
 
     <article class="markdown-body">
       <h2 id="前言">前言</h2>
-<p>动量梯度下降法是对梯度下降法的一种优化算法，该方法学习率可以选择更大的值，函数的收敛速度也更快。梯度下降法就像下面这张图，通过不断的跟新w与b，从而让函数移动到红点，但是要到达最优解，需要我们不断的迭代或者调整学习率来达到最后到达最优解的目的。但是调大学习率会导致每一次迭代的步长过大，也就是摆动过大，误差较大。调小学利率会让迭代次数增加。而增加迭代次数则明显的增加了训练时间。动量梯度下降法不但能使用较大的学习率，其迭代次数也较少。</p>
+<p>Adam 优化算法是随机梯度下降算法的优化，近来其广泛用于深度学习应用中，尤其是计算机视觉和自然语言处理等任务，该算法是Momentum算法与RMSprop算法的结合。<a href="https://terrifyzhao.github.io/2018/02/16/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html">动量梯度下降法Momentum</a>我们之前已经讲解过，本文将会先介绍下RMSprop算法，再讲解Adam。</p>
 
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum1.jpg" width="630" height="140" /></p>
-
-<h2 id="指数加权平均数">指数加权平均数</h2>
-<p>在理解动量梯度下降法之前，我们首先要了解指数加权平均数，这是动量梯度下降法的核心。那么，什么是指数加权平均数呢，我们这里举例说明。</p>
-
-<p>下面是一个同学的某一科的考试成绩： 
-平时测验 80， 期中 90， 期末 95 
-学校规定的科目成绩的计算方式是： 
-平时测验占 20%； 
-期中成绩占 30%； 
-期末成绩占 50%； 
-这里，每个成绩所占的比重叫做权数或权重。那么， 
-加权平均值 = 80 * 20% + 90 * 30% + 95 * 50% = 90.5 
-算数平均值 = (80 + 90 + 95)/3 = 88.3</p>
-
-<p>我们再看一个例子，这是一个城市每天的温度</p>
-
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum2.jpg" width="130" height="240" /></p>
-
-<p>普通的温度平均值是</p>
-
-<script type="math/tex; mode=display">\theta = \frac{1}{n} \sum_{i=1}^{n}\theta_n</script>
-
-<p>在计算加权平均数时，我们引入了一个变量$\beta$作为权重，就好比上一个例子的成绩占比，我们先看下公式</p>
-
-<script type="math/tex; mode=display">v_t =  \beta v_{t-1} + (1-\beta)\theta_{t}</script>
-
-<p>其中$v_t$代表前$t$天的平均温度，$\theta_{t}$代表第$t$天的温度，其中$v_0=0$。在坐标轴中绘出其形状，蓝点是每天的具体温度，红线是指数加权平均数。</p>
-
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum3.jpg" width="500" height="240" /></p>
-
-<p>接下来我们详细讲解下这个公式，首相，我们把公式展开</p>
-
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum4.jpg" width="400" height="240" /></p>
-
-<p>假设$\beta=0.9$,那么，我们得到的公式如下</p>
-
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum5.jpg" width="400" height="240" /></p>
-
-<p>我们把$v_{99}$ $v_{98}$带入到$v_{100}$中</p>
-
-<script type="math/tex; mode=display">v_{100} = 0.1\theta_{100}+0.1\times0.9\theta_{99}+0.1\times(0.9)^2\theta_{98}+...+0.1\times(0.9)^{99}\theta_{1}</script>
-
-<p>可以发现，其实我们最终是给每一个值都赋予了一个权重，这个权重距离$t$越近，权重越大，反之也越小。但是因为越是后面的值，权重越小，所以算出来的值是可以忽略的，所以选择$\beta$时是很关键的，这里有一个公式</p>
-
-<script type="math/tex; mode=display">\frac{1}{1-\beta}</script>
-
-<p>这个公式得到的值即为迭代范围，例如$\beta=0.9$计算结果为10，那么，计算出来的加权平均数就是对过去10次进行迭代。</p>
-
-<p>那么，我们为什么要使用加权平均数呢，其实，在训练过程中，数据量是很大的，假设训练样本有100w，即使mini_batch取100，其计算平均值消耗的内存和时间需要的代价都很大，而对于加权平均数，如果$\beta$取值0.9那么只需要计算10个数即可计算其平均值，大大节约了内存，计算效率也极大的提高了。</p>
-
-<h2 id="动量梯度下降法">动量梯度下降法</h2>
-<p>我们先回顾下普通的梯度下降法在更新参数时</p>
-
-<script type="math/tex; mode=display">w = w - \alpha dW</script>
-
-<p>而对于动量梯度下降，首先，我们针对$dW$计算出$v_{dW}$
-<script type="math/tex">v_{dW} = \beta v_{dW} + (1-\beta)dW</script></p>
-
-<p>在更新参数时，我们不是乘$dW$，而是</p>
-
-<script type="math/tex; mode=display">w = w - \alpha v_{dW}</script>
-
-<p>这里我们又引入了一个超参数$\beta$，经过实践，这个超参数建议取0.9效果较好，大家也可以根据实际情况进行调整。</p>
-
-<p>那么，为什么乘加权平均数就可以加快收敛的速度呢，我们再看下这张图</p>
-
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-14-%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum/momentum6.png" width="630" height="140" /></p>
-
-<p>正常情况下(图中蓝色线段)，函数会在纵轴上不停的波动，但实际上纵轴上的这些波动的平均值是接近于0的，我们更希望其波动较小，在横轴上能快速前进。动量梯度就是通过计算其加权平均值，把这些在纵轴上多余的波动去除，从而让函数尽可能快的朝着横轴移动，因此其收敛的速度也会很快。</p>
+<h2 id="rmsprop均方根">RMSprop(均方根)</h2>
 
 
     </article>
@@ -296,25 +227,13 @@ refer to:
     </section>
     <section class="post-footer-item read-next">
       
-      <div class="read-next-item">
-        <a href="/2018/02/20/Adam%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95.html" class="read-next-link"></a>
-        <section>
-          <span>Adam优化算法</span>
-          <p>前言Adam 优化算法是随机梯度下降算法的优化，近来其广泛用于深度学习应用中，尤其是计算机视觉和自然语言处理等任务...</p>
-        </section>
-        
-        <div class="filter"></div>
-        <img src="" alt="">
-        
-     </div>
-      
 
       
       <div class="read-next-item">
-        <a href="/2018/02/13/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6.html" class="read-next-link"></a>
+        <a href="/2018/02/16/%E5%8A%A8%E9%87%8F%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95Momentum.html" class="read-next-link"></a>
           <section>
-            <span>循环神经网络RNN(下)</span>
-            <p>1、前言</p>
+            <span>动量梯度下降法Momentum</span>
+            <p>前言动量梯度下降法是对梯度下降法的一种优化算法，该方法学习率可以选择更大的值，函数的收敛速度也更快。梯度下降法就像...</p>
           </section>
           
           <div class="filter"></div>
