@@ -4,7 +4,7 @@ title: '动量梯度下降法Momentum'
 subtitle: 'Momentum算法讲解'
 date: 2018-02-16
 categories: 神经网络
-cover: ''
+cover: 'assets/img/2018-02-14-动量梯度下降法Momentum/cover.jpeg'
 tags: 神经网络 trick
 ---
 

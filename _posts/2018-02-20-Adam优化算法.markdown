@@ -4,7 +4,7 @@ title: 'Adam优化算法'
 subtitle: 'Adam算法讲解'
 date: 2018-02-20
 categories: 神经网络
-cover: ''
+cover: 'assets/img/2018-02-20-Adam优化算法/cover.jpg'
 tags: 神经网络 trick
 ---
 
@@ -41,20 +41,27 @@ $$W_2 = W_2 - \alpha \frac{dW_2}{ \sqrt[]{S_{dw2}+\epsilon}}$$
 接下来计算Momentum的指数加权平均数，注意超参数这里是$\beta_1$
 
 $$V_{dW} = \beta_1 V_{dW} + (1-\beta_1)dW$$
+
 $$V_{db} = \beta_1 V_{db} + (1-\beta_1)db$$
 
 再计算RMSprop的指数加权平均数，注意超参数这里是$\beta_2$
 
 $$S_{dw} = \beta_2 S_{dw} + (1-\beta_2)(dW)^2$$
+
 $$S_{db} = \beta_2 S_{db} + (1-\beta_2)(db)^2$$
 
 接下来进行参数修正，参数修正可以防止在迭代次数较少的时候，计算出来的指数加权平均数较小
+
 $$V_{dw}^{correct} = \frac{V_{dw}}{1- \beta_1^t}$$
+
 $$V_{db}^{correct} = \frac{V_{db}}{1- \beta_1^t}$$
+
 $$S_{dw}^{correct} = \frac{S_{dw}}{1- \beta_2^t}$$
+
 $$S_{dw}^{correct} = \frac{S_{dw}}{1- \beta_2^t}$$
 
 最后更新参数
+
 $$W = W - \alpha \frac{V_{dw}^{correct}}{\sqrt[]{S_{dw}^{correct}+\epsilon}}$$
 
 $$b = b - \alpha \frac{V_{db}^{correct}}{\sqrt[]{S_{db}^{correct}+\epsilon}}$$

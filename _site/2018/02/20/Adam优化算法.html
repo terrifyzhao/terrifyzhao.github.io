@@ -63,7 +63,7 @@
     </div>
     
     <div class="filter"></div>
-    <div class="post-cover" style="background: url('') center no-repeat; background-size: cover;">
+    <div class="post-cover" style="background: url('assets/img/2018-02-20-Adam优化算法/cover.jpg') center no-repeat; background-size: cover;">
       
   </header>
 
@@ -103,22 +103,29 @@
 
 <p>接下来计算Momentum的指数加权平均数，注意超参数这里是$\beta_1$</p>
 
-<p><script type="math/tex">V_{dW} = \beta_1 V_{dW} + (1-\beta_1)dW</script>
-<script type="math/tex">V_{db} = \beta_1 V_{db} + (1-\beta_1)db</script></p>
+<script type="math/tex; mode=display">V_{dW} = \beta_1 V_{dW} + (1-\beta_1)dW</script>
+
+<script type="math/tex; mode=display">V_{db} = \beta_1 V_{db} + (1-\beta_1)db</script>
 
 <p>再计算RMSprop的指数加权平均数，注意超参数这里是$\beta_2$</p>
 
-<p><script type="math/tex">S_{dw} = \beta_2 S_{dw} + (1-\beta_2)(dW)^2</script>
-<script type="math/tex">S_{db} = \beta_2 S_{db} + (1-\beta_2)(db)^2</script></p>
+<script type="math/tex; mode=display">S_{dw} = \beta_2 S_{dw} + (1-\beta_2)(dW)^2</script>
 
-<p>接下来进行参数修正，参数修正可以防止在迭代次数较少的时候，计算出来的指数加权平均数较小
-<script type="math/tex">V_{dw}^{correct} = \frac{V_{dw}}{1- \beta_1^t}</script>
-<script type="math/tex">V_{db}^{correct} = \frac{V_{db}}{1- \beta_1^t}</script>
-<script type="math/tex">S_{dw}^{correct} = \frac{S_{dw}}{1- \beta_2^t}</script>
-<script type="math/tex">S_{dw}^{correct} = \frac{S_{dw}}{1- \beta_2^t}</script></p>
+<script type="math/tex; mode=display">S_{db} = \beta_2 S_{db} + (1-\beta_2)(db)^2</script>
 
-<p>最后更新参数
-<script type="math/tex">W = W - \alpha \frac{V_{dw}^{correct}}{\sqrt[]{S_{dw}^{correct}+\epsilon}}</script></p>
+<p>接下来进行参数修正，参数修正可以防止在迭代次数较少的时候，计算出来的指数加权平均数较小</p>
+
+<script type="math/tex; mode=display">V_{dw}^{correct} = \frac{V_{dw}}{1- \beta_1^t}</script>
+
+<script type="math/tex; mode=display">V_{db}^{correct} = \frac{V_{db}}{1- \beta_1^t}</script>
+
+<script type="math/tex; mode=display">S_{dw}^{correct} = \frac{S_{dw}}{1- \beta_2^t}</script>
+
+<script type="math/tex; mode=display">S_{dw}^{correct} = \frac{S_{dw}}{1- \beta_2^t}</script>
+
+<p>最后更新参数</p>
+
+<script type="math/tex; mode=display">W = W - \alpha \frac{V_{dw}^{correct}}{\sqrt[]{S_{dw}^{correct}+\epsilon}}</script>
 
 <script type="math/tex; mode=display">b = b - \alpha \frac{V_{db}^{correct}}{\sqrt[]{S_{db}^{correct}+\epsilon}}</script>
 
@@ -292,7 +299,7 @@ refer to:
           </section>
           
           <div class="filter"></div>
-          <img src="" alt="">
+          <img src="assets/img/2018-02-14-动量梯度下降法Momentum/cover.jpeg" alt="">
           
       </div>
       
