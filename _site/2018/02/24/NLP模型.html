@@ -213,7 +213,7 @@
   <li>目标附近的一个词</li>
 </ul>
 
-<h2 id="skip-gram模型">Skip-Gram模型</h2>
+<h2 id="skip-gram">Skip-Gram</h2>
 
 <p>Word2Vec模型中，主要有Skip-Gram和CBOW两种模型。从直观上理解，CBOW模型的训练输入是某一个特征词的上下文相关的词对应的词向量，而输出就是这特定的一个词的词向量，例如输入I want a glass of orange __ 输出结果是juice。Skip-Gram输入是特定的一个词的词向量，而输出是特定词对应的上下文词向量。我们这里继续使用I want a glass of orange juice 来举例，假设输入是orange，我们取上下文的大小是2，因为orange后面只有一个词，所以输出结果就是softmax概率排前3的3个词。</p>
 
@@ -221,9 +221,19 @@
 
 <p>Skip-Gram模型一共分为3层，输入层，隐藏层，输出层。其中输入是一个ont-hot向量，经过隐藏层后会得到词向量，注意，这里的隐藏层的参数其实就是上文提到的嵌入矩阵，这个矩阵的参数是反向传播求出来的而不是人为规定的。最后再经过softmax层获得对应的概率。</p>
 
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-24-NLP%E6%A8%A1%E5%9E%8B/nlp2.jpg" width="880" height="300" /></p>
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-24-NLP%E6%A8%A1%E5%9E%8B/nlp3.jpg" width="580" height="500" /></p>
 
 <p>我们继续以上面的例子来讲解，假设我们词汇表一共有10000个词，词向量的维度是300，那么输入值就是一个10000维的Ont-hot向量，经过隐藏层即一个10000×300的嵌入矩阵，得到一个1×300的词向量,最后经过300×10000的softmax输出层，即可获取概率排前3的3个词。</p>
+
+<p>你可能注意到Skip-Gram实在是太巨大了。在我给的这个例子，每个词向量由300个元素组成，并且一个单词表中包含了10000个单词。回想神经网络中有两个权重矩阵——一个在隐藏层，一个在输出层。这两层都具有300 x 10000 = 3,000,000个权重！使用梯度下降法在这种巨大的神经网络下面进行训练是很慢的。并且可能更糟糕的是，你需要大量的训练数据来调整这些权重来避免过拟合。上百万的权重乘以上十亿的训练样本，意味着这个模型将会是一个超级大怪兽！</p>
+
+<p>针对这个问题，Skip-Gram的作者提出了3个解决方案</p>
+
+<ul>
+  <li>对于常见的单词对或者短语，在模型中将他们视为单个的单词。</li>
+  <li>对常见单词进行二次采样来减少他们在训练样本中的数量。</li>
+  <li>使用所谓的“负采样”（negative sampling）来改进优化对象，这将造成每一个训练的样本只会更对模型权重的很小一个比例的更新。</li>
+</ul>
 
 
     </article>
