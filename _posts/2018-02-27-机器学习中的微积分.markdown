@@ -1,0 +1,27 @@
+---
+layout: post
+title: '2018-02-27-机器学习随笔'
+subtitle: '随笔'
+date: 2018-02-27
+categories: 机器学习
+cover: ''
+tags: 
+---
+
+
+1、正则化 regularization
+控制参数的幅度，限制参数搜索空间
+$L_1$正则 $|\theta|$
+
+$L_2$正则 $\theta^2$
+一般采用$L_2$正则，方便求导
+
+
+2、逻辑回归不使用平方损失函数是因为不是凸函数
+
+3、逻辑回归的主要目的是去找判定边界Decision Boundary 逻辑回归是对概率进行拟合
+
+
+
+
+
