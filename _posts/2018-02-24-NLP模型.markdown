@@ -4,7 +4,7 @@ title: 'NLP模型'
 subtitle: 'NLP模型浅析'
 date: 2018-02-24
 categories: 神经网络
-cover: ''
+cover: 'assets/img/2018-02-24-NLP模型/cover.jpeg'
 tags: 神经网络
 ---
 
