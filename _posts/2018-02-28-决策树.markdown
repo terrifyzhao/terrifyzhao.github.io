@@ -14,11 +14,37 @@ tags: 机器学习
 
 ## 决策树
 
+分类决策树模型是一种描述对实例进行分类的树形结构。决策树由结点和有向边组成。结点有两种类型：内部节点和叶节点，内部节点表示一个特征或属性，叶节点表示一个类。 分类的时候，从根节点开始，对实例的某一个特征进行测试，根据测试结果，将实例分配到其子结点；此时，每一个子结点对应着该特征的一个取值。如此递归向下移动，直至达到叶结点，最后将实例分配到叶结点的类中。 
 
+为了方便理解，我们来看例子
 
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/dt1.png" width="500" height="500"/>
 
+一个女孩子去相亲，其择偶的标准是年龄，长相，收入，是否是公务员。其中绿色结点表示判断条件，橙色结点表示叶节点即决策结果，箭头表示在一个判断条件在不同情况下的决策路径，图中红色箭头表示女孩的决策过程。 当把一个人的条件输入到如图的树行结构中，最后就会输出一个是否见面的结果。这就是一个最基础的决策树模型。
 
+决策树的关键是分治思想，能否把数据分成两组，不同的数据点能否被完美区分开(pure)
 
+接下来我们再看一个带有数据的例子，这个是小明14天内是否去打球的数据，我们的任务是根据这14天的数据来判断第15天他是否会去打球。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/dt2.png" width="700" height="500"/>
+
+那么，小明是否打球是否是天气决定的呢
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/dt3.png" width="700" height="330"/>
+
+在天气的条件下，我们把它分为了3类，但是晴天与雨天并没有完美区分开是否打球，也就是说这个是不pure的，因此，我们需要对该类进行进一步的区分。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/dt4.png" width="700" height="330"/>
+
+我们针对晴天用湿度这个特征进行进一步的分类，对雨天用风的强弱来进行进一步分类，最终完美区分开。到这一步，就是我们最终的决策树。
+
+那么，在分类的是否，我们改选用什么特征作为第一个分类呢，是天气还是湿度？这就需要引入一个新的概念，熵Entropy
+
+## 熵Entropy
+
+熵是用来形容物体的一个混乱状态的，如果越混乱熵就越高。例如上面的是否打球，如果是与否各站一半，则熵较大，反之较小。因此熵能计算出按照某个特征分类后纯洁度(pure)有多高。
+
+熵Entropy $H(S) = -P(是)logP(是)-P(否)logP(否)$
 
 
 
