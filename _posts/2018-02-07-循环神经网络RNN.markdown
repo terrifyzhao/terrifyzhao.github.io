@@ -1,0 +1,118 @@
+---
+layout: post
+title: '循环神经网络RNN'
+subtitle: 'RNN基础讲解'
+date: 2018-02-07
+categories: 神经网络
+cover: 'assets/img/2018-02-07-循环神经网络RNN入门/cover.jpg'
+tags: 神经网络 RNN
+---
+
+
+## 为什么需要循环神经网络
+
+普通的神经网络只能对单一时刻的数据就行处理，但是，当任务需要处理序列信息时，例如一段文字，音频，视频，即前面的输入与后面的输入是有关联的。
+
+举个例子：现在我们要对“我爱你”与“这就是爱”中的“爱”字进行词性分析，在不同的语境下，爱的词性是不同的，在前一句中是动词，后一句中是名词，如果用普通的神经网络进行识别，是无法准确判断的。在词性判断中，前一个词会对后一个词的词性判断产生很大的影响，在“这就是爱”这种文字中，“是“是一个动词，那么“爱”是名词的概率就会大大提高，因为动词后面一般接名词，而动词后接动词就很少见。
+
+显然，普通的神经网路无法建立前后关系，为了能更好的处理序列信息，循环神经网络就诞生了。
+
+## 循环神经网络结构
+
+RNN听名字，看似很复杂，但相对于CNN来说，结构反而简单许多。
+
+我们先从一个简单的浅层神经网络说起
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_1.jpg" width = "100" height = "210" alt="图片名称"/>
+
+这是一个最简单的神经网络模型， $x$ 为输入，$h$是隐藏层，$y$是输出层，$U$与$V$是我们需要学习的参数。公式如下：
+
+隐藏层:
+
+$$ h=f(x*U + b) $$
+
+输出层:
+
+$$ y = f(h*V+c) $$
+
+
+我们再来看看RNN的结构
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_2.jpg" width = "100" height = "210"/>
+
+RNN的结构和浅层神经网络很类似，唯一的区别是在隐藏层，多了一个递归的圈，同时这个圈带着一个$W$参数，接下来我们把该圈展开看一看
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-07-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8/rnn_3.jpg" width = "600" height = "210" />
+
+展开后可以看到隐藏层$h$的输入变为了2个部分，我们以中间的$h_t$为例，此时公式为:
+
+隐藏层:
+
+$$h_t = f(U * x_t + W * h_t + b)$$
+
+输出层:
+
+$$ y_t = f(V * h_t + c) $$
+
+是不是和浅层神经网络很像，只是在计算隐藏层的时候多了一项，隐藏层的值不仅仅取决于当前这次的输入$x$，还取决于上一次隐藏层的值$h$。权重矩阵$W$就是隐藏层上一次的值作为这一次的输入的权重。
+
+## RNN的反向传播BPTT 
+
+RNN反向传播算法的思路和DNN是一样的，即通过梯度下降法一轮轮的迭代，得到合适的RNN模型参数。由于我们是基于时间反向传播，所以RNN的反向传播有一个很炫酷的名字BPTT(back-propagation through time)。当然这里的BPTT和DNN也有很大的不同点，即这里所有的参数在序列的各个位置是共享的，反向传播时我们更新的是相同的参数。
+
+首先我们先回顾下前向传播，隐藏层为：
+
+$${h^{(t)}} = \sigma(Ux^{(t)}+Wh^{(t-1)}+b)$$
+
+其中$\sigma$为RNN的激活函数，一般为$tanh$, $b$为偏移量。
+输出中层为：
+
+$$o^{(t)} = Vh^{(t)}+c $$
+
+激活后：
+
+$$\hat{y^{(t)}} = \sigma(o^{(t)}) $$
+
+注意，通常由于RNN是识别类的分类模型，所以上面这个激活函数一般是softmax。
+
+接下来我们来看反向传播。为了简化描述，这里的损失函数我们为对数损失函数，输出的激活函数为softmax函数，隐藏层的激活函数为tanh函数。对于RNN，由于我们在序列的每个位置都有损失函数，我们假设每个序列的损失函数为${\ L^{(t)}}$ 因此最终的损失${\ L}$为：
+
+$${\ L} = \sum_{t=1}^{\tau}L^{(t)}$$
+
+其中$V, c$的梯度计算是比较简单的：
+
+$$\frac{\partial{L}}{\partial{c}}=\sum_{t=1}^{\tau}\frac{\partial{L^{(t)}}}{\partial{o^{(t)}}}\frac{\partial{o^{(t)}}}{\partial{c^{(t)}}}=\sum_{t=1}^{\tau}\hat{y^{(t)}}-y^{(t)}$$
+
+$$\frac{\partial{L}}{\partial{V}}=\sum_{t=1}^{\tau}\frac{\partial{L^{(t)}}}{\partial{o^{(t)}}}\frac{\partial{o^{(t)}}}{\partial{V^{(t)}}}=\sum_{t=1}^{\tau}(\hat{y^{(t)}}-y^{(t)})(h^{(t)})^T$$
+
+对于$W，U, b$的梯度，计算起来相对复杂些，在某一序列位置t的梯度损失由当前位置的输出对应的梯度损失和序列索引位置t+1t+1时的梯度损失两部分共同决定，对于WW在某一序列位置t的梯度损失需要反向传播一步步的计算。我们定义序列索引tt位置的隐藏状态的梯度为：
+
+$$\delta^{t}=\frac{\partial{L}}{\partial{h^{t}}}=\frac{\partial{L^{(t)}}}{\partial{o^{(t)}}}\frac{\partial{o^{(t)}}}{\partial{h^{(t)}}} + \frac{\partial{L^{(t)}}}{\partial{h^{(t+1)}}}\frac{\partial{h^{(t+1)}}}{\partial{h^{(t)}}}=V^{T}(\hat{y^{(\tau)}}-y^{(\tau)})$$
+
+有了$\delta^{(t)}$,计算$W,U,b$就容易了，这里给出$W,U,b$的梯度计算表达式：
+
+$$\frac{\partial{L}}{\partial{W}} = \sum_{t=1}^{\tau}\frac{\partial{L}}{\partial{h^{(t)}}}\frac{\partial{h^{(t)}}}{\partial{W}}=\sum_{t=1}^{\tau}diag(1-(h^{(t)})^2)\delta^{(t)}(h^{(t-1)})^T$$
+
+$$\frac{\partial{L}}{\partial{b}} = \sum_{t=1}^{\tau}\frac{\partial{L}}{\partial{h^{(t)}}}\frac{\partial{h^{(t)}}}{\partial{b}}=\sum_{t=1}^{\tau}diag(1-(h^{(t)})^2)\delta^{(t)}$$
+
+$$\frac{\partial{L}}{\partial{U}} = \sum_{t=1}^{\tau}\frac{\partial{L}}{\partial{h^{(t)}}}\frac{\partial{h^{(t)}}}{\partial{U}}=\sum_{t=1}^{\tau}diag(1-(h^{(t)})^2)\delta^{(t)}(x^{(t)})^T$$
+
+## 不同类型的RNN
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-13-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6/rnn1.jpg"/>
+
+RNN一共有五种不同的类型
+
++ 一对一 这种类型不需要使用RNN
++ 一对多 例如音乐生成
++ 多对一 例如情感分析，读取一段影评，输出用户是否喜欢这个电影
++ 多对多 输入条目数=输出条目数 例如机器翻译
++ 多对多 输入条目数!=输出条目数 例如输入一段视频，输出视频的一些标签
+
+只要合理的使用RNN的基本模块，把他们组合起来，就可以构建出各种各样的模型。
+
+
+
+## 总结
+循环神经网络（recurrent neural network，RNN）源自于1982年由Saratha Sathasivam提出的霍普菲尔德网络。霍普菲尔德网络因为实现困难，在其提出的时候并且没有被合适地应用。该网络结构也于1986年后被全连接神经网络以及一些传统的机器学习算法所取代。然而，传统的机器学习算法非常依赖于人工提取的特征，使得基于传统机器学习的图像识别、语音识别以及自然语言处理等问题存在特征提取的瓶颈。而基于全连接神经网络的方法也存在参数太多、无法利用数据中时间序列信息等问题。随着更加有效的循环神经网络结构被不断提出，循环神经网络挖掘数据中的时序信息以及语义信息的深度表达能力被充分利用，并在语音识别、语言模型、机器翻译以及时序分析等方面实现了突破。
+
+
+

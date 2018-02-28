@@ -31,12 +31,6 @@
     } ,
   
     {
-      "title"    : "循环神经网络RNN(下)",
-      "tags"     : "神经网络 RNN",
-      "url"      : "/2018/02/13/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E8%BF%9B%E9%98%B6.html"
-    } ,
-  
-    {
       "title"    : "LSTM网络",
       "tags"     : "神经网络 RNN",
       "url"      : "/2018/02/13/LSTM%E7%BD%91%E7%BB%9C.html"
@@ -49,9 +43,9 @@
     } ,
   
     {
-      "title"    : "循环神经网络RNN(上)",
+      "title"    : "循环神经网络RNN",
       "tags"     : "神经网络 RNN",
-      "url"      : "/2018/02/07/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN%E5%85%A5%E9%97%A8.html"
+      "url"      : "/2018/02/07/%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9CRNN.html"
     } 
   
 ]
