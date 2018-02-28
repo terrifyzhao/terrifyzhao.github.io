@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ' '
+title: '机器学习随笔'
 subtitle: '随笔'
 date: 2018-02-27
 categories: 机器学习
