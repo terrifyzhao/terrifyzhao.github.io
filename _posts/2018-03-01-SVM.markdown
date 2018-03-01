@@ -1,0 +1,17 @@
+---
+layout: post
+title: 'SVM'
+subtitle: 'SVM推导过程详解'
+date: 2018-03-01
+categories: 机器学习
+cover: 'assets/img/2018-03-01-SVM/cover.jpeg'
+tags: 机器学习
+---
+
+## 前言
+
+SVM - support vector machine, 俗称支持向量机，为一种supervised learning算法，属于classification的范畴。本篇文章将会从推导的角度，讲述SVM的原理并介绍推导过程。
+
+## SVM
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-24-NLP%E6%A8%A1%E5%9E%8B/nlp2.jpg" width="880" height="300"/>
+
