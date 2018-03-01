@@ -4,7 +4,7 @@ title: 'Batch Normalization浅析'
 subtitle: 'BN算法讲解'
 date: 2018-02-08
 categories: 神经网络
-cover: 'assets/img/2018-02-08-Batch Normalization浅析/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-08-Batch%20Normalization%E6%B5%85%E6%9E%90/cover.jpg'
 tags: 神经网络 trick
 postPatterns: 'overlappingCircles'
 ---

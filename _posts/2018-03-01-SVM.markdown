@@ -4,7 +4,7 @@ title: 'SVM'
 subtitle: 'SVM推导过程详解'
 date: 2018-03-01
 categories: 机器学习
-cover: 'assets/img/2018-03-01-SVM/cover.jpeg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg'
 tags: 机器学习
 ---
 
@@ -69,7 +69,15 @@ $$width = \frac{2}{|\vec w|}$$
 
 所以宽度实际上和训练数据是没有关系的，只要知道了法向量，就可以求出宽度
 
-我们要让宽度越大越好，即$max\frac {2}{|\vec w|}$ 即$min|\vec w|$ 即 
+我们要让宽度越大越好，即
+
+$$max\frac {2}{|\vec w|}$$
+
+即
+
+$$min|\vec w|$$ 
+
+即 
 
 $$min\frac{1}{2}|\vec w|^2$$
 
@@ -80,13 +88,15 @@ $$min\frac{1}{2}|\vec w|^2$$
  $$L = \frac{1}{2}|\vec w|^2 - \sum_{i=1}^N \alpha_i[y_i(\vec w_i \vec x_i-b)-1]$$
  
  对$w$与$b$求偏导
+ 
  $$\frac{\alpha L}{\alpha \vec w} = \vec w - \sum_{i=1}^N\alpha_i y_i x_i$$
  
  $$\frac{\alpha L}{\alpha \vec b} = \sum_{i=1}^N\alpha_i y_i$$
 
-另导数为0
+令导数为0有
 
 $$\vec w = \sum_{i=1}^N\alpha_i y_i x_i$$
+
 $$\sum_{i=1}^N\alpha_i y_i = 0$$
 
 把这两个式子带入到L中

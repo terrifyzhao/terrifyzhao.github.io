@@ -4,7 +4,7 @@ title: 'LSTM网络'
 subtitle: 'LSTM网络讲解'
 date: 2018-02-13
 categories: 神经网络
-cover: 'assets/img/2018-02-13-LSTM网络/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-13-LSTM%E7%BD%91%E7%BB%9C/cover.jpg'
 tags: 神经网络 RNN
 ---
 

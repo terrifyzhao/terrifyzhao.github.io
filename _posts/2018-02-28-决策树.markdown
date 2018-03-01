@@ -4,7 +4,7 @@ title: '决策树'
 subtitle: '决策树与随机森林'
 date: 2018-02-28
 categories: 机器学习
-cover: 'assets/img/2018-02-28-决策树/cover.jpeg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/cover.jpeg'
 tags: 机器学习
 ---
 

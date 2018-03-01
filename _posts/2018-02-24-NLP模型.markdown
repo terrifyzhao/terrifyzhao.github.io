@@ -4,7 +4,7 @@ title: 'NLP模型'
 subtitle: 'NLP模型浅析'
 date: 2018-02-24
 categories: 神经网络
-cover: 'assets/img/2018-02-24-NLP模型/cover.jpeg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-24-NLP%E6%A8%A1%E5%9E%8B/cover.jpeg'
 tags: 神经网络
 ---
 
