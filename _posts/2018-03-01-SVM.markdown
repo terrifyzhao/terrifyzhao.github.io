@@ -12,9 +12,9 @@ tags: 机器学习
 
 SVM - support vector machine, 俗称支持向量机，为一种supervised learning算法，属于classification的范畴。本篇文章将会讲述SVM的原理并介绍推导过程。
 
-## SVM
+## SVM推导过程
 
-如图，我们有些红色与蓝色点分部在平面中，我们设蓝点为正红点为负。SVM的任务就是找到一条线，将红点和蓝点分割开来，这条线可能会有很多种可能，图中绿色的实线是最好的一条，因为它距离红点和蓝点的距离最大。
+如图，我们有些红色与蓝色点分部在平面中，我们设蓝点为正红点为负。SVM的任务就是找到一条线，将红点和蓝点分割开来，这条线可能会有很多种可能，图中绿色的实线是最好的一条，因为它距离红点和蓝点所在的虚线的距离最大。
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/svm1.jpg" width="360" height="300"/>
 
@@ -25,61 +25,66 @@ SVM - support vector machine, 俗称支持向量机，为一种supervised learni
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/svm2.png" width="360" height="300"/>
 
 
-假设分割线距离原点的距离为b，那么 
+假设分割线距离原点的距离为b，那么对于负样本$\vec u$
 
-$$\vec{u} · \vec{w}  >= c$$
+$$\vec{u} · \vec{w} <= b$$
 
-时，就能判断是正,反之就是负，这里我们令$b=-c$,那么
+就有
 
-$$\vec{u} · \vec{w} + b  >= 0$$
+$$\vec{u} · \vec{w} - b  <= 0$$
 
-从公式就能看到，SVM其实就是在找合适的$w$与$b$.
+从公式就能看到，SVM其实就是要寻找合适的$w$与$b$让虚线与实线的距离最大。
 
-当我们找到分割线之后，能确认另外两条线如图中虚线，这两条线上的点距离分割线的距离是最近的，我们这里把距离归一化，那么对于训练集来说
+接下来我们把实线与虚线的距离归一化，那么对于训练集来说就有如下公式
 
 负项：
 
-$$\vec{w}\vec{x} + b <= -1$$
+$$\vec{w}\vec{x} - b <= -1$$
 
 正项：
 
-$$\vec{w}\vec{x} + b >= 1$$
+$$\vec{w}\vec{x} - b >= 1$$
 
-我们这里加入一个辅助量
+为了将这两个公式统一，我们加入一个辅助量
 
 $$y_i = \begin{cases}\;\;1\quad x为正\\-1\quad x为负\end{cases}$$
 
-把辅助量带入上面的公式
+把辅助量带入上面的公式，最终两个公式可以合并成一个公式
 
-$$y_i(\vec{w}\vec{x} + b) -1 >= 0$$
+$$y_i(\vec{w}\vec{x} - b) - 1 >= 0$$
 
 
-街宽
+那么，怎么样才能保证实线与虚线的距离最宽呢，这里我们设$\vec x_+$与$\vec x_+$分别为正负虚线上面的点，那么就有
 
 $$width = (\vec x_+ - \vec x_-)· \frac{\vec w}{|w|}$$
 
-把上面的公式带入到街宽中
+$$x_+=\frac{b+1}{\vec w}$$
+
+$$x_-=\frac{b-1}{\vec w}$$
+
+最终我们得到公式
 
 $$width = \frac{2}{|\vec w|}$$   
 
-所以我们的街宽实际上和训练数据是没有关系的，只要知道了法向量，就可以求出街宽
 
-我们要让街越宽越好，即$max\frac {2}{|\vec w|}$ 即$min|\vec w|$ 即 
+所以宽度实际上和训练数据是没有关系的，只要知道了法向量，就可以求出宽度
+
+我们要让宽度越大越好，即$max\frac {2}{|\vec w|}$ 即$min|\vec w|$ 即 
 
 $$min\frac{1}{2}|\vec w|^2$$
 
- 这里的参数是为了之后求导方便
+这里添加的参数是为了之后求导方便
  
- 最终我们这里是需要求出其极值，但是我们这里有一个限制条件，根据拉格朗日乘子法,最终求极值的公式为：
+接下来就是求极值，但是我们这里有一个限制条件，因此根据拉格朗日乘子法,最终求极值的公式为：
  
- $$L = \frac{1}{2}|\vec w|^2 - \sum_{i=1}^N \alpha_i[y_i(\vec w_i \vec x_i+b)-1]$$
+ $$L = \frac{1}{2}|\vec w|^2 - \sum_{i=1}^N \alpha_i[y_i(\vec w_i \vec x_i-b)-1]$$
  
- 之后我们对$w$与$b$求偏导
+ 对$w$与$b$求偏导
  $$\frac{\alpha L}{\alpha \vec w} = \vec w - \sum_{i=1}^N\alpha_i y_i x_i$$
  
  $$\frac{\alpha L}{\alpha \vec b} = \sum_{i=1}^N\alpha_i y_i$$
 
-所以最终
+另导数为0
 
 $$\vec w = \sum_{i=1}^N\alpha_i y_i x_i$$
 $$\sum_{i=1}^N\alpha_i y_i = 0$$
@@ -88,11 +93,10 @@ $$\sum_{i=1}^N\alpha_i y_i = 0$$
 
 $$L = \sum_{i=1}^N\alpha_i - \frac{1}{2}\sum_{i=1}^N \sum_{j=1}^N\alpha_i \alpha_j y_i y_j x_i x_j$$
 
-对于$\alpha$的值，一般会采用SMO KKT算算法来求取，这里不做详细说明。
+走到这一步我们会发现$w$与$b$已经别其他变量所取代，最后我们要求的是$\alpha$的值，对于$\alpha$的值，一般会采用SMO KKT等算法来求取，这里不做详细说明。
 
+那对于一些无法用线性函数来做分类时怎么办呢
 
-那对于一些无法用线性函数来区分分类时怎么办呢
-
-首相，我们会把数据做一个非线性变化，把值变化到一个线性可分的空间上，这个函数我们称为核函数kernel，根据上面的L公式来说，我们并不需要知道每个点的数据怎么变的，只需要拿到核函数的结果即可。
+首相，我们会把数据做一个非线性变化，把值变化到一个线性可分的空间上，这个函数我们称为核函数kernel，根据上面的L公式来说，我们并不需要知道每个点的数据怎么变的，只需要拿到核函数的结果，并把$x_ix_j$替换成核函数结果即可求出最后的值。
 
 
