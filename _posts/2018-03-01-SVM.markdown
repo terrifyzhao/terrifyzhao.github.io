@@ -10,8 +10,78 @@ tags: 机器学习
 
 ## 前言
 
-SVM - support vector machine, 俗称支持向量机，为一种supervised learning算法，属于classification的范畴。本篇文章将会从推导的角度，讲述SVM的原理并介绍推导过程。
+SVM - support vector machine, 俗称支持向量机，为一种supervised learning算法，属于classification的范畴。本篇文章将会讲述SVM的原理并介绍推导过程。
 
 ## SVM
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-24-NLP%E6%A8%A1%E5%9E%8B/nlp2.jpg" width="880" height="300"/>
+
+如图，我们有些红色与蓝色点分部在平面中，我们设蓝点为正红点为负。SVM的任务就是找到一条线，将红点和蓝点分割开来，这条线可能会有很多种可能，图中绿色的实线是最好的一条，因为它距离红点和蓝点的距离最大。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/svm1.jpg" width="360" height="300"/>
+
+接下来我们就一起来探讨下SVM的这条分割线是如何找到的。
+
+首先，我们先随便找一条线做为分割线，我们选择平面上的任意一个点用向量$\vec{u}$表示，设分割线的法向量为$\vec{w}$，就可以计算出向量$\vec{u}$ 在$\vec{w}$ 方向的投影长度，假设分割线距离原点的距离为b，那么
+$$\vec{u}\vec{w} + b >= 0$$
+时，就能判断是蓝点,反之就是红点。所以SVM最终的任务就是找到合适的$w$与$b$.
+
+当我们找到分割线之后，能确认另外两条线如图中虚线，这两条线上的点距离分割线的距离是最近的，我们这里把距离归一化，那么对于训练集来说
+
+负项：
+
+$$\vec{w}\vec{x} + b <= -1$$
+
+正项：
+
+$$\vec{w}\vec{x} + b >= 1$$
+
+我们这里加入一个辅助量
+
+$$y_i = \begin{cases}\;\;1\quad x为正\\-1\quad x为负\end{cases}$$
+
+把辅助量带入上面的公式
+
+$$y_i(\vec{w}\vec{x} + b) -1 >= 0$$
+
+
+街宽
+
+$$width = (\vec x_+ - \vec x_-)· \frac{\vec w}{|w|}$$
+
+把上面的公式带入到街宽中
+
+$$width = \frac{2}{|\vec w|}$$   
+
+所以我们的街宽实际上和训练数据是没有关系的，只要知道了法向量，就可以求出街宽
+
+我们要让街越宽越好，即$max\frac {2}{|\vec w|}$ 即$min|\vec w|$ 即 
+
+$$min\frac{1}{2}|\vec w|^2$$
+
+ 这里的参数是为了之后求导方便
+ 
+ 最终我们这里是需要求出其极值，但是我们这里有一个限制条件，根据拉格朗日乘子法,最终求极值的公式为：
+ 
+ $$L = \frac{1}{2}|\vec w|^2 - \sum_{i=1}^N \alpha_i[y_i(\vec w_i \vec x_i+b)-1]$$
+ 
+ 之后我们对$w$与$b$求偏导
+ $$\frac{\alpha L}{\alpha \vec w} = \vec w - \sum_{i=1}^N\alpha_i y_i x_i$$
+ 
+ $$\frac{\alpha L}{\alpha \vec b} = \sum_{i=1}^N\alpha_i y_i$$
+
+所以最终
+
+$$\vec w = \sum_{i=1}^N\alpha_i y_i x_i$$
+$$\sum_{i=1}^N\alpha_i y_i = 0$$
+
+把这两个式子带入到L中
+
+$$L = \sum_{i=1}^N\alpha_i - \frac{1}{2}\sum_{i=1}^N \sum_{j=1}^N\alpha_i \alpha_j y_i y_j x_i x_j$$
+
+对于$\alpha$的值，一般会采用SMO KKT算算法来求取，这里不做详细说明。
+
+
+那对于一些无法用线性函数来区分分类时怎么办呢
+
+首相，我们会把数据做一个非线性变化，把值变化到一个线性可分的空间上，这个函数我们称为核函数kernel，根据上面的L公式来说，我们并不需要知道每个点的数据怎么变的，只需要拿到核函数的结果即可。
+
 
