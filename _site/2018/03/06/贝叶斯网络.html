@@ -78,14 +78,7 @@
 
 <h2 id="条件概率">条件概率</h2>
 
-<table>
-  <tbody>
-    <tr>
-      <td>条件概率是指一个事件A在另外一个事件B已经发生条件下的发生概率。条件概率表示为：P（A</td>
-      <td>B），读作“在B条件下A的概率”。</td>
-    </tr>
-  </tbody>
-</table>
+<p>条件概率是指一个事件A在另外一个事件B已经发生条件下的发生概率。条件概率表示为$P(A|B)$，读作在B条件下A的概率。</p>
 
 <script type="math/tex; mode=display">P(AB) = P(A)P(B|A)</script>
 
@@ -161,40 +154,15 @@
 
 <script type="math/tex; mode=display">P(A) = \sum_B \sum_E \sum_A \sum_J P(B)P(E)P(A|B,E)P(J|A)P(M|A)</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>这里有个小技巧，因为除了$P(J</td>
-      <td>A)$中有J其他项都没有J，我们可以把J这一项单独出来，即</td>
-    </tr>
-  </tbody>
-</table>
+<p>这里有个小技巧，因为除了$P(J|A)$中有J其他项都没有J，我们可以把J这一项单独出来，即</p>
 
 <script type="math/tex; mode=display">P(A) = \sum_B \sum_E \sum_A  P(B)P(E)P(A|B,E)P(M|A)\sum_J P(J|A)</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>由于$\sum_J P(J</td>
-      <td>A)=1$,所以我们这里就可以把这一项约掉，最终</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>$$P(A) = \sum_B \sum_E \sum_A  P(B)P(E)P(A</td>
-      <td>B,E)P(M</td>
-      <td>A)$$</td>
-    </tr>
-  </tbody>
-</table>
+<p>由于$\sum_J P(J|A)=1$,所以我们这里就可以把这一项约掉，最终</p>
 
-<table>
-  <tbody>
-    <tr>
-      <td>这里我在看一个条件概率，例如给John打电话的话地震的概率即$P(E</td>
-      <td>A)$，对于这样的问题，我们可以拆解成两个联合分布相除的式子</td>
-    </tr>
-  </tbody>
-</table>
+<script type="math/tex; mode=display">P(A) = \sum_B \sum_E \sum_A  P(B)P(E)P(A|B,E)P(M|A)</script>
+
+<p>这里我在看一个条件概率，例如给John打电话的话地震的概率即$P(E|A)$，对于这样的问题，我们可以拆解成两个联合分布相除的式子</p>
 
 <script type="math/tex; mode=display">P(E|A) = \frac{P(EA)}{P(A)}</script>
 
@@ -203,6 +171,7 @@
 <script type="math/tex; mode=display">P(EA) = \sum_B \sum_J \sum_M P(B)P(E)P(A|B,E)P(J|A)P(M|A)</script>
 
 <h2 id="隐马尔科夫链">隐马尔科夫链</h2>
+<p>…</p>
 
 
     </article>
