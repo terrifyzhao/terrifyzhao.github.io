@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>机器学习随笔 - Welcome to AI World</title>
+    <title>推荐系统算法入门 - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="机器学习随笔">
+    <meta name="description" content="推荐系统算法入门">
     <meta name="keywords"  content="机器学习">
     <!-- Open Graph -->
-    <meta property="og:title" content="机器学习随笔 - Welcome to AI World">
+    <meta property="og:title" content="推荐系统算法入门 - Welcome to AI World">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/02/27/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%9A%8F%E7%AC%94.html">
+    <meta property="og:url" content="http://localhost:4000/2018/03/06/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%AE%97%E6%B3%95%E5%85%A5%E9%97%A8.html">
     <meta property="og:description" content="个人AI技术博客">
     <meta property="og:site_name" content="Welcome to AI World">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -53,96 +53,35 @@
           
         
       </div>
-      <h1>机器学习随笔</h1>
+      <h1>推荐系统算法入门</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
-        <time class="post-meta-item" datetime="18-02-27"><i class="iconfont icon-date"></i>27 Feb 2018</time>
+        <time class="post-meta-item" datetime="18-03-06"><i class="iconfont icon-date"></i>06 Mar 2018</time>
       </div>
     </div>
     
     <div class="filter"></div>
-    <div class="post-cover" style="background: url('') center no-repeat; background-size: cover;">
+    <div class="post-cover" style="background: url('https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg') center no-repeat; background-size: cover;">
       
   </header>
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">随笔</h2>
+    <h2 class="post-subtitle">协同过滤 隐语义模型</h2>
     
 
     <article class="markdown-body">
-      <p>1、正则化 regularization
-控制参数的幅度，限制参数搜索空间
-$L_1$正则 $|\theta|$</p>
+      <h2 id="前言">前言</h2>
 
-<p>$L_2$正则 $\theta^2$
-一般采用$L_2$正则，方便求导</p>
+<p>机器学习一个运用较广泛的场景就是推荐系统，亚马逊每年35%的销售额都来源于它的推荐，头条半数以上新闻和广告点击来源于推荐，京东一年推荐和广告带来几亿的营收。推荐系统自动挖掘用户的兴趣点，随时能给用户带来惊喜与更好的体验。本文将会带领大家了解一下目前运用较多的一些推荐算法。</p>
 
-<p>2、逻辑回归不使用平方损失函数是因为不是凸函数</p>
+<h2 id="基于内容的推荐">基于内容的推荐</h2>
 
-<p>3、逻辑回归的主要目的是去找判定边界Decision Boundary 逻辑回归是对概率进行拟合</p>
-
-<p>4、过拟合</p>
-
-<ul>
-  <li>找更多数据来学习</li>
-  <li>增大正则化系数</li>
-  <li>dropout</li>
-  <li>regularization</li>
-  <li>batch normalizatin</li>
-</ul>
-
-<p>5、欠拟合</p>
-
-<ul>
-  <li>找更多的特征</li>
-  <li>减小正则化系数</li>
-</ul>
-
-<p>6、模型效果优化方法</p>
-
-<ul>
-  <li>
-    <p>Bagging，每一个模型只读取一部分数据，例如随机森林，最终结果求平均或者投票</p>
-  </li>
-  <li>
-    <p>Stacking，最终结果会作为特征再次进行训练</p>
-  </li>
-  <li>
-    <p>Blending，弱化版本的Stacking，特征训练较简单，可能是投票或平均</p>
-  </li>
-  <li>
-    <p>Adaboost,每次都把前一次训练错的内容加权训练，最后将所有的训练结果合并在一起</p>
-  </li>
-  <li>
-    <p>Gradient Boosting Tree，串行模型，会过拟合</p>
-  </li>
-</ul>
-
-<p>单个模型太强，那就使用并行，防止过拟合，单个模型太弱，那就使用串行</p>
-
-<p>7、流程</p>
-
-<p>preprocessing - learning - evaluation - predict</p>
-
-<p>8、使用交叉验证来选择最佳的超参数，可以使用<code class="highlighter-rouge">grid_search.GridSearchCV</code></p>
-
-<p>9、准确率与召回率</p>
-
-<p>假设推荐新闻，一共推荐给用户10条，用户感兴趣的新闻是12条，用户只点击了推荐的10条中的4条，那么</p>
-
-<script type="math/tex; mode=display">准确率 = \frac{4}{10}</script>
-
-<script type="math/tex; mode=display">召回率 = \frac{4}{12}</script>
-
-<p>10、机器学历学派</p>
-
-<ul>
-  <li>连接主义 例如神经网络</li>
-  <li>符号主义 基于逻辑的学习</li>
-  <li>统计学习 基于统计学原理，现有理论，再有算法，例如SVM</li>
-  <li>概率图模型 贝叶斯网络</li>
-</ul>
+<p>基于用户喜欢的物品的属性、内容进行推荐。需要分析内容，无需考虑用户与用户之间的关联。通常使用在文本相关产品上进行推荐。物品通过内容(比如关键词)关联:
+       电影题材:爱情/探险/动作/喜剧/悬疑    标志特征:黄晓明/王宝强…
+   年代:1995，2016…
+   关键词
+   基于比对物品内容进行推荐</p>
 
 
     </article>
@@ -294,28 +233,28 @@ refer to:
     <section class="post-footer-item read-next">
       
       <div class="read-next-item">
-        <a href="/2018/02/28/%E5%86%B3%E7%AD%96%E6%A0%91.html" class="read-next-link"></a>
+        <a href="/2018/03/06/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C.html" class="read-next-link"></a>
         <section>
-          <span>决策树</span>
-          <p>前言</p>
+          <span>贝叶斯网络</span>
+          <p>条件概率</p>
         </section>
         
         <div class="filter"></div>
-        <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/cover.jpeg" alt="">
+        <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg" alt="">
         
      </div>
       
 
       
       <div class="read-next-item">
-        <a href="/2018/02/24/NLP%E6%A8%A1%E5%9E%8B.html" class="read-next-link"></a>
+        <a href="/2018/03/01/SVM.html" class="read-next-link"></a>
           <section>
-            <span>NLP模型</span>
-            <p>前言DP算法在图像识别领域取得了惊人的效果，近些年，也不断有人挖掘除了语言这种高层次抽象中的本质，从而让DP在NL...</p>
+            <span>SVM</span>
+            <p>前言</p>
           </section>
           
           <div class="filter"></div>
-          <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-24-NLP%E6%A8%A1%E5%9E%8B/cover.jpeg" alt="">
+          <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg" alt="">
           
       </div>
       
