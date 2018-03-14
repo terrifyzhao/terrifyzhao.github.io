@@ -82,6 +82,70 @@ $L_1$正则 $|\theta|$</p>
 
 <p>3、逻辑回归的主要目的是去找判定边界Decision Boundary 逻辑回归是对概率进行拟合</p>
 
+<p>4、过拟合</p>
+
+<ul>
+  <li>找更多数据来学习</li>
+  <li>增大正则化系数</li>
+  <li>dropout</li>
+  <li>regularization</li>
+  <li>batch normalizatin</li>
+</ul>
+
+<p>5、欠拟合</p>
+
+<ul>
+  <li>找更多的特征</li>
+  <li>减小正则化系数</li>
+</ul>
+
+<p>6、模型效果优化方法</p>
+
+<ul>
+  <li>
+    <p>Bagging，每一个模型只读取一部分数据，例如随机森林，最终结果求平均或者投票</p>
+  </li>
+  <li>
+    <p>Stacking，最终结果会作为特征再次进行训练</p>
+  </li>
+  <li>
+    <p>Blending，弱化版本的Stacking，特征训练较简单，可能是投票或平均</p>
+  </li>
+  <li>
+    <p>Adaboost,每次都把前一次训练错的内容加权训练，最后将所有的训练结果合并在一起</p>
+  </li>
+  <li>
+    <p>Gradient Boosting Tree，串行模型，会过拟合</p>
+  </li>
+</ul>
+
+<p>单个模型太强，那就使用并行，防止过拟合，单个模型太弱，那就使用串行</p>
+
+<p>7、流程</p>
+
+<p>preprocessing - learning - evaluation - predict</p>
+
+<p>8、使用交叉验证来选择最佳的超参数，可以使用<code class="highlighter-rouge">grid_search.GridSearchCV</code></p>
+
+<p>9、如果一个函数单调递减并且有下界，那么一定是收敛函数，例如k-means的代价函数</p>
+
+<p>10、准确率与召回率</p>
+
+<p>假设推荐新闻，一共推荐给用户10条，用户感兴趣的新闻是12条，用户只点击了推荐的10条中的4条，那么</p>
+
+<script type="math/tex; mode=display">准确率 = \frac{4}{10}</script>
+
+<script type="math/tex; mode=display">召回率 = \frac{4}{12}</script>
+
+<p>11、机器学历学派</p>
+
+<ul>
+  <li>连接主义 例如神经网络</li>
+  <li>符号主义 基于逻辑的学习</li>
+  <li>统计学习 基于统计学原理，现有理论，再有算法，例如SVM</li>
+  <li>概率图模型 贝叶斯网络</li>
+</ul>
+
 
     </article>
 

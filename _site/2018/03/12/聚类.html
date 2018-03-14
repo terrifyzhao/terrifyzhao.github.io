@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVM - Welcome to AI World</title>
+    <title>聚类 - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="SVM">
+    <meta name="description" content="聚类">
     <meta name="keywords"  content="机器学习">
     <!-- Open Graph -->
-    <meta property="og:title" content="SVM - Welcome to AI World">
+    <meta property="og:title" content="聚类 - Welcome to AI World">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/03/01/SVM.html">
+    <meta property="og:url" content="http://localhost:4000/2018/03/12/%E8%81%9A%E7%B1%BB.html">
     <meta property="og:description" content="个人AI技术博客">
     <meta property="og:site_name" content="Welcome to AI World">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -53,10 +53,10 @@
           
         
       </div>
-      <h1>SVM</h1>
+      <h1>聚类</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
-        <time class="post-meta-item" datetime="18-03-01"><i class="iconfont icon-date"></i>01 Mar 2018</time>
+        <time class="post-meta-item" datetime="18-03-12"><i class="iconfont icon-date"></i>12 Mar 2018</time>
       </div>
     </div>
     
@@ -73,104 +73,9 @@
     <article class="markdown-body">
       <h2 id="前言">前言</h2>
 
-<p>SVM - support vector machine, 俗称支持向量机，为一种supervised learning算法，属于classification的范畴。本篇文章将会讲述SVM的原理并介绍推导过程。</p>
+<h2 id="k-means">k-means</h2>
 
-<h2 id="svm推导过程">SVM推导过程</h2>
-
-<p>如图，我们有些红色与蓝色点分部在平面中，我们设蓝点为正红点为负。SVM的任务就是找到一条线，将红点和蓝点分割开来，这条线可能会有很多种可能，图中绿色的实线是最好的一条，因为它距离红点和蓝点所在的虚线的距离最大。</p>
-
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/svm1.jpg" width="360" height="300" /></p>
-
-<p>接下来我们就一起来探讨下SVM的这条分割线是如何找到的。</p>
-
-<p>首先，我们先随便找一条线做为分割线，我们选择平面上的任意一个点用向量$\vec{u}$表示，设分割线的法向量为$\vec{w}$，就可以计算出向量$\vec{u}$ 在$\vec{w}$ 方向的投影长度。</p>
-
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/svm2.png" width="360" height="300" /></p>
-
-<p>假设分割线距离原点的距离为b，那么对于负样本$\vec u$</p>
-
-<script type="math/tex; mode=display">% <![CDATA[
-\vec{u} · \vec{w} <= b %]]></script>
-
-<p>就有</p>
-
-<script type="math/tex; mode=display">% <![CDATA[
-\vec{u} · \vec{w} - b  <= 0 %]]></script>
-
-<p>从公式就能看到，SVM其实就是要寻找合适的$w$与$b$让虚线与实线的距离最大。</p>
-
-<p>接下来我们把实线与虚线的距离归一化，那么对于训练集来说就有如下公式</p>
-
-<p>负项：</p>
-
-<script type="math/tex; mode=display">% <![CDATA[
-\vec{w}\vec{x} - b <= -1 %]]></script>
-
-<p>正项：</p>
-
-<script type="math/tex; mode=display">\vec{w}\vec{x} - b >= 1</script>
-
-<p>为了将这两个公式统一，我们加入一个辅助量</p>
-
-<script type="math/tex; mode=display">y_i = \begin{cases}\;\;1\quad x为正\\-1\quad x为负\end{cases}</script>
-
-<p>把辅助量带入上面的公式，最终两个公式可以合并成一个公式</p>
-
-<script type="math/tex; mode=display">y_i(\vec{w}\vec{x} - b) - 1 >= 0</script>
-
-<p>那么，怎么样才能保证实线与虚线的距离最宽呢，这里我们设$\vec x_+$与$\vec x_+$分别为正负虚线上面的点，那么就有</p>
-
-<script type="math/tex; mode=display">width = (\vec x_+ - \vec x_-)· \frac{\vec w}{|w|}</script>
-
-<script type="math/tex; mode=display">x_+=\frac{b+1}{\vec w}</script>
-
-<script type="math/tex; mode=display">x_-=\frac{b-1}{\vec w}</script>
-
-<p>最终我们得到公式</p>
-
-<script type="math/tex; mode=display">width = \frac{2}{|\vec w|}</script>
-
-<p>所以宽度实际上和训练数据是没有关系的，只要知道了法向量，就可以求出宽度</p>
-
-<p>我们要让宽度越大越好，即</p>
-
-<script type="math/tex; mode=display">max\frac {2}{|\vec w|}</script>
-
-<p>即</p>
-
-<script type="math/tex; mode=display">min|\vec w|</script>
-
-<p>即</p>
-
-<script type="math/tex; mode=display">min\frac{1}{2}|\vec w|^2</script>
-
-<p>这里添加的参数是为了之后求导方便</p>
-
-<p>接下来就是求极值，但是我们这里有一个限制条件，因此根据拉格朗日乘子法,最终求极值的公式为：</p>
-
-<script type="math/tex; mode=display">L = \frac{1}{2}|\vec w|^2 - \sum_{i=1}^N \alpha_i[y_i(\vec w_i \vec x_i-b)-1]</script>
-
-<p>对$w$与$b$求偏导</p>
-
-<script type="math/tex; mode=display">\frac{\alpha L}{\alpha \vec w} = \vec w - \sum_{i=1}^N\alpha_i y_i x_i</script>
-
-<script type="math/tex; mode=display">\frac{\alpha L}{\alpha \vec b} = \sum_{i=1}^N\alpha_i y_i</script>
-
-<p>令导数为0有</p>
-
-<script type="math/tex; mode=display">\vec w = \sum_{i=1}^N\alpha_i y_i x_i</script>
-
-<script type="math/tex; mode=display">\sum_{i=1}^N\alpha_i y_i = 0</script>
-
-<p>把这两个式子带入到L中</p>
-
-<script type="math/tex; mode=display">L = \sum_{i=1}^N\alpha_i - \frac{1}{2}\sum_{i=1}^N \sum_{j=1}^N\alpha_i \alpha_j y_i y_j x_i x_j</script>
-
-<p>走到这一步我们会发现$w$与$b$已经别其他变量所取代，最后我们要求的是$\alpha$的值，对于$\alpha$的值，一般会采用SMO KKT等算法来求取，这里不做详细说明。</p>
-
-<p>那对于一些无法用线性函数来做分类时怎么办呢</p>
-
-<p>首相，我们会把数据做一个非线性变化，把值变化到一个线性可分的空间上，这个函数我们称为核函数kernel，根据上面的L公式来说，我们并不需要知道每个点的数据怎么变的，只需要拿到核函数的结果，并把$x_ix_j$替换成核函数结果即可求出最后的值。</p>
+<p>k-means是硬分类，一个点只能分到一个类</p>
 
 
     </article>
@@ -321,29 +226,17 @@ refer to:
     </section>
     <section class="post-footer-item read-next">
       
-      <div class="read-next-item">
-        <a href="/2018/03/06/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%AE%97%E6%B3%95%E5%85%A5%E9%97%A8.html" class="read-next-link"></a>
-        <section>
-          <span>推荐系统算法入门</span>
-          <p>前言</p>
-        </section>
-        
-        <div class="filter"></div>
-        <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg" alt="">
-        
-     </div>
-      
 
       
       <div class="read-next-item">
-        <a href="/2018/02/28/%E5%86%B3%E7%AD%96%E6%A0%91.html" class="read-next-link"></a>
+        <a href="/2018/03/06/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C.html" class="read-next-link"></a>
           <section>
-            <span>决策树</span>
-            <p>前言</p>
+            <span>贝叶斯网络</span>
+            <p>前言贝叶斯网络是机器学习中非常经典的算法之一，它能够根据已知的条件来估算出不确定的知识，应用范围非常的广泛。贝叶斯...</p>
           </section>
           
           <div class="filter"></div>
-          <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/cover.jpeg" alt="">
+          <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg" alt="">
           
       </div>
       

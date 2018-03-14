@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVM - Welcome to AI World</title>
+    <title>贝叶斯网络 - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="SVM">
+    <meta name="description" content="贝叶斯网络">
     <meta name="keywords"  content="机器学习">
     <!-- Open Graph -->
-    <meta property="og:title" content="SVM - Welcome to AI World">
+    <meta property="og:title" content="贝叶斯网络 - Welcome to AI World">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://localhost:4000/2018/03/01/SVM.html">
+    <meta property="og:url" content="http://localhost:4000/2018/03/06/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C.html">
     <meta property="og:description" content="个人AI技术博客">
     <meta property="og:site_name" content="Welcome to AI World">
     <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
@@ -53,10 +53,10 @@
           
         
       </div>
-      <h1>SVM</h1>
+      <h1>贝叶斯网络</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
-        <time class="post-meta-item" datetime="18-03-01"><i class="iconfont icon-date"></i>01 Mar 2018</time>
+        <time class="post-meta-item" datetime="18-03-06"><i class="iconfont icon-date"></i>06 Mar 2018</time>
       </div>
     </div>
     
@@ -67,110 +67,91 @@
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">SVM推导过程详解</h2>
+    <h2 class="post-subtitle"></h2>
     
 
     <article class="markdown-body">
       <h2 id="前言">前言</h2>
+<p>贝叶斯网络是机器学习中非常经典的算法之一，它能够根据已知的条件来估算出不确定的知识，应用范围非常的广泛。贝叶斯网络以贝叶斯公式为理论接触构建成了一个有向无环图，我们可以通过贝叶斯网络构建的图清晰的根据已有信息预测未来信息。</p>
 
-<p>SVM - support vector machine, 俗称支持向量机，为一种supervised learning算法，属于classification的范畴。本篇文章将会讲述SVM的原理并介绍推导过程。</p>
+<p>本文将会从最基本的概率基础开始讲解，并延伸到贝叶斯网络与马尔科夫链。</p>
 
-<h2 id="svm推导过程">SVM推导过程</h2>
+<h2 id="条件概率">条件概率</h2>
 
-<p>如图，我们有些红色与蓝色点分部在平面中，我们设蓝点为正红点为负。SVM的任务就是找到一条线，将红点和蓝点分割开来，这条线可能会有很多种可能，图中绿色的实线是最好的一条，因为它距离红点和蓝点所在的虚线的距离最大。</p>
+<table>
+  <tbody>
+    <tr>
+      <td>条件概率是指一个事件A在另外一个事件B已经发生条件下的发生概率。条件概率表示为：P（A</td>
+      <td>B），读作“在B条件下A的概率”。</td>
+    </tr>
+  </tbody>
+</table>
 
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/svm1.jpg" width="360" height="300" /></p>
+<script type="math/tex; mode=display">P(AB) = P(A)P(B|A)</script>
 
-<p>接下来我们就一起来探讨下SVM的这条分割线是如何找到的。</p>
+<h2 id="全概率公式">全概率公式</h2>
 
-<p>首先，我们先随便找一条线做为分割线，我们选择平面上的任意一个点用向量$\vec{u}$表示，设分割线的法向量为$\vec{w}$，就可以计算出向量$\vec{u}$ 在$\vec{w}$ 方向的投影长度。</p>
+<p>在讲全概率公式之前，首先要理解什么是“完备事件群”。</p>
 
-<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/svm2.png" width="360" height="300" /></p>
+<p>对于任何一个事件的所有情况有，n表示所有情况的数量</p>
 
-<p>假设分割线距离原点的距离为b，那么对于负样本$\vec u$</p>
+<script type="math/tex; mode=display">\sum_{i=1}^n B_i = 1</script>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\vec{u} · \vec{w} <= b %]]></script>
+<p>如果A是未知事件，那么</p>
 
-<p>就有</p>
+<script type="math/tex; mode=display">A = \sum_{i=1}^n AB_i</script>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\vec{u} · \vec{w} - b  <= 0 %]]></script>
+<script type="math/tex; mode=display">P(A) = \sum_{i=1}^n P(AB_i)</script>
 
-<p>从公式就能看到，SVM其实就是要寻找合适的$w$与$b$让虚线与实线的距离最大。</p>
+<p>根据条件概率有</p>
 
-<p>接下来我们把实线与虚线的距离归一化，那么对于训练集来说就有如下公式</p>
+<script type="math/tex; mode=display">P(A) = \sum_{i=1}^n P(B_i)P(A|B_i)</script>
 
-<p>负项：</p>
+<p>下面我们来看一个例子。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\vec{w}\vec{x} - b <= -1 %]]></script>
+<p>某地盗窃风气盛行，且偷窃者屡教不改。我们根据过往的案件记录，推断A今晚作案的概率是0.8，B今晚作案的概率是0.1，C今晚作案的概率是0.5，除此之外，还推断出A的得手率是0.1，B的得手率是1.0，C的得手率是0.5。那么，今晚村里有东西被偷的概率是多少？</p>
 
-<p>正项：</p>
+<p>通过阅读上述文字，我们大概对A、B、C三人有了一个初步的印象。首先，A的脑子可能有些问题，特别喜欢偷，但是技术相当烂。B看来是个江湖高手，一般不出手，一出手就绝不失手。C大概是追求中庸，各方面都很普通。</p>
 
-<script type="math/tex; mode=display">\vec{w}\vec{x} - b >= 1</script>
+<p>我们将文字描述转换为数学语言，根据作案频率可知</p>
 
-<p>为了将这两个公式统一，我们加入一个辅助量</p>
+<script type="math/tex; mode=display">P(A)=0.8\\P(B)=0.1\\P(C)=0.5</script>
 
-<script type="math/tex; mode=display">y_i = \begin{cases}\;\;1\quad x为正\\-1\quad x为负\end{cases}</script>
+<p>将“村里有东西被偷”记为S，根据得手率可以得到</p>
 
-<p>把辅助量带入上面的公式，最终两个公式可以合并成一个公式</p>
+<script type="math/tex; mode=display">P(S|A)=0.1\\P(S|B)=1.0\\P(S|C)=0.5</script>
 
-<script type="math/tex; mode=display">y_i(\vec{w}\vec{x} - b) - 1 >= 0</script>
+<p>根据我们上面全概率的公式，就可以求得</p>
 
-<p>那么，怎么样才能保证实线与虚线的距离最宽呢，这里我们设$\vec x_+$与$\vec x_+$分别为正负虚线上面的点，那么就有</p>
+<script type="math/tex; mode=display">P(S)=P(A)P(S|A)+P(B)P(S|B)+P(C)P(S|C)=0.43</script>
 
-<script type="math/tex; mode=display">width = (\vec x_+ - \vec x_-)· \frac{\vec w}{|w|}</script>
+<h2 id="贝叶斯公式">贝叶斯公式</h2>
 
-<script type="math/tex; mode=display">x_+=\frac{b+1}{\vec w}</script>
+<p>有了前面条件概率与全概率的基础，我们现在先直接抛出贝叶斯公式：</p>
 
-<script type="math/tex; mode=display">x_-=\frac{b-1}{\vec w}</script>
+<script type="math/tex; mode=display">P(B_i|A) = \frac{P(AB_i)}{P(A)} = \frac{p(B_i)P(A|B_i)}{\sum_{j} P(B_j)P(A|B_j)}</script>
 
-<p>最终我们得到公式</p>
+<p>上面的例子是知道小偷各自作案的概率，求被偷的概率。问你个更有意思的问题，是哪个小偷偷的，计算每个小偷偷的概率，这就是贝叶斯公式解决的问题。</p>
 
-<script type="math/tex; mode=display">width = \frac{2}{|\vec w|}</script>
+<p>为了方便大家对应上面的公式，我们这里把小偷这个变量设为B，被偷这个事件设为A，根据贝叶斯公式有</p>
 
-<p>所以宽度实际上和训练数据是没有关系的，只要知道了法向量，就可以求出宽度</p>
+<script type="math/tex; mode=display">P(B_1|A) = \frac{P(B_1)P(A|B_1)}{P(A)}=\frac{0.8×0.1}{0.43}=0.186</script>
 
-<p>我们要让宽度越大越好，即</p>
+<script type="math/tex; mode=display">P(B_2|A) = \frac{P(B_2)P(A|B_2)}{P(A)}=\frac{0.1×1.0}{0.43}=0.232</script>
 
-<script type="math/tex; mode=display">max\frac {2}{|\vec w|}</script>
+<script type="math/tex; mode=display">P(B_1|A) = \frac{P(B_1)P(A|B_1)}{P(A)}=\frac{0.5×0.5}{0.43}=0.581</script>
 
-<p>即</p>
+<p>注意，这里的$P(A)$已在上文求过，这里不再展开，正常情况应该使用全概率公式进行求解。</p>
 
-<script type="math/tex; mode=display">min|\vec w|</script>
+<h2 id="贝叶斯网络">贝叶斯网络</h2>
 
-<p>即</p>
+<p>贝叶斯网络，又称有向无环图模型，是一种概率图模型，把某个研究系统中涉及的随机变量，根据是否条件独立绘制在一个有向图中，就形成了贝叶斯网络。</p>
 
-<script type="math/tex; mode=display">min\frac{1}{2}|\vec w|^2</script>
+<p>在开始贝叶斯网络之前，我们需要了解一个概念，联合分布，即一个模型中，所有事件的概率，例如，一个模型中有事件A,B,C，我们要求出A,B,C分别为0或1的概率，在只有3个事件的情况下，我们需要存储$2^3$即8种情况，如果事件较多的情况下，我们是很难存储这些数据的，概率图模型就是为了能用最便捷的方式存储联合分布。</p>
 
-<p>这里添加的参数是为了之后求导方便</p>
+<p>如果我们能把模型中的事件以有向无环图的方式表示出来，</p>
 
-<p>接下来就是求极值，但是我们这里有一个限制条件，因此根据拉格朗日乘子法,最终求极值的公式为：</p>
-
-<script type="math/tex; mode=display">L = \frac{1}{2}|\vec w|^2 - \sum_{i=1}^N \alpha_i[y_i(\vec w_i \vec x_i-b)-1]</script>
-
-<p>对$w$与$b$求偏导</p>
-
-<script type="math/tex; mode=display">\frac{\alpha L}{\alpha \vec w} = \vec w - \sum_{i=1}^N\alpha_i y_i x_i</script>
-
-<script type="math/tex; mode=display">\frac{\alpha L}{\alpha \vec b} = \sum_{i=1}^N\alpha_i y_i</script>
-
-<p>令导数为0有</p>
-
-<script type="math/tex; mode=display">\vec w = \sum_{i=1}^N\alpha_i y_i x_i</script>
-
-<script type="math/tex; mode=display">\sum_{i=1}^N\alpha_i y_i = 0</script>
-
-<p>把这两个式子带入到L中</p>
-
-<script type="math/tex; mode=display">L = \sum_{i=1}^N\alpha_i - \frac{1}{2}\sum_{i=1}^N \sum_{j=1}^N\alpha_i \alpha_j y_i y_j x_i x_j</script>
-
-<p>走到这一步我们会发现$w$与$b$已经别其他变量所取代，最后我们要求的是$\alpha$的值，对于$\alpha$的值，一般会采用SMO KKT等算法来求取，这里不做详细说明。</p>
-
-<p>那对于一些无法用线性函数来做分类时怎么办呢</p>
-
-<p>首相，我们会把数据做一个非线性变化，把值变化到一个线性可分的空间上，这个函数我们称为核函数kernel，根据上面的L公式来说，我们并不需要知道每个点的数据怎么变的，只需要拿到核函数的结果，并把$x_ix_j$替换成核函数结果即可求出最后的值。</p>
+<p>在一个模型中，如果我们知道所有事件的联合分布，即可知道所有事件的任何情况下的概率，</p>
 
 
     </article>
@@ -322,9 +303,9 @@ refer to:
     <section class="post-footer-item read-next">
       
       <div class="read-next-item">
-        <a href="/2018/03/06/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%AE%97%E6%B3%95%E5%85%A5%E9%97%A8.html" class="read-next-link"></a>
+        <a href="/2018/03/12/%E8%81%9A%E7%B1%BB.html" class="read-next-link"></a>
         <section>
-          <span>推荐系统算法入门</span>
+          <span>聚类</span>
           <p>前言</p>
         </section>
         
@@ -336,14 +317,14 @@ refer to:
 
       
       <div class="read-next-item">
-        <a href="/2018/02/28/%E5%86%B3%E7%AD%96%E6%A0%91.html" class="read-next-link"></a>
+        <a href="/2018/03/06/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%AE%97%E6%B3%95%E5%85%A5%E9%97%A8.html" class="read-next-link"></a>
           <section>
-            <span>决策树</span>
+            <span>推荐系统算法入门</span>
             <p>前言</p>
           </section>
           
           <div class="filter"></div>
-          <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-02-28-%E5%86%B3%E7%AD%96%E6%A0%91/cover.jpeg" alt="">
+          <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg" alt="">
           
       </div>
       
