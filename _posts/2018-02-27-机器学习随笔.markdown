@@ -51,6 +51,8 @@ preprocessing - learning - evaluation - predict
 
 8、使用交叉验证来选择最佳的超参数，可以使用`grid_search.GridSearchCV`
 
+9、如果一个函数单调递减并且有下界，那么一定是收敛函数，例如k-means的代价函数
+
 
 
 
