@@ -1,7 +1,7 @@
 ---
 layout: post
-title: '贝叶斯网络'
-subtitle: ''
+title: '贝叶斯网络与隐马尔科夫链'
+subtitle: '概率图模型'
 date: 2018-03-06
 categories: 机器学习
 cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-01-SVM/cover.jpeg'
@@ -11,7 +11,7 @@ tags: 机器学习
 ## 前言
 贝叶斯网络是机器学习中非常经典的算法之一，它能够根据已知的条件来估算出不确定的知识，应用范围非常的广泛。贝叶斯网络以贝叶斯公式为理论接触构建成了一个有向无环图，我们可以通过贝叶斯网络构建的图清晰的根据已有信息预测未来信息。
 
-本文将会从最基本的概率基础开始讲解，并延伸到贝叶斯网络与马尔科夫链。
+本文将会从最基本的概率基础开始讲解，并延伸到贝叶斯网络与隐马尔科夫链。
 
 ## 条件概率
 
@@ -100,5 +100,15 @@ $$P(A) = \sum_B \sum_E \sum_A  P(B)P(E)P(A|B,E)P(M|A)\sum_J P(J|A)$$
 由于$\sum_J P(J|A)=1$,所以我们这里就可以把这一项约掉，最终
 $$P(A) = \sum_B \sum_E \sum_A  P(B)P(E)P(A|B,E)P(M|A)$$
 
+
+这里我在看一个条件概率，例如给John打电话的话地震的概率即$P(E|A)$，对于这样的问题，我们可以拆解成两个联合分布相除的式子
+
+$$P(E|A) = \frac{P(EA)}{P(A)}$$
+
+这里$P(A)$我们上面已经求出来了，对于$P(EA)$我们依旧使用积分的方法
+
+$$P(EA) = \sum_B \sum_J \sum_M P(B)P(E)P(A|B,E)P(J|A)P(M|A)$$
+
+## 隐马尔科夫链
 
 

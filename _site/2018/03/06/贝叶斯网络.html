@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>贝叶斯网络 - Welcome to AI World</title>
+    <title>贝叶斯网络与隐马尔科夫链 - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="贝叶斯网络">
+    <meta name="description" content="贝叶斯网络与隐马尔科夫链">
     <meta name="keywords"  content="机器学习">
     <!-- Open Graph -->
-    <meta property="og:title" content="贝叶斯网络 - Welcome to AI World">
+    <meta property="og:title" content="贝叶斯网络与隐马尔科夫链 - Welcome to AI World">
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://localhost:4000/2018/03/06/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C.html">
     <meta property="og:description" content="个人AI技术博客">
@@ -53,7 +53,7 @@
           
         
       </div>
-      <h1>贝叶斯网络</h1>
+      <h1>贝叶斯网络与隐马尔科夫链</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
         <time class="post-meta-item" datetime="18-03-06"><i class="iconfont icon-date"></i>06 Mar 2018</time>
@@ -67,14 +67,14 @@
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle"></h2>
+    <h2 class="post-subtitle">概率图模型</h2>
     
 
     <article class="markdown-body">
       <h2 id="前言">前言</h2>
 <p>贝叶斯网络是机器学习中非常经典的算法之一，它能够根据已知的条件来估算出不确定的知识，应用范围非常的广泛。贝叶斯网络以贝叶斯公式为理论接触构建成了一个有向无环图，我们可以通过贝叶斯网络构建的图清晰的根据已有信息预测未来信息。</p>
 
-<p>本文将会从最基本的概率基础开始讲解，并延伸到贝叶斯网络与马尔科夫链。</p>
+<p>本文将会从最基本的概率基础开始讲解，并延伸到贝叶斯网络与隐马尔科夫链。</p>
 
 <h2 id="条件概率">条件概率</h2>
 
@@ -186,6 +186,23 @@
     </tr>
   </tbody>
 </table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>这里我在看一个条件概率，例如给John打电话的话地震的概率即$P(E</td>
+      <td>A)$，对于这样的问题，我们可以拆解成两个联合分布相除的式子</td>
+    </tr>
+  </tbody>
+</table>
+
+<script type="math/tex; mode=display">P(E|A) = \frac{P(EA)}{P(A)}</script>
+
+<p>这里$P(A)$我们上面已经求出来了，对于$P(EA)$我们依旧使用积分的方法</p>
+
+<script type="math/tex; mode=display">P(EA) = \sum_B \sum_J \sum_M P(B)P(E)P(A|B,E)P(J|A)P(M|A)</script>
+
+<h2 id="隐马尔科夫链">隐马尔科夫链</h2>
 
 
     </article>
