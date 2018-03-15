@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>贝叶斯网络与隐马尔科夫链 - Welcome to AI World</title>
+    <title>贝叶斯网络与隐马尔科夫模型 - Welcome to AI World</title>
     <meta name="author"  content="Joe">
-    <meta name="description" content="贝叶斯网络与隐马尔科夫链">
+    <meta name="description" content="贝叶斯网络与隐马尔科夫模型">
     <meta name="keywords"  content="机器学习">
     <!-- Open Graph -->
-    <meta property="og:title" content="贝叶斯网络与隐马尔科夫链 - Welcome to AI World">
+    <meta property="og:title" content="贝叶斯网络与隐马尔科夫模型 - Welcome to AI World">
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://localhost:4000/2018/03/06/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C.html">
     <meta property="og:description" content="个人AI技术博客">
@@ -53,7 +53,7 @@
           
         
       </div>
-      <h1>贝叶斯网络与隐马尔科夫链</h1>
+      <h1>贝叶斯网络与隐马尔科夫模型</h1>
       <div class="post-meta">
         <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
         <time class="post-meta-item" datetime="18-03-06"><i class="iconfont icon-date"></i>06 Mar 2018</time>
@@ -67,7 +67,7 @@
 
   <div class="post-content visible">
     
-    <h2 class="post-subtitle">概率图模型</h2>
+    <h2 class="post-subtitle">概率图模型简介</h2>
     
 
     <article class="markdown-body">
@@ -170,8 +170,62 @@
 
 <script type="math/tex; mode=display">P(EA) = \sum_B \sum_J \sum_M P(B)P(E)P(A|B,E)P(J|A)P(M|A)</script>
 
-<h2 id="隐马尔科夫链">隐马尔科夫链</h2>
-<p>…</p>
+<h2 id="隐马尔科夫模型-hmm">隐马尔科夫模型 HMM</h2>
+
+<p>隐马尔科夫模型是概率图模型的一种特定情况，该模型存在着一种链式关系，其中，隐是表示隐含状态的意思，如下图所示，马尔科夫的意思是当前节点只与其父节点有关系，和其它节点相互独立。</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/bayes2.jpg" width="500" height="300" /></p>
+
+<p>马尔科夫模型属于一个序列模型，适合用于连续性数据的场景。这里，我们以股票来举例子。</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/bayes3.jpg" width="640" height="300" /></p>
+
+<p>Y代表当天股票的价格，X代表股票是牛市还是熊市，我们的任务是根据$Y_1 到 Y_{t-1}$的数据预测$X_t$，最后拿到真正的数据$Y_t$时再更新一次$X_t$，用公式表达就是</p>
+
+<script type="math/tex; mode=display">P(X_t|Y_{1:t})</script>
+
+<p>注意，这里Y的下标表示第1到t天</p>
+
+<p>根据我们在贝叶斯网络中学到的内容，要求解上面的问题，首先，我们需要得到联合分布，再使用贝叶斯公式计算出其概率，接下来我们就一步一步的来把结果推导出来。</p>
+
+<p>为了求最终结果，我们把计算过程分为两个大的过程</p>
+
+<ul>
+  <li>求 $P(X_t|Y_{1:t-1})$ 即预测过程，通过前几天的数据预测今日走势</li>
+  <li>求 $P(X_t|Y_{1:t})$ 即更新过程，获取今日数据之后更新走势</li>
+</ul>
+
+<p>在求解前，我们引入一个概率公式</p>
+
+<script type="math/tex; mode=display">P(AB|C) = P(A|BC)P(B|C)</script>
+
+<p>预测：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+P(X_t|Y_{1:t-1}) &= \sum P(X_tX_{1:t-1}|Y_{1:t-1})\\
+&= \sum P(X_t|X_{1:t-1}Y_{1:t-1})P(X_{1:t-1}|Y_{1:t-1})\\
+&= \sum P(X_t|X_{1:t-1})P(X_{1:t-1}|Y_{1:t-1})
+\end{align} %]]></script>
+
+<p>公式第一行使用了全概率引入了$X_{t-1}$，第二行由于$X_t$与$Y_{t-1}$没有关系，所以可以把$Y_{t-1}$约掉，最后剩余的概率值都可从联合分布中获取。</p>
+
+<p>在继续一面的推断前，我们再看一下三个参数的贝叶斯公式</p>
+
+<script type="math/tex; mode=display">P(A|BC) = \frac{P(B|AC)P(A|C)}{P(B|C)}</script>
+
+<p>更新：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+P(X_t|Y_{1:t}) &= P(X_t|Y_tY_{1:t-1})\\
+&= \frac{P(Y_t|X_tY_{1:t-1})P(X_t|Y_{1:t-1})}{\sum P(Y_t|X_tY_{1:t-1})P(X_t|Y_{1:t-1})}\\
+&= \frac{P(Y_t|X_t)P(X_t|Y_{1:t-1})}{\sum P(Y_t|X_t)P(X_t|Y_{1:t-1})}
+\end{align} %]]></script>
+
+<p>公式第二行根据三参数贝叶斯公式进行变形，第三行把不相关的参数去除，剩余参数都是已知参数。</p>
+
+<p>HMM模型和RNN模型很像，都是序列模型。在数据量较大的情况下，使用RNN效果较好，HMM运算过程简单，效率高，更适合轻量级的数据。</p>
 
 
     </article>

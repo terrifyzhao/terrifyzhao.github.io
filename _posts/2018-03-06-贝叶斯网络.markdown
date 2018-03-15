@@ -1,7 +1,7 @@
 ---
 layout: post
 title: '贝叶斯网络与隐马尔科夫模型'
-subtitle: '概率图模型'
+subtitle: '概率图模型简介'
 date: 2018-03-06
 categories: 机器学习
 cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/cover.jpg'
@@ -119,8 +119,53 @@ $$P(EA) = \sum_B \sum_J \sum_M P(B)P(E)P(A|B,E)P(J|A)P(M|A)$$
 
 马尔科夫模型属于一个序列模型，适合用于连续性数据的场景。这里，我们以股票来举例子。
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/bayes3.jpg" width="500" height="300"/>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/bayes3.jpg" width="640" height="300"/>
 
-Y代表当天股票的价格，X代表股票是牛市还是熊市，我们的任务是根据$Y_1 到 Y_{t-1}$的数据预测$X_t$
+Y代表当天股票的价格，X代表股票是牛市还是熊市，我们的任务是根据$Y_1 到 Y_{t-1}$的数据预测$X_t$，最后拿到真正的数据$Y_t$时再更新一次$X_t$，用公式表达就是
+
+$$P(X_t|Y_{1:t})$$
+
+注意，这里Y的下标表示第1到t天
+
+根据我们在贝叶斯网络中学到的内容，要求解上面的问题，首先，我们需要得到联合分布，再使用贝叶斯公式计算出其概率，接下来我们就一步一步的来把结果推导出来。
+
+为了求最终结果，我们把计算过程分为两个大的过程
+
++ 求 $P(X_t\|Y_{1:t-1})$ 即预测过程，通过前几天的数据预测今日走势
++ 求 $P(X_t\|Y_{1:t})$ 即更新过程，获取今日数据之后更新走势
+
+在求解前，我们引入一个概率公式
+
+$$P(AB|C) = P(A|BC)P(B|C)$$
+
+预测：
+
+$$
+\begin{align}
+P(X_t|Y_{1:t-1}) &= \sum P(X_tX_{1:t-1}|Y_{1:t-1})\\
+&= \sum P(X_t|X_{1:t-1}Y_{1:t-1})P(X_{1:t-1}|Y_{1:t-1})\\
+&= \sum P(X_t|X_{1:t-1})P(X_{1:t-1}|Y_{1:t-1})
+\end{align}
+$$
+
+公式第一行使用了全概率引入了$X_{t-1}$，第二行由于$X_t$与$Y_{t-1}$没有关系，所以可以把$Y_{t-1}$约掉，最后剩余的概率值都可从联合分布中获取。
+
+在继续一面的推断前，我们再看一下三个参数的贝叶斯公式
+
+$$P(A|BC) = \frac{P(B|AC)P(A|C)}{P(B|C)}$$
+
+更新：
+
+$$
+\begin{align}
+P(X_t|Y_{1:t}) &= P(X_t|Y_tY_{1:t-1})\\
+&= \frac{P(Y_t|X_tY_{1:t-1})P(X_t|Y_{1:t-1})}{\sum P(Y_t|X_tY_{1:t-1})P(X_t|Y_{1:t-1})}\\
+&= \frac{P(Y_t|X_t)P(X_t|Y_{1:t-1})}{\sum P(Y_t|X_t)P(X_t|Y_{1:t-1})}
+\end{align}
+$$
+
+公式第二行根据三参数贝叶斯公式进行变形，第三行把不相关的参数去除，剩余参数都是已知参数。
+
+HMM模型和RNN模型很像，都是序列模型。在数据量较大的情况下，使用RNN效果较好，HMM运算过程简单，效率高，更适合轻量级的数据。
 
 
