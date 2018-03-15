@@ -117,6 +117,10 @@ $$P(EA) = \sum_B \sum_J \sum_M P(B)P(E)P(A|B,E)P(J|A)P(M|A)$$
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/bayes2.jpg" width="500" height="300"/>
 
 
-马尔科夫模型属于一个序列模型，适合用于连续性数据的场景，这里，我们以股票来举例子。
+马尔科夫模型属于一个序列模型，适合用于连续性数据的场景。这里，我们以股票来举例子。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/bayes3.jpg" width="500" height="300"/>
+
+Y代表当天股票的价格，X代表股票是牛市还是熊市，我们的任务是根据$Y_1 到 Y_{t-1}$的数据预测$X_t$
 
 
