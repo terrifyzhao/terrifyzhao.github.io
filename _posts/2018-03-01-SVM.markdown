@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'SVM'
+title: '支持向量机SVM'
 subtitle: 'SVM推导过程详解'
 date: 2018-03-01
 categories: 机器学习

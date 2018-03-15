@@ -7,7 +7,7 @@
     } ,
   
     {
-      "title"    : "SVM",
+      "title"    : "支持向量机SVM",
       "tags"     : "机器学习",
       "url"      : "/2018/03/01/SVM.html"
     } ,
