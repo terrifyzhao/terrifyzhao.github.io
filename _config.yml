@@ -20,7 +20,7 @@ footer:
 author: 'Joe'
 nickname: ''
 bio: '移动客户端开发者，热爱AI技术'
-avatar: '/assets/img/profile.jpeg'
+avatar: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/hero.jpg'
 
 # Search
 search: true
