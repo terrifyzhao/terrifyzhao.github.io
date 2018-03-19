@@ -75,5 +75,17 @@ $c^{(i)}$=从1到K的所有聚类中心索引（index）中最接近于$x^{(i)}$
 
 但是，k-means也有其缺点，例如，我们有9个点，初始点我们选择了图中的这三个
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering8.jpg" width="400" height="240"/>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering8.jpg" width="800" height="240"/>
+
+根据前面的算法，我们最终的结果是这样的
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering9.jpg" width="800" height="240"/>
+
+显然，这并不是我们期望的结果，算法最终陷入到了局部最优解中。
+
+## 最远点初始化
+
+从上面的问题就可以发现，其实k-means算法的关键就是找到合理的初始化点，这里我们介绍一种优化方案，最远初始化。
+
+首先，我们随机选一个点
 
