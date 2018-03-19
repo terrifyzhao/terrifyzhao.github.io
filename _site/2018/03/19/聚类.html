@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聚类 - Welcome to AI World</title>
+    <meta name="author"  content="Joe">
+    <meta name="description" content="聚类">
+    <meta name="keywords"  content="机器学习, 无监督学习">
+    <!-- Open Graph -->
+    <meta property="og:title" content="聚类 - Welcome to AI World">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:4000/2018/03/19/%E8%81%9A%E7%B1%BB.html">
+    <meta property="og:description" content="个人AI技术博客">
+    <meta property="og:site_name" content="Welcome to AI World">
+    <link rel="stylesheet" href="//cdn.staticfile.org/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_roc50gemkxpw4s4i.css">
+    <link rel="stylesheet" href="/assets/css/github-markdown.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    <link rel="stylesheet" href="/assets/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+
+<body>
+  <!--[if lt IE 10]>
+<div class="alert-danger" role="alert">你的浏览器实在太太太旧了，放学别走，升级完浏览器再说！<a target="_blank" class="alert-link" href="http://browsehappy.com">立即升级</a></div>
+<![endif]-->
+  <input id="nm-switch" type="hidden" value="true"> <header class="g-header">
+    <div class="g-logo">
+      <a href="/"></a>
+    </div>
+    <i id="menu-toggle" class="iconfont icon-menu"></i>
+    <nav class="g-nav">
+        <ul>
+            
+            <li><a href="/">home</a></li>
+            
+            <li><a href="/tags.html">tags</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+
+  <header class="g-banner post-header post-pattern-circuitBoard bgcolor-default " data-theme="default">
+    <div class="post-wrapper">
+      <div class="post-tags">
+        
+          
+            <a href="http://localhost:4000/tags#%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" class="post-tag">机器学习</a>
+          
+            <a href="http://localhost:4000/tags#%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0" class="post-tag">无监督学习</a>
+          
+        
+      </div>
+      <h1>聚类</h1>
+      <div class="post-meta">
+        <span class="post-meta-item"><i class="iconfont icon-author"></i><a href="http://localhost:4000" target="_blank" rel="author">Joe</a></></span>
+        <time class="post-meta-item" datetime="18-03-19"><i class="iconfont icon-date"></i>19 Mar 2018</time>
+      </div>
+    </div>
+    
+    <div class="filter"></div>
+    <div class="post-cover" style="background: url('https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-18-%E8%81%9A%E7%B1%BB/cover.jpeg') center no-repeat; background-size: cover;">
+      
+  </header>
+
+  <div class="post-content visible">
+    
+    <h2 class="post-subtitle">SVM推导过程详解</h2>
+    
+
+    <article class="markdown-body">
+      <h2 id="前言">前言</h2>
+
+<p>俗话说：“物以类聚，人以群分”，在自然科学和社会科学中，存在着大量的分类问题。所谓类，通俗地说，就是指相似元素的集合。</p>
+
+<p>而对于分类问题，我们通常不会提供x与y这样的映射关系，对于这种用机器自动找出其中规律并进行分类的问题，我们称为聚类。</p>
+
+<p>聚类在实际的应用中亦是非常广泛的，如：市场细分（Market segmentation）、社交圈分析（social network analysis）、集群计算（organize computing clusters）、天体数据分析（astronomical data analysis）</p>
+
+<h2 id="k均值k-means">K均值(K-means)</h2>
+
+<p>在聚类分析中，我们希望能有一种算法能够自动的将相同元素分为紧密关系的子集或簇，K均值算法（K-means）为最广泛的一种算法。k-means是硬分类，一个点只能分到一个类。</p>
+
+<p>接下来我们会以图解的形式讲解该算法。</p>
+
+<p>假设我们有9个点，我们要把九个点分为三类</p>
+
+<p>首先，我们在图中随机选择三个点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering1.jpg" width="400" height="240" /></p>
+
+<p>把距离这三个点最近的其他点归为一类</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering2.jpg" width="400" height="240" /></p>
+
+<p>取当前类的所有点的均值，作为中心点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering3.jpg" width="400" height="240" /></p>
+
+<p>更新距离中心点最近的点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering4.jpg" width="400" height="240" /></p>
+
+<p>再次计算被分类点的均值作为新的中心点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering5.jpg" width="400" height="240" /></p>
+
+<p>再次更新距离中心点最近的点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering6.jpg" width="400" height="240" /></p>
+
+<p>计算中心点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering7.jpg" width="400" height="240" /></p>
+
+<p>当所有的点无法再更新到其他分类时，算法结束，此时继续迭代，聚类中心将不会再做改变。</p>
+
+<p>k-means算法，输入有两个部分：K（聚类的个数）：number of clusters，训练集$x^{(1)},x^{(2)},…,x^{(m)}$</p>
+
+<p>​随机初始化K个聚类中心$\mu_1,\mu_2,…,\mu_k$，重复以下迭代：</p>
+
+<p>for i=1:m</p>
+
+<p>$c^{(i)}$=从1到K的所有聚类中心索引（index）中最接近于$x^{(i)}$的索引，即
+​ 
+​<script type="math/tex">c^{(i)}=min_k||x^{(i)}−\mu_k||^2</script></p>
+
+<p>​for k=1:K</p>
+
+<p>​$\mu_k$=对于接近于聚类k点处平均值，即
+​ 
+​<script type="math/tex">\mu_k = \frac{1}{n} \sum_{n} x^{(i)}</script></p>
+
+<p>但是，k-means也有其缺点，例如，我们有9个点，初始点我们选择了图中的这三个</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering8.jpg" width="800" height="240" /></p>
+
+<p>根据前面的算法，我们最终的结果是这样的</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering9.jpg" width="800" height="240" /></p>
+
+<p>显然，这并不是我们期望的结果，算法最终陷入到了局部最优解中。</p>
+
+<h2 id="最远点初始化">最远点初始化</h2>
+
+<p>从上面的问题就可以发现，其实k-means算法的关键就是找到合理的初始化点，初始化点的位置会影响到最终的结果好坏。这里我们介绍一种优化方案，最远初始化。</p>
+
+<p>首先，我们还是随机选一个点，例如图中的红点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering10.jpg" width="500" height="240" /></p>
+
+<p>接下来，我们要选择一个距离红点最远的点，图中绿点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering11.jpg" width="500" height="240" /></p>
+
+<p>最后，再选一个距离红点第二远的点，图中黑点</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering12.jpg" width="500" height="240" /></p>
+
+<p>初始化完成后根据前面提到的算法完成分类</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering13.jpg" width="420" height="240" /></p>
+
+<p>但是，该算法还是有一些问题，对于绿点，如果是噪声的话，我们最终把噪声分成了一类，这也并不是我们想要的结果,那么怎么解决这个问题呢？</p>
+
+<h2 id="k-means">K-means++</h2>
+
+<p>对于噪声，我们知道都是一些很少量的数据，那么，在我们选择点的时候，我门要给所有的点一个权重，例如上面的绿点，虽然距离最远，但是只有一个点，其权重较小，而对于(0,1)与(0,-1)附近的点很多，其权重就大。例如，我们设绿点的权重是1/10，(0,1)与(0,-1)的点权重是1/30，但是其数量很多，假设有10个点，那么权重就可以理解为多个点的和，那就是1/3，所以，最终初始化的点会选择(0,1)与(0,-1)附近，噪声问题也就解决了。</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering14.jpg" width="420" height="240" /></p>
+
+<p>K-means算法首先需要选择k个点，每次要计算其余n各点的距离，假设每个点的维度是d，那么最终的时间复杂度是$O(nkd)$，可见其算法是线性的，效率很高。</p>
+
+<h2 id="k值的选择">K值的选择</h2>
+
+<p>对于K值的选择，我们可以考虑使用交叉验证，根据损失函数来选择最优的K</p>
+
+<script type="math/tex; mode=display">J = \sum_{i=1}^n min_k||x^{(i)}−\mu_k||^2</script>
+
+<p>损失函数最终会有一个拐点，根据这个拐点我们就能选择最佳的K值</p>
+
+<p><img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering15.jpg" width="320" height="240" /></p>
+
+
+    </article>
+
+    
+      <!--
+Author: Ray-Eldath
+refer to:
+ - https://github.com/theme-next/hexo-theme-next/blob/4bfbd67b3edc6f11b00357da6e509e5281a896f1/layout/_macro/reward.swig and
+ - https://github.com/theme-next/hexo-theme-next/blob/e12bb0b27e16072eb82baa4c7dda1c41c8de7264/source/css/_common/components/post/post-reward.styl
+-->
+<style media="screen">
+  .reward {
+    padding: 5px 0;
+    margin: 20px auto;
+    width: 90%;
+    text-align: center;
+  }
+
+  .rewardButton {
+    background-color: #f44236;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: '微软雅黑';
+    font-size: 18px;
+    padding: 5px 25px;
+    text-decoration: none;
+  }
+
+  .rewardButton:hover {
+    background-color: #F7877F;
+  }
+
+  .wechat:hover p {
+    animation: roll 0.1s infinite linear;
+    -webkit-animation: roll 0.1s infinite linear;
+    -moz-animation: roll 0.1s infinite linear;
+  }
+
+  .alipay:hover p {
+    animation: roll 0.1s infinite linear;
+    -webkit-animation: roll 0.1s infinite linear;
+    -moz-animation: roll 0.1s infinite linear;
+  }
+
+  .QR {
+    padding-top: 20px;
+  }
+
+  .QR a {
+    border: 0;
+  }
+
+  .QR img {
+    width: 180px;
+    max-width: 100%;
+    display: inline-block;
+    margin: 0.8em 2em 0 2em;
+  }
+</style>
+
+<div class="reward">
+  <a class="rewardButton" title="请Joe喝杯咖啡？">赞 赏</a>
+
+  <div class="QR" style="display: none;">
+    
+    <div>
+      <span style="font-family: '微软雅黑'; font-size: 18px; ">真诚赞赏 手留余香</span>
+    </div>
+    
+
+    
+    <div class="wechat" style="display: inline-block">
+      <img class="wechat_qr" src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/wechat.jpeg" title="用微信请Joe喝杯咖啡？" alt="用微信请Joe喝杯咖啡？" />
+      <p>微信支付</p>
+    </div>
+    
+
+    
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("a.rewardButton").click(function() {
+      $("div.QR").slideToggle()
+    });
+  });
+</script>
+
+    
+
+    
+    <div class="social-share-wrapper">
+      <div class="social-share"></div>
+    </div>
+    
+  </div>
+
+  <section class="author-detail">
+    <section class="post-footer-item author-card">
+      <div class="avatar">
+        <img src="http://localhost:4000/assets/img/profile.jpeg" alt="">
+      </div>
+      <div class="author-name" rel="author">Joe</div>
+      <div class="bio">
+        <p>移动客户端开发者，热爱AI技术</p>
+      </div>
+      
+      <ul class="sns-links">
+        
+        <li>
+          <a href="mailto:zjiuzhou@gmail.com" target="_blank">
+                    <i class="iconfont icon-email"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//weibo.com/u/2265751480?refer_flag=1001030101_" target="_blank">
+                    <i class="iconfont icon-weibo"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//www.linkedin.com/in/%E4%B9%9D%E5%B7%9E-%E8%B5%B5-742276152/" target="_blank">
+                    <i class="iconfont icon-linkedin"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//www.instagram.com/joe.zhao520/" target="_blank">
+                    <i class="iconfont icon-instagram"></i>
+                </a>
+        </li>
+        
+        <li>
+          <a href="//github.com/terrifyzhao" target="_blank">
+                    <i class="iconfont icon-github"></i>
+                </a>
+        </li>
+        
+      </ul>
+      
+    </section>
+    <section class="post-footer-item read-next">
+      
+
+      
+      <div class="read-next-item">
+        <a href="/2018/03/06/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C.html" class="read-next-link"></a>
+          <section>
+            <span>贝叶斯网络与隐马尔科夫模型</span>
+            <p>前言贝叶斯网络是机器学习中非常经典的算法之一，它能够根据已知的条件来估算出不确定的知识，应用范围非常的广泛。贝叶斯...</p>
+          </section>
+          
+          <div class="filter"></div>
+          <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-06-%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/cover.jpg" alt="">
+          
+      </div>
+      
+    </section>
+
+    
+
+    
+    <section class="post-footer-item comment">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDAzNi8xMDU3NA">
+    </section>
+    
+  </section>
+
+  
+  <!--
+Author: Ray-Eldath
+refer to:
+ - https://github.com/theme-next/hexo-theme-next/blob/master/source/js/src/utils.js
+ - https://jingyan.baidu.com/article/b2c186c83ec846c46ef6ff80.html
+ - http://www.bkjia.com/jQuery/449205.html
+-->
+<style media="screen">
+  .scroll {
+    z-index: 10000;
+    display: none;
+    width: 56px;
+    height: 24px;
+    background: #222;
+    color: #fff;
+    line-height: 24px;
+    text-align: center;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+</style>
+<div class="scroll">
+  <i class="fa fa-arrow-up"></i>
+  <span class="scrollpercent"></span><span> %</span>
+</div>
+
+<script src="/assets/js/util.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    if (utils.isMobile()) {
+      $('.scroll').hide();
+      return;
+    }
+    $(window).scroll(function() {
+      let scrollValue = $(window).scrollTop();
+
+      var scrollPercentRounded = Math.round((scrollValue / utils.getContentVisibilityHeight()) * 100);
+      var scrollPercentMaxed = (scrollPercentRounded > 100) ? 100 : scrollPercentRounded;
+
+      $('.scrollpercent').html(scrollPercentMaxed);
+      scrollValue > 100 ? $('.scroll').fadeIn() : $('.scroll').fadeOut();
+    });
+
+    $('.scroll').click(function() {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 300);
+    })
+  })
+</script>
+
+
+
+<footer class="g-footer">
+  <section>Welcome to AI World ©
+  
+  
+    2017
+    -
+  
+  2018
+  </section>
+  <section>Powered by <a href="//jekyllrb.com">Jekyll</a> | <a href="https://github.com/kaeyleo/jekyll-theme-H2O">Theme H2O</a></section>
+</footer>
+
+
+  <script src="/assets/js/social-share.min.js"></script>
+  <script>
+    socialShare('.social-share', {
+      sites: [
+        
+          'wechat'
+          ,
+          
+        
+          'weibo'
+          ,
+          
+        
+          'douban'
+          ,
+          
+        
+          'twitter'
+          
+        
+      ],
+      wechatQrcodeTitle: "分享到微信朋友圈",
+      wechatQrcodeHelper: '<p>扫码后点击右上角</p><p>将本文分享至朋友圈</p>'
+    });
+  </script>
+
+
+
+
+<script>
+    (function(d, s) {
+      var j, e = d.getElementsByTagName(s)[0];
+
+      if (typeof LivereTower === 'function') {
+        return;
+      }
+
+      j = d.createElement(s);
+      j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+      j.async = true;
+
+      e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+
+  </script>
+
+
+  <noscript>为正常使用评论功能请激活JavaScript。</noscript>
+  <script src="/assets/js/prism.js"></script>
+  <script src="/assets/js/index.min.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+      }
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  
+</body>
+
+</html>
