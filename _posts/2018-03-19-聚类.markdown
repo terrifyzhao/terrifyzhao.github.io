@@ -17,11 +17,63 @@ tags: 机器学习 无监督学习
 聚类在实际的应用中亦是非常广泛的，如：市场细分（Market segmentation）、社交圈分析（social network analysis）、集群计算（organize computing clusters）、天体数据分析（astronomical data analysis）
 
 
-## k-means
+## K均值(K-means)
 
-在聚类分析中，我们希望能有一种算法能够自动的将相同元素分为紧密关系的子集或簇，K均值算法（k-means）为最广泛的一种算法。k-means是硬分类，一个点只能分到一个类。
+在聚类分析中，我们希望能有一种算法能够自动的将相同元素分为紧密关系的子集或簇，K均值算法（K-means）为最广泛的一种算法。k-means是硬分类，一个点只能分到一个类。
 
 接下来我们会以图解的形式讲解该算法。
 
 假设我们有9个点，我们要把九个点分为三类
+
+首先，我们在图中随机选择三个点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering1.jpg" width="400" height="240"/>
+
+把距离这三个点最近的其他点归为一类
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering2.jpg" width="400" height="240"/>
+
+取当前类的所有点的均值，作为中心点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering3.jpg" width="400" height="240"/>
+
+更新距离中心点最近的点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering4.jpg" width="400" height="240"/>
+
+再次计算被分类点的均值作为新的中心点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering5.jpg" width="400" height="240"/>
+
+再次更新距离中心点最近的点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering6.jpg" width="400" height="240"/>
+
+计算中心点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering7.jpg" width="400" height="240"/>
+
+当所有的点无法再更新到其他分类时，算法结束，此时继续迭代，聚类中心将不会再做改变。
+
+k-means算法，输入有两个部分：K（聚类的个数）：number of clusters，训练集$x^{(1)},x^{(2)},...,x^{(m)}$ 
+
+​随机初始化K个聚类中心$\mu_1,\mu_2,...,\mu_k$，重复以下迭代：
+
+
+for i=1:m
+
+$c^{(i)}$=从1到K的所有聚类中心索引（index）中最接近于$x^{(i)}$的索引，即
+​ 
+​$$c^{(i)}=min_k||x^{(i)}−\mu_k||^2$$
+
+​for k=1:K
+
+​$\mu_k$=对于接近于聚类k点处平均值，即
+​ 
+​$$\mu_k = \frac{1}{n} \sum_{n} x^{(i)}$$
+
+
+但是，k-means也有其缺点，例如，我们有9个点，初始点我们选择了图中的这三个
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering8.jpg" width="400" height="240"/>
 
