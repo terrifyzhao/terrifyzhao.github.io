@@ -85,7 +85,23 @@ $c^{(i)}$=从1到K的所有聚类中心索引（index）中最接近于$x^{(i)}$
 
 ## 最远点初始化
 
-从上面的问题就可以发现，其实k-means算法的关键就是找到合理的初始化点，这里我们介绍一种优化方案，最远初始化。
+从上面的问题就可以发现，其实k-means算法的关键就是找到合理的初始化点，初始化点的位置会影响到最终的结果好坏。这里我们介绍一种优化方案，最远初始化。
 
-首先，我们随机选一个点
+首先，我们还是随机选一个点，例如图中的红点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering10.jpg" width="500" height="240"/>
+
+接下来，我们要选择一个距离红点最远的点，图中绿点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering11.jpg" width="500" height="240"/>
+
+最后，再选一个距离红点第二远的点，图中黑点
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering12.jpg" width="500" height="240"/>
+
+初始化完成后根据前面提到的算法完成分类
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/clustering13.jpg" width="420" height="240"/>
+
+但是，该算法还是有一些问题，对于绿点，如果是噪声的话，我们最终把噪音分成了一类，这也并不是我们想要的结果
 
