@@ -1,10 +1,10 @@
 ---
 layout: post
 title: '聚类'
-subtitle: 'SVM推导过程详解'
+subtitle: 'k-means算法详解'
 date: 2018-03-19
 categories: 无监督学习
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-18-%E8%81%9A%E7%B1%BB/cover.jpeg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-03-19-%E8%81%9A%E7%B1%BB/cover.jpeg'
 tags: 机器学习 无监督学习
 ---
 
