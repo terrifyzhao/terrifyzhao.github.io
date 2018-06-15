@@ -28,5 +28,11 @@ $$Obj(Θ) = L(Θ) + Ω(Θ) $$
 
 $$L = \sum_{i=1}^{n} l(y_i,\hat{y_i})$$
 
-接下来，我们以一个例子来理解下文。我们有一堆用户信息，我们想要根据这些信息来判断用户是否打游戏
+接下来，我们以一个例子来理解下文。我们有一堆用户信息，我们想要根据这些信息来判断用户是否打游戏，结果是一个实数域的值，值越大，用于越可能喜欢打游戏。我们分别看下一棵树的情况和Boosted Tree的情况。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-06-15-Boosted%20Tree/bt1.jpg"/>
+
+
+
+
 
