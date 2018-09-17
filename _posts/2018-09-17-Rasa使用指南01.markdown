@@ -1,0 +1,116 @@
+---
+layout: post
+title: 'Rasa使用指南01'
+subtitle: 'Rasa基础说明'
+date: 2018-09-17
+categories: NLP 人机对话
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-06-15-PCA%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/cover.jpeg'
+tags:NLP
+---
+
+# Rasa NLU 使用指南
+
+本文将会基于一个简单的单轮对话内容带领大家搭建一个rasa平台。在开始之前，我们需要理解以下几个概念，story、domain、
+
+#### 1、Write Stories
+In this very simple conversation, the user says hello to our bot, and the bot says hello back. This is how it looks as a story:
+
+符号|说明|
+:---:|:---:
+\##|story 标题|
+*|用户输入的内容
+-|action
+
+```
+## happy path
+* greet
+  - utter_greet
+* mood_great
+  - utter_happy
+
+## sad path 1
+* greet
+  - utter_greet
+* mood_unhappy
+  - utter_cheer_up
+  - utter_did_that_help
+* mood_affirm
+  - utter_happy
+
+## sad path 2
+* greet
+  - utter_greet
+* mood_unhappy
+  - utter_cheer_up
+  - utter_did_that_help
+* mood_deny
+  - utter_goodbye
+
+## say goodbye
+* goodbye
+  - utter_goodbye
+```
+save it in a file called `stories.md`
+
+####2、Define a Domain
+The next thing we need to do is define a Domain. The domain defines the universe your bot lives in.
+
+So what do the different parts mean?
+
+标识|说明
+:---:|:---:
+intents|问题的意图
+actions|机器的动作
+templates|机器的回答模板
+entities|问题的实体
+slots|槽
+
+```
+intents:
+  - greet
+  - goodbye
+  - mood_affirm
+  - mood_deny
+  - mood_great
+  - mood_unhappy
+
+actions:
+- utter_greet
+- utter_cheer_up
+- utter_did_that_help
+- utter_happy
+- utter_goodbye
+
+templates:
+  utter_greet:
+  - text: "Hey! How are you?"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great carry on!"
+
+  utter_goodbye:
+  - text: "Bye"
+```
+save it in a file called `domain.yml`
+
+Rasa Core’s job is to choose the right action to execute at each step of the conversation. Simple actions are just sending a message to a user. These simple actions are the actions in the domain, which start with utter_. They will just respond with a message based on a template from the templates section. See Actions for how to build more interesting actions.
+
+In our simple example we don’t need slots and entities, so these aren’t in the example domain.
+
+#### 3、Train a Dialogue Model
+
+The next step is to train a neural network on our example stories. To do this, run the command below. If you are running this on your machine, leave out the ! at the start. This will train the dialogue model and store it into models/dialogue.
+
+```
+python -m rasa_core.train -d domain.yml -s stories.md -o models/dialogue
+```
+
+这一步会对我们之前准备好的story与domain进行训练，
+
