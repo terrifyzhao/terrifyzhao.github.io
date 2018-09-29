@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Rasa使用指南01'
+title: 'Rasa使用指南'
 subtitle: 'Rasa基础说明'
 date: 2018-09-17
 categories: NLP 人机对话
@@ -8,12 +8,28 @@ cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/mast
 tags:NLP
 ---
 
-# Rasa NLU 使用指南
+## 前言
 
-本文将会基于一个简单的单轮对话内容带领大家搭建一个rasa平台。在开始之前，我们需要理解以下几个概念，story、domain、
+本文内容基于Rasa官网文档，做了翻译与整理，想了解更多内容的小伙伴可关注[Rasa官网](https://rasa.com/docs/getting-started/overview/)
 
-#### 1、Write Stories
-In this very simple conversation, the user says hello to our bot, and the bot says hello back. This is how it looks as a story:
+Rasa是一个对话框架，其中包含两个模块Rasa nlu和Rasa core。为了方便理解，我们看个例子，用户输入
+
+>Please send the confirmation to amy@example.com
+
+Rasa nlu是用来理解语义的，包括意图识别，实体识别，它会把用户的输入转换为结构化的数据，在该例子中，nlu会识别出用户打算发一封邮件（意图），邮箱地址amy@example.com（实体）。Rasa Core是一个对话管理的平台，它的工作是决定接下来机器该返回什么内容给用户，这里给用户返回了
+
+>Should we make that your primary email?
+
+![rasa](https://rasa.com/docs/getting-started/_static/images/rasa_stack_explained.png)
+
+在接下来的内容中，本文将会基于一个简单的单轮对话内容带领大家搭建一个rasa平台。
+
+## Rasa Core
+
+我们先从core讲起，在这个例子中用户会对机器说一句你好，机器会返回用户你好。在开始之前，我们需要理解以下2个概念，story、domain。
+
+
+#### 1、编写 Story
 
 符号|说明|
 :---:|:---:
@@ -22,40 +38,16 @@ In this very simple conversation, the user says hello to our bot, and the bot sa
 -|action
 
 ```
-## happy path
+## story1
 * greet
-  - utter_greet
-* mood_great
-  - utter_happy
-
-## sad path 1
-* greet
-  - utter_greet
-* mood_unhappy
-  - utter_cheer_up
-  - utter_did_that_help
-* mood_affirm
-  - utter_happy
-
-## sad path 2
-* greet
-  - utter_greet
-* mood_unhappy
-  - utter_cheer_up
-  - utter_did_that_help
-* mood_deny
-  - utter_goodbye
-
-## say goodbye
-* goodbye
-  - utter_goodbye
+   - utter_greet
 ```
-save it in a file called `stories.md`
 
-####2、Define a Domain
-The next thing we need to do is define a Domain. The domain defines the universe your bot lives in.
+把以上内容保存到 `stories.md`文件中
 
-So what do the different parts mean?
+####2、定义Domain
+
+接下来我们需要定义一个domain，domian是指机器所能回答的内容的范围。
 
 标识|说明
 :---:|:---:
@@ -68,35 +60,13 @@ slots|槽
 ```
 intents:
   - greet
-  - goodbye
-  - mood_affirm
-  - mood_deny
-  - mood_great
-  - mood_unhappy
 
 actions:
 - utter_greet
-- utter_cheer_up
-- utter_did_that_help
-- utter_happy
-- utter_goodbye
 
 templates:
   utter_greet:
-  - text: "Hey! How are you?"
-
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great carry on!"
-
-  utter_goodbye:
-  - text: "Bye"
+  - text: "你好"
 ```
 save it in a file called `domain.yml`
 
@@ -109,8 +79,95 @@ In our simple example we don’t need slots and entities, so these aren’t in t
 The next step is to train a neural network on our example stories. To do this, run the command below. If you are running this on your machine, leave out the ! at the start. This will train the dialogue model and store it into models/dialogue.
 
 ```
-python -m rasa_core.train -d domain.yml -s stories.md -o models/dialogue
+python -m rasa_nlu.train -c nlu_config.yml --data nlu.md -o models --fixed_model_name nlu --project current --verbose
+```
+这一步会对我们之前准备好的story与domain进行训练，
+
+![avatar](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/rasa1.jpg)
+
+可以看到，训练过程采用了一个神经网络，结构为：masking->lstm->dense->activation，这里简单介绍下masking层，在nlp领域，输入的内容可能不是一样长的，为了能统一处理数据需要定长，因此某些值需要补0或者截取多余内容，对了补0的部分其实是没有意义的，masking层能让这些补0的部分不参与之后的计算，从而提升运算效率。
+
+
+#### 4、Add NLU
+
+Of course you want your bot to understand real language, not just structured input.
+
+An interpreter is responsible for parsing messages. It performs the Natural Language Understanding (NLU) and transforms the message into structured output. In this example we are going to use Rasa NLU for this purpose.
+
+```
+## intent:greet
+- hey
+- hello
+- hi
+- good morning
+- good evening
+- hey there
+
+## intent:goodbye
+- bye
+- goodbye
+- see you around
+- see you later
+
+## intent:mood_affirm
+- yes
+- indeed
+- of course
+- that sounds good
+- correct
+
+## intent:mood_deny
+- no
+- never
+- I don't think so
+- don't like that
+- no way
+- not really
+
+## intent:mood_great
+- perfect
+- very good
+- great
+- amazing
+- wonderful
+- I am feeling very good
+- I am great
+- I'm good
+
+## intent:mood_unhappy
+- sad
+- very sad
+- unhappy
+- bad
+- very bad
+- awful
+- terrible
+- not very good
+- extremly sad
+- so sad
+```
+save it in a file called `nlu.md`
+
+Furthermore, we need a configuration file, nlu_config.yml, for the NLU model:
+
+```
+language: en
+pipeline: tensorflow_embedding
+```
+save it in a file called `nlu_config.yml`
+
+We can now train an NLU model using our examples (make sure to install Rasa NLU first).
+
+```
+python -m rasa_nlu.train -c nlu_config.yml --data nlu.md -o models --fixed_model_name nlu --project current --verbose
 ```
 
-这一步会对我们之前准备好的story与domain进行训练，
+####6. Talking To Your Bot
+Now that we’ve added an NLU model, you can talk to your bot using natural language, rather than typing in structured input. Let’s start up your full bot, including both Rasa Core and Rasa NLU models!
+
+If you are running these commands locally, run:
+
+```
+python -m rasa_core.run -d models/dialogue -u models/current/nlu
+```
 
