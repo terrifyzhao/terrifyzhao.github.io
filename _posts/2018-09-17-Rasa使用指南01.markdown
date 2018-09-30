@@ -1,10 +1,10 @@
 ---
 layout: post
-title: 'Rasa使用指南'
+title: 'Rasa使用指南1'
 subtitle: 'Rasa基础说明'
 date: 2018-09-17
 categories: NLP 人机对话
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-0-15-PCA%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/cover.png'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/cover.png'
 tags:NLP
 ---
 
