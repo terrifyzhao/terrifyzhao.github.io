@@ -5,7 +5,7 @@ subtitle: 'Rasa基础说明'
 date: 2018-09-17
 categories: NLP 人机对话
 cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/cover.png'
-tags:NLP
+tags: NLP
 ---
 
 ## 前言
