@@ -174,4 +174,9 @@ python -m rasa_nlu.train -c nlu_config.yml --data nlu.md -o models --fixed_model
 python -m rasa_core.run -d models/dialogue -u models/current/nlu
 ```
 
-![输入意图聊天](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/rasa3.png)
+![输入自然语言聊天](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/rasa3.png)
+
+
+到此我们简单的Rasa系统就搭建完成了，大家可以继续添加stories、domain、nlu文件的内容来搭建一个属于自己的Rasa系统。下一篇文章将会带领大家学习如何做实体识别与填槽。
+
+
