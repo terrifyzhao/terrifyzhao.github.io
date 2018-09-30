@@ -10,159 +10,159 @@ tags:NLP
 
 ## 前言
 
-本文内容基于Rasa官网文档，做了翻译与整理，想了解更多内容的小伙伴可关注[Rasa官网](https://rasa.com/docs/getting-started/overview/)
+本文内容基于Rasa官网文档，做了翻译与整理，并添加一些自己的理解，方便大家上手Rasa，想了解更多内容的小伙伴可关注[Rasa官网](https://rasa.com/docs/getting-started/overview/)
 
-Rasa是一个对话框架，其中包含两个模块Rasa nlu和Rasa core。为了方便理解，我们看个例子，用户输入
+Rasa是一个基于多轮对话的框架，其中包含两个模块Rasa core与Rasa nlu。
 
->Please send the confirmation to amy@example.com
-
-Rasa nlu是用来理解语义的，包括意图识别，实体识别，它会把用户的输入转换为结构化的数据，在该例子中，nlu会识别出用户打算发一封邮件（意图），邮箱地址amy@example.com（实体）。Rasa Core是一个对话管理的平台，它的工作是决定接下来机器该返回什么内容给用户，这里给用户返回了
-
->Should we make that your primary email?
+Rasa nlu是用来理解语义的，包括意图识别，实体识别，它会把用户的输入转换为结构化的数据，例如在下图的例子中，nlu会识别出用户打算发一封邮件（意图），邮箱地址amy@example.com（实体）。Rasa Core是一个对话管理的平台，它的工作是决定接下来机器该返回什么内容给用户，这里给用户返回了Should we make that your primary email?
 
 ![rasa](https://rasa.com/docs/getting-started/_static/images/rasa_stack_explained.png)
 
-在接下来的内容中，本文将会基于一个简单的单轮对话内容带领大家搭建一个rasa平台。
+在接下来的内容中，我们会基于一个简单的多轮对话带领大家搭建一个Rasa平台，为了理解起来简单，我们暂时不考虑填槽。
+
+
+## 安装Rasa
+
+```
+pip install rasa_core
+pip install rasa_nlu[tensorflow]
+```
+
 
 ## Rasa Core
 
-我们先从core讲起，在这个例子中用户会对机器说一句你好，机器会返回用户你好。在开始之前，我们需要理解以下2个概念，story、domain。
+我们先从Rasa core讲起，core包含两个内容，stories和domain。
 
+#### 1、Stories
 
-#### 1、编写 Story
+stories可以理解为对话的场景流程，我们需要告诉机器我们的多轮场景是怎么样的，例如，在下文的例子中，我们希望的流程是这样的：用户问好 -> 机器问用户今天过得怎么样 -> 用户反馈情绪 -> 机器根据不同的情绪进行回复，这里其实包含两个流程，一个正面情绪的流程与一个负面情绪的流程，因此，我们也需要编写两个story，接下来我们看下怎么编写story。
 
 符号|说明|
 :---:|:---:
 \##|story 标题|
-*|用户输入的内容
--|action
+*|意图
+-|动作
 
 ```
-## story1
+## story_happy
 * greet
-   - utter_greet
+  - utter_greet
+* mood_happy
+  - utter_happy
+
+## story_unhappy
+* greet2
+  - utter_greet
+*  mood_unhappy
+  - utter_unhappy
+   
 ```
 
 把以上内容保存到 `stories.md`文件中
 
-####2、定义Domain
+#### 2、Domain
 
-接下来我们需要定义一个domain，domian是指机器所能回答的内容的范围。
+domain可以理解为机器的知识库，其中定义了意图，动作，以及对应动作所反馈的内容。
+
 
 标识|说明
 :---:|:---:
-intents|问题的意图
-actions|机器的动作
-templates|机器的回答模板
-entities|问题的实体
-slots|槽
+intents|意图
+actions|动作
+templates|回答模板
+entities|实体
+slots|词槽
 
 ```
 intents:
   - greet
+  - mood_happy
+  - mood_unhappy
 
 actions:
 - utter_greet
+- utter_happy
+- utter_unhappy
 
 templates:
   utter_greet:
-  - text: "你好"
-```
-save it in a file called `domain.yml`
+  - text: "你好，你今天过的怎么样"
 
-Rasa Core’s job is to choose the right action to execute at each step of the conversation. Simple actions are just sending a message to a user. These simple actions are the actions in the domain, which start with utter_. They will just respond with a message based on a template from the templates section. See Actions for how to build more interesting actions.
+  utter_happy:
+  - text: "那很棒棒哦"
 
-In our simple example we don’t need slots and entities, so these aren’t in the example domain.
-
-#### 3、Train a Dialogue Model
-
-The next step is to train a neural network on our example stories. To do this, run the command below. If you are running this on your machine, leave out the ! at the start. This will train the dialogue model and store it into models/dialogue.
+  utter_unhappy:
+  - text: "咋了，可以告诉我吗"
 
 ```
-python -m rasa_nlu.train -c nlu_config.yml --data nlu.md -o models --fixed_model_name nlu --project current --verbose
+把以上内容保存到 `domain.yml`文件中
+
+Rasa Core的任务是在获取到用户的意图后，选择正确的action，这些action就是定义在domain中以utter_开头的内容，每一个 action会根据templates中的情况来返回对应的内容。
+
+在我们这个简单的例子中不需要定义词槽与实体，所以domain中暂时没有。
+
+#### 3、训练对话模型
+
+下一步就是用神经网络去训练我们的Core模型了，我们可以直接执行以下命令，训练的模型将会存储在models/dialogue文件夹下。
+
 ```
-这一步会对我们之前准备好的story与domain进行训练，
+python -m rasa_core.train -d domain.yml -s stories.md -o models/dialogue
+```
 
 ![avatar](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/rasa1.jpg)
 
-可以看到，训练过程采用了一个神经网络，结构为：masking->lstm->dense->activation，这里简单介绍下masking层，在nlp领域，输入的内容可能不是一样长的，为了能统一处理数据需要定长，因此某些值需要补0或者截取多余内容，对了补0的部分其实是没有意义的，masking层能让这些补0的部分不参与之后的计算，从而提升运算效率。
+可以看到，训练过程采用了一个神经网络，结构为：masking->lstm->dense->activation，这里简单介绍下masking层，在nlp领域，输入的内容可能不是一样长的，为了能统一处理数据需要定长，因此某些值需要补0或者截取多余内容，但是补0的部分其实是没有意义的，masking层能让这些补0的部分不参与之后的计算，从而提升运算效率。
+
+#### 4、尝试和你的机器人交流吧
+
+接下来我们就可以用训练好的模型来运行我们的机器人了，执行以下命令
+
+```
+python -m rasa_core.run -d models/dialogue
+```
+
+此时我们的机器人还无法判断用户的意图，只能根据输入的意图返回特定的答案，所以我们只能输入一些结构化的数据，例如输入我们之前在domian中定义好的意图，输入的信息需要以 `/`开头，我们可以试试输入 `/greet`，当然，如果你想让机器人回答更多的内容，请在stories与domain中添加更多的内容。
 
 
-#### 4、Add NLU
 
-Of course you want your bot to understand real language, not just structured input.
 
-An interpreter is responsible for parsing messages. It performs the Natural Language Understanding (NLU) and transforms the message into structured output. In this example we are going to use Rasa NLU for this purpose.
+#### 4、添加NLU模块
+
+目前我们的机器人已经可以针对结构化的数据做到简单的问答了，但是怎么让机器理解真正的语言呢，这个时候就需要用到NLU模块了，NLU的任务是解析消息，它能把自然语言解释成我们需要的结构化的数据，我们还是以一个例子来解释。
+
+首先，我们需要定义一个用户可能的输入信息的文件`nlu.md`
 
 ```
 ## intent:greet
-- hey
-- hello
-- hi
-- good morning
-- good evening
-- hey there
+- 你好
+- 上午好
+- 下午好
+- 早上好
+- 晚上好
 
 ## intent:goodbye
-- bye
-- goodbye
-- see you around
-- see you later
-
-## intent:mood_affirm
-- yes
-- indeed
-- of course
-- that sounds good
-- correct
-
-## intent:mood_deny
-- no
-- never
-- I don't think so
-- don't like that
-- no way
-- not really
-
-## intent:mood_great
-- perfect
-- very good
-- great
-- amazing
-- wonderful
-- I am feeling very good
-- I am great
-- I'm good
-
-## intent:mood_unhappy
-- sad
-- very sad
-- unhappy
-- bad
-- very bad
-- awful
-- terrible
-- not very good
-- extremly sad
-- so sad
+- 拜
+- 拜拜
+- 再见
 ```
-save it in a file called `nlu.md`
+把以上内容保存到 `nlu.md`文件中
 
-Furthermore, we need a configuration file, nlu_config.yml, for the NLU model:
+
+除此之外，我们还需要一个nlu的配置文件，`nlu_config.yml`
 
 ```
-language: en
+language: zh
 pipeline: tensorflow_embedding
 ```
-save it in a file called `nlu_config.yml`
+把以上内容保存到`nlu_config.yml`文件中
 
-We can now train an NLU model using our examples (make sure to install Rasa NLU first).
+准备好之后就可以开始训练NLU模型了，执行以下命令
 
 ```
 python -m rasa_nlu.train -c nlu_config.yml --data nlu.md -o models --fixed_model_name nlu --project current --verbose
 ```
 
-####6. Talking To Your Bot
+#### 6. Talking To Your Bot
 Now that we’ve added an NLU model, you can talk to your bot using natural language, rather than typing in structured input. Let’s start up your full bot, including both Rasa Core and Rasa NLU models!
 
 If you are running these commands locally, run:
