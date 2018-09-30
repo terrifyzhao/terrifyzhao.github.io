@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Rasa使用指南1'
+title: 'Rasa使用指南01'
 subtitle: 'Rasa基础说明'
 date: 2018-09-17
 categories: NLP 人机对话
