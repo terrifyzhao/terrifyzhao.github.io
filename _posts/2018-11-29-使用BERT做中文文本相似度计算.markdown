@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '使用BERT做中文文本相似度计算与分类'
+title: 'BERT中文文本相似度计算与文本分类'
 subtitle: '最简单的BERT使用指南'
 date: 2018-11-29
 categories: NLP 文本相似度
@@ -21,7 +21,7 @@ tags: NLP
 
 谷歌提供了以下几个版本的BERT模型，每个模型的参数都做了简单的说明，中文的预训练模型在11月3日的时候提供了，这里我们只需要用到中文的版本，[点击下载]('https://storage.googleapis.com/bert_models/2018_11_03/chinese_L-12_H-768_A-12.zip')
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic1.jpg">
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic1.jpg"/>
 
 下载下来的文件包括以下内容
 
@@ -33,15 +33,15 @@ tags: NLP
 
 模型准备好后就可以编写代码了，我们先把BERT的[github]('https://github.com/google-research/bert')代码clone下来，之后我们的代码编写会基于`run_classifier.py`文件，我们看下代码的结构
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic2.jpg", width=300, align='center'>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic2.jpg" width="300" >
 
 可以看到有好几个`xxxProcessor`的类，这些类都有同一个父类`DataProcessor`，其中`DataProcessor`提供了4个抽象方法，如图
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic3.jpg", width=500, align='center'>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic3.jpg" width="500"/>
 
 顾名思义，`Processor`就是用来获取对应的训练集、验证集、测试集的数据与label的数据，并把这些数据喂给BERT的，而我们要做的就是自定义新的Processor并重写这4个方法，也就是说我们只需要提供我们自己场景对应的数据。这里我自定义了一个名叫SimProcessor的类，我们简单看一下
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic4.jpg", width=600, align='center'>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic4.jpg"  width="600"/>
 
 读取的数据需要封装成一个`InputExample`的对象并添加到list中，注意这里有一个guid的参数，这个参数是必填的，是用来区分每一条数据的。是否进行训练集、验证集、测试集的计算，在执行代码时会有参数控制，我们下文会讲，所以这里的抽象方法也并不是需要全部都重写，但是为了体验一个完整的流程， 建议大家还是简单写一下。
 
@@ -49,13 +49,13 @@ tags: NLP
 
 接下来还需要给`Processor`加一个名字，让我们的在运行时告诉代码我们要执行哪一个`Processor`，如图我自定义的叫做sim
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic6.jpg", width=300, align='center'>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic6.jpg" width="300">
 
 ## 训练模型
 
 ok，到这里我们已经把`Processor`编写好了，接下来就是运行代码了，我们来看下`run_classifier.py`的执行过程。
 
-<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic5.jpg", width=300, align='center'>
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic5.jpg" width="300">
 
 可以看到，在执行`run_classifier.py`时需要先输入这5个必填参数，这里我们对参数做一个简单的说明
 
@@ -118,5 +118,4 @@ python run_classifier.py \
 
 ## 总结
 除了相似度计算，以上的代码完全能够用来做文本二分类，你也可以根据自己的需求来修改Processor，更多的细节大家可以参阅github与源码。
-
 
