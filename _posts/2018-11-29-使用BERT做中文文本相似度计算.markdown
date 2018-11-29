@@ -15,9 +15,29 @@ tags: NLP
 
 本文不会去讲解BERT的原理，如果您还不清楚什么是BERT建议先参阅Google的[论文]('https://arxiv.org/abs/1810.04805')或者其他博文，本文主要目的在于教会大家怎么使用BERT的预训练模型。
 
-在开始使用之前，我们先简单介绍一下到底什么是BERT。在CV问题中，目前已经有了很多成熟的预训练模型供大家使用，我们只需要修改结尾的FC层或根据实际场景添加softmax层，也就是我们常说的迁移学习。那在NLP领域是否有类似的方法呢，答案是肯定的，BERT就是这样的预训练模型。对于NLP的正常流程来说，我们需要做一些预处理，例如分词、W2V等，BERT包含所有的预训练过程，只需要提供文本数据即可，接下来我们会基于NLP常用的文本相似度计算问题来介绍如何使用BERT。
+在开始使用之前，我们先简单介绍一下到底什么是BERT，大家也可以去BERT的[github]('https://github.com/google-research/bert')上进行详细的了解。在CV问题中，目前已经有了很多成熟的预训练模型供大家使用，我们只需要修改结尾的FC层或根据实际场景添加softmax层，也就是我们常说的迁移学习。那在NLP领域是否有类似的方法呢，答案是肯定的，BERT就是这样的预训练模型。对于NLP的正常流程来说，我们需要做一些预处理，例如分词、W2V等，BERT包含所有的预训练过程，只需要提供文本数据即可，接下来我们会基于NLP常用的文本相似度计算问题来介绍如何使用BERT。
 
 ## 下载预训练模型
 
+谷歌提供了以下几个版本的BERT模型，每个模型的参数都做了简单的说明，中文的预训练模型在11月3日的时候提供了，这里我们只需要用到中文的版本，[点击下载]('https://storage.googleapis.com/bert_models/2018_11_03/chinese_L-12_H-768_A-12.zip')
 
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic1.jpg">
+
+下载下来的文件包括以下内容
+
+* TensorFlow 用来保存预训练模型的三个 checkpoint 文件(bert_model.ckpt.xxx) 
+* 字典文件，用于做ID的映射 (vocab.txt) 
+* 配置文件，该文件的参数是fine-tuning时模型用到的，可自行调整 (bert_config.json) 
+
+## 编写相似度计算的代码
+
+模型准备好后就可以编写代码了，我们先把BERT的[github]('https://github.com/google-research/bert')代码clone下来，之后我们的代码编写会基于`run_classifier.py`文件，我们先看下该文件的结构。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic2.jpg", width=300, align='center'>
+
+可以看到有好几个`xxxProcessor`的类，这些类都有同一个父类`DataProcessor`，`DataProcessor`提供了4个抽象方法，如图
+
+
+
+而我们要做的就是自定义新的Processor并重写这4个方法，写就是说我们只需要提供我们自己场景对应的数据，这里我自定义了一个名叫SimProcessor的类，我们简单看一下
 
