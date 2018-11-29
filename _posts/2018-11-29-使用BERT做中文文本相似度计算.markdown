@@ -49,10 +49,11 @@ tags: NLP
 
 这里我偷了个懒，没有编写验证集的代码，建议大家添加上去，运行的时候是否做验证集的计算是有参数控制的，我们在下文会讲解到。
 
-接下来我们还需要给`Processor`加一个名字，让我们的在运行时告诉代码我们要执行哪一个`Processor`
+接下来我们还需要给`Processor`加一个名字，让我们的在运行时告诉代码我们要执行哪一个`Processor`，如图我自定义的叫做sim
 
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic6.jpg", width=300, align='center'>
 
-ok，到这里我们已经把`Processor`编写好了，接下来就是运行代码了，我们来看下`mian`函数。
+ok，到这里我们已经把`Processor`编写好了，接下来就是运行代码了，我们来看下`run_classifier.py`的执行过程。
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic5.jpg", width=300, align='center'>
 
@@ -61,8 +62,31 @@ ok，到这里我们已经把`Processor`编写好了，接下来就是运行代�
 | 参数 | 说明 |
 | ------ | ------ |
 |data_dir | 训练数据的地址 |
-|task_name | processor名字 |
-|data_dir | 训练数据的地址 |
-|data_dir | 训练数据的地址 |
-|data_dir | 训练数据的地址 |
+|task_name | processor的名字 |
+|vocab_file | 字典地址，用默认提供的就可以了，当然也可以自定义 |
+|bert_config_file | 配置文件 |
+|output_dir | 模型的输出地址 |
+
+当然还有一些其他的参数，这里给出官方提供的运行参数
+
+```
+export BERT_BASE_DIR=/Users/joe/Desktop/chinese_L-12_H-768_A-12
+
+export MY_DATASET=/Users/joe/Desktop/bert_data 
+
+python run_classifier.py \
+--data_dir=$MY_DATASET \
+--task_name=sim \
+--vocab_file=$BERT_BASE_DIR/vocab.txt \
+--bert_config_file=$BERT_BASE_DIR/bert_config.json \
+--output_dir=/tmp/sim_model/ \
+--do_train=true \
+--do_test=true \
+--dopredict=true\ 
+--init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
+--max_seq_length=128 \
+--train_batch_size=32 \
+--learning_rate=5e-5\
+--num_train_epochs=2.0 
+```
 
