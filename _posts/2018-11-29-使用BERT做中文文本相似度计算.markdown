@@ -113,7 +113,7 @@ python run_classifier.py \
   --output_dir=/tmp/output/
 ```
 
-当让，我们需要在`data_dir`下有测试数据，测试完成后会在`output_dir`路径下生成一个`test_results.tsv`文件，该文件包含了测试用例和相似度probabilities
+当然，我们需要在`data_dir`下有测试数据，测试完成后会在`output_dir`路径下生成一个`test_results.tsv`文件，该文件包含了测试用例和相似度probabilities
 
 
 ## 总结
