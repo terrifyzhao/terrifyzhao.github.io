@@ -29,7 +29,7 @@ tags: NLP
 * 字典文件，用于做ID的映射 (vocab.txt) 
 * 配置文件，该文件的参数是fine-tuning时模型用到的，可自行调整 (bert_config.json) 
 
-## 编写相似度计算的代码
+## 编写代码
 
 模型准备好后就可以编写代码了，我们先把BERT的[github]('https://github.com/google-research/bert')代码clone下来，之后我们的代码编写会基于`run_classifier.py`文件，我们看下代码的结构
 
@@ -43,15 +43,15 @@ tags: NLP
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic4.jpg", width=600, align='center'>
 
-读取的数据需要封装成一个`InputExample`的对象并添加到list中，注意这里有一个guid的参数，这个参数是必填的，是用来区分每一条数据的。
+读取的数据需要封装成一个`InputExample`的对象并添加到list中，注意这里有一个guid的参数，这个参数是必填的，是用来区分每一条数据的。是否进行训练集、验证集、测试集的计算，在执行代码时会有参数控制，我们下文会讲，所以这里的抽象方法也并不是需要全部都重写，但是为了体验一个完整的流程， 建议大家还是简单写一下。
 
-`get_labels`方法返回的是一个数组，因为相似度维度可以理解为分类问题，所以返回的标签只有0和1，注意，这里我返回的是参数是字符串，所以在重写获取数据的方法时`InputExample`中的label也要传字符串的数据，可以看到上图中我对`label`做了一个`str()`的处理。
+`get_labels`方法返回的是一个数组，因为相似度问题可以理解为分类问题，所以返回的标签只有0和1，注意，这里我返回的是参数是字符串，所以在重写获取数据的方法时`InputExample`中的label也要传字符串的数据，可以看到上图中我对`label`做了一个`str()`的处理。
 
-这里我偷了个懒，没有编写验证集的代码，建议大家添加上去，运行的时候是否做验证集的计算是有参数控制的，我们在下文会讲解到。
-
-接下来我们还需要给`Processor`加一个名字，让我们的在运行时告诉代码我们要执行哪一个`Processor`，如图我自定义的叫做sim
+接下来还需要给`Processor`加一个名字，让我们的在运行时告诉代码我们要执行哪一个`Processor`，如图我自定义的叫做sim
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic6.jpg", width=300, align='center'>
+
+## 训练模型
 
 ok，到这里我们已经把`Processor`编写好了，接下来就是运行代码了，我们来看下`run_classifier.py`的执行过程。
 
@@ -75,18 +75,48 @@ export BERT_BASE_DIR=/Users/joe/Desktop/chinese_L-12_H-768_A-12
 export MY_DATASET=/Users/joe/Desktop/bert_data 
 
 python run_classifier.py \
---data_dir=$MY_DATASET \
---task_name=sim \
---vocab_file=$BERT_BASE_DIR/vocab.txt \
---bert_config_file=$BERT_BASE_DIR/bert_config.json \
---output_dir=/tmp/sim_model/ \
---do_train=true \
---do_test=true \
---dopredict=true\ 
---init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
---max_seq_length=128 \
---train_batch_size=32 \
---learning_rate=5e-5\
---num_train_epochs=2.0 
+  --data_dir=$MY_DATASET \
+  --task_name=sim \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
+  --output_dir=/tmp/sim_model/ \
+  --do_train=true \
+  --do_eval=true \
+  --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
+  --max_seq_length=128 \
+  --train_batch_size=32 \
+  --learning_rate=5e-5\
+  --num_train_epochs=2.0 
 ```
+
+这里再补充下以下三个可选参数说明
+
+| 参数 | 说明 |
+| ------ | ------ |
+|do_train | 是否做fine-tuning，默认为false，如果为true必须重写获取训练集的方法 |
+|do_eval | 是否运行验证集，默认为false，如果为true必须重写获取验证集的方法 |
+|dopredict | 是否做预测，默认为false，如果为true必须重写获取测试集的方法 |
+
+## 预测
+
+执行以上的代码即可训练我们自己的模型了，如果需要使用模型来进行预测，可执行以下命令
+
+```
+python run_classifier.py \
+  --task_name=sim \
+  --do_predict=true \
+  --data_dir=$MY_DATASET \
+  --vocab_file=$BERT_BASE_DIR/vocab.txt \
+  --bert_config_file=$BERT_BASE_DIR/bert_config.json \
+  --init_checkpoint=/tmp/sim_model \
+  --max_seq_length=128 \
+  --output_dir=/tmp/output/
+```
+
+当让，我们需要在`data_dir`下有测试数据，测试完成后会在`output_dir`路径下生成一个`test_results.tsv`文件，该文件包含了测试用例和相似度probabilities
+
+
+## 总结
+除了相似度计算，以上的代码完全能够用来做文本二分类，你也可以根据自己的需求来修改Processor，更多的细节大家可以参阅github与源码。
+
 
