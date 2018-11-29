@@ -4,7 +4,7 @@ title: '最简单的BERT使用指南-使用BERT做中文文本相似度计算'
 subtitle: '使用BERT做中文文本相似度计算'
 date: 2018-11-29
 categories: NLP 文本相似度
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/cover.png'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/cover.jpeg'
 tags: NLP
 ---
 
