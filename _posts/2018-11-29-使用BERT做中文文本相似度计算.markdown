@@ -31,13 +31,19 @@ tags: NLP
 
 ## 编写相似度计算的代码
 
-模型准备好后就可以编写代码了，我们先把BERT的[github]('https://github.com/google-research/bert')代码clone下来，之后我们的代码编写会基于`run_classifier.py`文件，我们先看下该文件的结构。
+模型准备好后就可以编写代码了，我们先把BERT的[github]('https://github.com/google-research/bert')代码clone下来，之后我们的代码编写会基于`run_classifier.py`文件，我们先看下`mian`函数。
+
+
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic2.jpg", width=300, align='center'>
 
-可以看到有好几个`xxxProcessor`的类，这些类都有同一个父类`DataProcessor`，`DataProcessor`提供了4个抽象方法，如图
+可以看到有好几个`xxxProcessor`的类，这些类都有同一个父类`DataProcessor`，其中`DataProcessor`提供了4个抽象方法，如图
 
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic3.jpg", width=500, align='center'>
 
+顾名思义，就是获取对应的训练集、验证集、测试集的数据与label的数据，而我们要做的就是自定义新的Processor并重写这4个方法，写就是说我们只需要提供我们自己场景对应的数据。这里我自定义了一个名叫SimProcessor的类，我们简单看一下
 
-而我们要做的就是自定义新的Processor并重写这4个方法，写就是说我们只需要提供我们自己场景对应的数据，这里我自定义了一个名叫SimProcessor的类，我们简单看一下
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic4.jpg", width=600, align='center'>
+
+注意这里我没有编写验证集的代码，运行的时候是否检测验证集的效果是有参数控制的，我们在下文会讲解到。
 
