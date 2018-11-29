@@ -31,9 +31,7 @@ tags: NLP
 
 ## 编写相似度计算的代码
 
-模型准备好后就可以编写代码了，我们先把BERT的[github]('https://github.com/google-research/bert')代码clone下来，之后我们的代码编写会基于`run_classifier.py`文件，我们先看下`mian`函数。
-
-
+模型准备好后就可以编写代码了，我们先把BERT的[github]('https://github.com/google-research/bert')代码clone下来，之后我们的代码编写会基于`run_classifier.py`文件，我们看下代码的结构
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic2.jpg", width=300, align='center'>
 
@@ -41,9 +39,30 @@ tags: NLP
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic3.jpg", width=500, align='center'>
 
-顾名思义，就是获取对应的训练集、验证集、测试集的数据与label的数据，而我们要做的就是自定义新的Processor并重写这4个方法，写就是说我们只需要提供我们自己场景对应的数据。这里我自定义了一个名叫SimProcessor的类，我们简单看一下
+顾名思义，`Processor`就是用来获取对应的训练集、验证集、测试集的数据与label的数据，并把这些数据喂给BERT的，而我们要做的就是自定义新的Processor并重写这4个方法，也就是说我们只需要提供我们自己场景对应的数据。这里我自定义了一个名叫SimProcessor的类，我们简单看一下
 
 <img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic4.jpg", width=600, align='center'>
 
-注意这里我没有编写验证集的代码，运行的时候是否检测验证集的效果是有参数控制的，我们在下文会讲解到。
+读取的数据需要封装成一个`InputExample`的对象并添加到list中，注意这里有一个guid的参数，这个参数是必填的，是用来区分每一条数据的。
+
+`get_labels`方法返回的是一个数组，因为相似度维度可以理解为分类问题，所以返回的标签只有0和1，注意，这里我返回的是参数是字符串，所以在重写获取数据的方法时`InputExample`中的label也要传字符串的数据，可以看到上图中我对`label`做了一个`str()`的处理。
+
+这里我偷了个懒，没有编写验证集的代码，建议大家添加上去，运行的时候是否做验证集的计算是有参数控制的，我们在下文会讲解到。
+
+接下来我们还需要给`Processor`加一个名字，让我们的在运行时告诉代码我们要执行哪一个`Processor`
+
+
+ok，到这里我们已经把`Processor`编写好了，接下来就是运行代码了，我们来看下`mian`函数。
+
+<img src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/pic5.jpg", width=300, align='center'>
+
+可以看到，在执行`run_classifier.py`时需要先输入这5个必填参数，这里我们对参数做一个简单的说明
+
+| 参数 | 说明 |
+| ------ | ------ |
+|data_dir | 训练数据的地址 |
+|task_name | processor名字 |
+|data_dir | 训练数据的地址 |
+|data_dir | 训练数据的地址 |
+|data_dir | 训练数据的地址 |
 
