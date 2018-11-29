@@ -1,0 +1,23 @@
+---
+layout: post
+title: '最简单的BERT使用指南-使用BERT做中文文本相似度计算'
+subtitle: '使用BERT做中文文本相似度计算'
+date: 2018-11-29
+categories: NLP 文本相似度
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/cover.png'
+tags: NLP
+---
+
+## 简介
+
+最近Google推出了NLP大杀器BERT，BERT（Transformer双向编码器表示）是Google AI语言研究人员最近发表的一篇论文。它通过在各种NLP任务中呈现最先进的结果，包括问答系统、自然语言推理等，引起了机器学习社区的轰动。
+
+
+本文不会去讲解BERT的原理，如果您还不清楚什么是BERT建议先参阅Google的[论文]('https://arxiv.org/abs/1810.04805')或者其他博文，本文主要目的在于教会大家怎么使用BERT的预训练模型。
+
+在开始使用之前，我们先简单介绍一下到底什么是BERT。在CV问题中，目前已经有了很多成熟的预训练模型供大家使用，我们只需要修改结尾的FC层或根据实际场景添加softmax层，也就是我们常说的迁移学习。那在NLP领域是否有类似的方法呢，答案是肯定的，BERT就是这样的预训练模型。对于NLP的正常流程来说，我们需要做一些预处理，例如分词、W2V等，BERT包含所有的预训练过程，只需要提供文本数据即可，接下来我们会基于NLP常用的文本相似度计算问题来介绍如何使用BERT。
+
+## 下载预训练模型
+
+
+
