@@ -12,4 +12,4 @@ tags: NLP
 
 传统的机器翻译基本都是基于seq2seq模型来做的，该模型分为encoder层与decoder层，并均为RNN构成，如下图所示
 
-<iframe  height=500  width=500  src="http://ww4.sinaimg.cn/mw690/e75a115bgw1f3rrbzv1m8g209v0diqv7.gif">
+<iframe height=500 width=500 src="https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-04-Attention%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic1.gif">
