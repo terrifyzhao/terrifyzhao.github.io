@@ -36,18 +36,14 @@ Attention，正如其名，注意力，该模型在decode阶段，会选择最�
 
 这里我们以一个具体的例子来看下其中的详细计算步骤：
 
-获取到encoder的每一个hidden state之后，把每一个encoder的hidden state的值与当前decoder的节点的hidden state相乘，如下图，把h1、h2、h3分别与当前节点的hidden state相乘(hidden state的值会在BP过程中不断更新，如果是第一个decoder节点，需要随机初始化一个hidden state)，最后会获得三个值，这三个值就是上文提到的hidden state的分数，注意，这个数值对于每一个encoder的节点来说是不一样的，把该分数值进行softmax计算，计算之后的值就是每一个hidden state对于当前节点的权重，把权重与原hidden state相乘并相加，得到的结果即是当前节点的hidden state。
+把每一个encoder节点的hidden states的值与decoder当前节点的上一个节点的hidden state相乘，如下图，h1、h2、h3分别与当前节点的上一节点的hidden state进行相乘(如果是第一个decoder节点，需要随机初始化一个hidden state)，最后会获得三个值，这三个值就是上文提到的hidden state的分数，注意，这个数值对于每一个encoder的节点来说是不一样的，把该分数值进行softmax计算，计算之后的值就是每一个encoder节点的hidden states对于当前节点的权重，把权重与原hidden states相乘并相加，得到的结果即是当前节点的hidden state。可以发现，其实Atttention的关键就是计算这个分值。
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-04-Attention%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic3.gif)
 
-明白每一个节点是怎么获取hidden state之后，接下来就是decoder层的工作原理讲解了，其具体过程如下：
+明白每一个节点是怎么获取hidden state之后，接下来就是decoder层的工作原理了，其具体过程如下：
 
-+ 第一个decoder的节点初始化一个hidden state，并计算当前节点Attention之后的hidden state，把<END>与hidden state作为第一个节点的输入，经过RNN节点后得到一个新的hidden state与输出值，注意，这里和Seq2Seq有一个很大的区别，Seq2Seq是直接把输出值作为当前节点的输出，但是Attention会把改值弃用，
+第一个decoder的节点初始化一个向量，并计算当前节点的hidden state，把<END>与hidden state作为第一个节点的输入，经过RNN节点后得到一个新的hidden state与输出值，注意，这里和Seq2Seq有一个很大的区别，Seq2Seq是直接把输出值作为当前节点的输出，但是Attention会把该值与hidden state做一个连接，并把连接好的值作为context，并送入一个前馈神经网络，最终当前节点的输出内容由该网络决定，重复以上步骤，直到所有decoder的节点都输出相应内容。
 
-1.  The attention decoder RNN takes in the embedding of the <END> token, and an initial decoder hidden state.
-2.  The RNN processes its inputs, producing an output and a new hidden state vector (h4). The output is discarded.
-3.  Attention Step: We use the encoder hidden states and the h4 vector to calculate a context vector (C4) for this time step.
-4.  We concatenate h4 and C4 into one vector.
-5.  We pass this vector through a feedforward neural network (one trained jointly with the model).
-6.  The output of the feedforward neural networks indicates the output word of this time step.
-7.  Repeat for the next time steps
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-04-Attention%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic4.gif)
+
+Attention模型并不只是盲目地将输出的第一个单词与输入的第一个词对齐。实际上，它在训练阶段学习了如何在该语言对中对齐单词(在我们的示例中是法语和英语)。
