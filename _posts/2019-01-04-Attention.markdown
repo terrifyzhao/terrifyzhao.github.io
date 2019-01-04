@@ -29,17 +29,25 @@ Attention，正如其名，注意力，该模型在decode阶段，会选择最�
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-04-Attention%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic2.gif)
 
-+ Second, an attention decoder does an extra step before producing its output. In order to focus on the parts of the input that are relevant to this decoding time step, the decoder does the following:
-
-1.  Look at the set of encoder hidden states it received – each encoder hidden states is most associated with a certain word in the input sentence
-2.  Give each hidden states a score (let’s ignore how the scoring is done for now)
-3.  Multiply each hidden states by its softmaxed score, thus amplifying hidden states with high scores, and drowning out hidden states with low scores
-
 + decoder并不是直接把所有encoder提供的hidden state作为输入，而是采取一种选择机制，把最符合当前位置的hidden state选出来，具体的步骤如下
   + 确定哪一个hidden state与当前节点关系最为密切
   + 计算每一个hidden state的分数值（具体怎么计算我们下文讲解）
   + 对每个分数值做一个softmax的计算，这能让相关性高的hidden state的分数值更大，相关性低的hidden state的分数值更低
 
+这里我们以一个具体的例子来看下其中的详细计算步骤：
+
+获取到encoder的每一个hidden state之后，把每一个encoder的hidden state的值与当前decoder的节点的hidden state相乘，如下图，把h1、h2、h3分别与当前节点的hidden state相乘(hidden state的值会在BP过程中不断更新，如果是第一个decoder节点，需要随机初始化一个hidden state)，最后会获得三个值，这三个值就是上文提到的hidden state的分数，注意，这个数值对于每一个encoder的节点来说是不一样的，把该分数值进行softmax计算，计算之后的值就是每一个hidden state对于当前节点的权重，把权重与原hidden state相乘并相加，得到的结果即是当前节点的hidden state。
+
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-04-Attention%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic3.gif)
 
+明白每一个节点是怎么获取hidden state之后，接下来就是decoder层的工作原理讲解了，其具体过程如下：
 
++ 第一个decoder的节点初始化一个hidden state，并计算当前节点Attention之后的hidden state，把<END>与hidden state作为第一个节点的输入，经过RNN节点后得到一个新的hidden state与输出值，注意，这里和Seq2Seq有一个很大的区别，Seq2Seq是直接把输出值作为当前节点的输出，但是Attention会把改值弃用，
+
+1.  The attention decoder RNN takes in the embedding of the <END> token, and an initial decoder hidden state.
+2.  The RNN processes its inputs, producing an output and a new hidden state vector (h4). The output is discarded.
+3.  Attention Step: We use the encoder hidden states and the h4 vector to calculate a context vector (C4) for this time step.
+4.  We concatenate h4 and C4 into one vector.
+5.  We pass this vector through a feedforward neural network (one trained jointly with the model).
+6.  The output of the feedforward neural networks indicates the output word of this time step.
+7.  Repeat for the next time steps
