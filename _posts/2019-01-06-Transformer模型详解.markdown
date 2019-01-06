@@ -61,3 +61,17 @@ decoder也包含encoder提到的两层网络，但是在这两层中间还有一
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic9.png)
 
+这篇论文更牛逼的地方是给self-attention加入了另外一个机制，被称为“multi-headed” attention，该机制理解起来很简单，就是说不仅仅只初始化一组Q、K、V的矩阵，而是初始化多组，tranformer是使用了8组，所以最后得到的结果是8个矩阵。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic10.png)
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic11.png)
+
+这给我们留下了一个小的挑战，前馈神经网络没法输入8个矩阵呀，这该怎么办呢？所以我们需要一种方式，把8个矩阵降为1个，首先，我们把8个矩阵连在一起，这样会得到一个大的矩阵，再随机初始化一个矩阵和这个组合好的矩阵相乘，最后得到一个最终的矩阵。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic12.png)
+
+这就是multi-headed attention的全部流程了，这里其实已经有很多矩阵了，我们把所有的矩阵放到一张图内看一下总体的流程。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic13.png)
+
