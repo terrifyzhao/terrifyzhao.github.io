@@ -8,11 +8,11 @@ cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/mast
 tags: NLP
 ---
 
-## 简介
+## **简介**
 
 [Attention Is All You Need](https://arxiv.org/pdf/1706.03762.pdf)是一篇Google提出的将Attention思想发挥到极致的论文。这篇论文中提出一个全新的模型，叫 Transformer，抛弃了以往深度学习任务里面使用到的 CNN 和 RNN ，目前大热的Bert就是基于Transformer构建的，这个模型广泛应用于NLP领域，例如机器翻译，问答系统，文本摘要和语音识别等等方向。
 
-## Transformer结构
+## **Transformer总体结构**
 
 和Attention模型一样，Transformer模型中也采用了 encoer-decoder 架构。但其结构相比于Attention更加复杂，论文中encoder层由6个encoder堆叠在一起，decoder层也一样。
 
@@ -30,7 +30,7 @@ decoder也包含encoder提到的两层网络，但是在这两层中间还有一
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic3.png)
 
-## self-attention
+## **Self-Attention**
 接下来我们详细看一下self-attention，其思想和attention类似，但是self-attention是Transformer用来将其他相关单词的“理解”转换成我们正在处理的单词的一种思路，我们看个例子：
 ```The animal didn't cross the street because it was too tired```
 这里的it到底代表的是animal还是street呢，对于我们来说能很简单的判断出来，但是对于机器来说，是很难判断的，self-attention就能够让机器把it和animal联系起来，接下来我们看下详细的处理过程。
@@ -61,6 +61,7 @@ decoder也包含encoder提到的两层网络，但是在这两层中间还有一
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic9.png)
 
+## **Multi-Headed Attention**
 这篇论文更牛逼的地方是给self-attention加入了另外一个机制，被称为“multi-headed” attention，该机制理解起来很简单，就是说不仅仅只初始化一组Q、K、V的矩阵，而是初始化多组，tranformer是使用了8组，所以最后得到的结果是8个矩阵。
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic10.png)
@@ -74,4 +75,50 @@ decoder也包含encoder提到的两层网络，但是在这两层中间还有一
 这就是multi-headed attention的全部流程了，这里其实已经有很多矩阵了，我们把所有的矩阵放到一张图内看一下总体的流程。
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic13.png)
+
+
+## **Positional Encoding**
+
+到目前为止，transformer模型中还缺少一种解释输入序列中单词顺序的方法。为了处理这个问题，transformer给encoder层和decoder层的输入添加了一个额外的向量Positional Encoding，维度和embedding的维度一样，这个向量采用了一种很独特的方法来让模型学习到这个值，这个向量能决定当前词的位置，或者说在一个句子中不同的词之间的距离。这个位置向量的具体计算方法有很多种，论文中的计算方法如下
+
+$$PE(pos,2i) = sin(pos/10000^{2i}/d_model)$$
+
+$$PE(pos,2i+1) = cos(pos/10000^{2i}/d_model)$$
+
+其中pos是指当前词在句子中的位置，i是指向量中每个值的index，可以看出，在**偶数位置，使用正弦编码，在奇数位置，使用余弦编码**，这里提供一下代码。
+
+```
+position_encoding = np.array(
+    [[pos / np.power(10000, 2.0 * (j // 2) / d_model) for j in range(d_model)] for pos in range(max_seq_len)])
+
+position_encoding[:, 0::2] = np.sin(position_encoding[:, 0::2])
+position_encoding[:, 1::2] = np.cos(position_encoding[:, 1::2])
+```
+
+最后把这个Positional Encoding与embedding的值相加，作为输入送到下一层。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic16.png)
+
+
+
+## **Layer normalization**
+
+>Normalization有很多种，但是它们都有一个共同的目的，那就是把输入转化成均值为0方差为1的数据。我们在把数据送入激活函数之前进行normalization（归一化），因为我们不希望输入数据落在激活函数的饱和区。
+
+在transformer中，每一个子层（self-attetion，ffnn）之后都会接一个残缺模块，并且有一个Layer normalization
+
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic19.png)
+
+残缺模块相信大家都很清楚了，这里不再讲解，主要讲解下Layer normalization。说到 normalization，那就肯定得提到 Batch Normalization。
+
+BN的主要思想就是：在每一层的每一批数据上进行归一化。我们可能会对输入数据进行归一化，但是经过该网络层的作用后，我们的数据已经不再是归一化的了。随着这种情况的发展，数据的偏差越来越大，我的反向传播需要考虑到这些大的偏差，这就迫使我们只能使用较小的学习率来防止梯度消失或者梯度爆炸。
+
+BN的具体做法就是对每一小批数据，在批这个方向上做归一化。如下图所示：
+
+
+
+
+
+
 
