@@ -166,3 +166,6 @@ mask 表示掩码，它对某些值进行掩盖，使其在参数更新时不产
 
 *   对于 decoder 的 self-attention，里面使用到的 scaled dot-product attention，同时需要padding mask 和 sequence mask 作为 attn_mask，具体实现就是两个mask相加作为attn_mask。
 *   其他情况，attn_mask 一律等于 padding mask。
+
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-06-Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/pic25.jpg)
