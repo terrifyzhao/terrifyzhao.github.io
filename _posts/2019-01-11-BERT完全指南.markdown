@@ -1,0 +1,21 @@
+---
+layout: post
+title: 'BERT完全指南'
+subtitle: 'BERT从原理到实践'
+date: 2019-01-11
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/cover.jpg'
+tags: NLP
+---
+
+
+
+## **简介**
+
+本文将会从BERT的原理讲解到源码，并分别介绍如何使用BERT做本文分类与句向量的生成
+
+* Attention
+* Transrofmer
+* Transformer源码分析
+* BERT做文本相似度基于、文本分类
+* BERT句向量
