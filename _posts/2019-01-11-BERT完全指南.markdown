@@ -4,7 +4,7 @@ title: 'BERT完全指南'
 subtitle: 'BERT从原理到实践'
 date: 2019-01-11
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-11-29-%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-BERT%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/cover.jpg'
 tags: NLP
 ---
 
@@ -12,10 +12,24 @@ tags: NLP
 
 ## **简介**
 
-本文将会从BERT的原理讲解到源码，并分别介绍如何使用BERT做本文分类与句向量的生成
+本文将会从BERT的原理开始讲起，并带领大家分析tansformer的源码，并分别介绍如何使用BERT做本文分类与句向量的生成。
 
-* Attention
-* Transrofmer
-* Transformer源码分析
-* BERT做文本相似度基于、文本分类
-* BERT句向量
+## **原理篇**
+
+本章将会先给大家介绍BERT的核心transformer，而transformer又是由attention组合而成，希望这两篇博客能让大家对transformer有一个详细的了解。
+
+* ## [Attention机制讲解](https://terrifyzhao.github.io/2019/01/04/Attention%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3.html)
+* ## [Transrofmer模型讲解](https://terrifyzhao.github.io/2019/01/11/Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3.html)
+
+## **代码篇**
+
+上文介绍完了transformer的原理，接下来我们会对transformer的源码进行分析。
+
+* ## Transformer源码分析（待更新）
+
+## **实践篇**
+
+最后就是BERT的两个实战项目了，这两个项目也是目前NLP方向比较热门的内容。
+
+* ## [使用BERT做文本相似度计算、文本分类](https://terrifyzhao.github.io/2018/11/29/%E4%BD%BF%E7%94%A8BERT%E5%81%9A%E4%B8%AD%E6%96%87%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6%E8%AE%A1%E7%AE%97.html)
+* ## BERT句向量（待更新）
