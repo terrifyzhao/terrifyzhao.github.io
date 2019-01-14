@@ -201,7 +201,7 @@ with tf.variable_scope(scope, reuse=reuse):
 
 embedding结束之后是dropout层，比较简单，不再多提。
 
-然后就是6层的multihead_attention与feedforward了，我们先看multihead_attention。这一块的代码略长，但是如果知道原理的话很好理解，我们这里了把它分成两部分讲，先看下参数，
+然后就是6层的multihead_attention与feedforward了，我们先看multihead_attention。这一块的代码略长，但是如果知道原理的话很好理解，我们这里了把它分成两部分讲，先看下参数，其中queries与keys都是上文处理好的embedding的值，num_units表示的是attention的大小，num_heads表示attention的个数，还有一个很关键的参数causality，这个参数决定了是否采用mask。接下来我们看代码，首先当然是创建三个矩阵Q、K、V了，作者先初始化了三个全连接层，输入是queries或者keys，这里这两个值是相同的，都是上文的embedding的值，神经元个数即embedding的维度，激活函数是relu，所以得到的Q、K、V的维度是(N, T, C)，C表示的是embedding的维度
 ```
 def multihead_attention(queries, 
                         keys, 
