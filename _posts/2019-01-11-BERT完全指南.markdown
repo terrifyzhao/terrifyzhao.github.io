@@ -25,7 +25,7 @@ tags: NLP
 
 上文介绍完了transformer的原理，接下来我们会对transformer的源码进行分析。
 
-* ## Transformer源码分析（待更新）
+* ## [Transformer源码分析](https://terrifyzhao.github.io/2019/01/11/Transformer%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB.html)
 
 ## **实践篇**
 
