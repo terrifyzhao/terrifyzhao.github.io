@@ -1,6 +1,6 @@
 ---
 layout: post
-title: TensorFlow常用函数说明'
+title: TensorFlow常用函数说明
 subtitle: 'TensorFlow常用函数说明'
 date: 2019-01-15
 categories: TensorFlow
