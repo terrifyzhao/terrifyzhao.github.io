@@ -4,13 +4,13 @@ title: 'Transformer源码解读'
 subtitle: 'Transformer源码解读'
 date: 2019-01-11
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-BERT%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-Transformer%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/cover.jpg'
 tags: NLP
 ---
 
 
 
-之前我们一起了解了attention、transformer的原理，本文将会基于github的一个[transformer](https://github.com/Kyubyong/transformer)开源代码进行代码分析讲解，该代码相比于Google提供的[tensor2tensor/transformer](https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/models/transformer.py)代码更简单，也更容易理解。
+之前我们一起了解了attention、transformer的原理，本文将会基于github的一个 ~~[transformer](https://github.com/Kyubyong/transformer)~~ (下文会针对我对该代码的一个[改版](https://github.com/terrifyzhao/transformer)讲解)开源代码进行代码分析讲解，该代码相比于Google提供的[tensor2tensor/transformer](https://github.com/tensorflow/tensor2tensor/blob/master/tensor2tensor/models/transformer.py)代码更简单，也更容易理解。
 
 这里简单说一下代码怎么运行：
 *   下载数据集 [IWSLT 2016 German–English parallel corpus](https://wit3.fbk.eu/download.php?release=2016-01&type=texts&slang=de&tlang=en) 并解压到 `corpora/` 文件夹。
