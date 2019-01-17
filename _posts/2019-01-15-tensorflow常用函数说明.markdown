@@ -4,7 +4,7 @@ title: TensorFlow常用函数说明'
 subtitle: 'TensorFlow常用函数说明'
 date: 2019-01-15
 categories: TensorFlow
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-Transformer%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-15-tensorflow%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/cover.jpg'
 tags: NLP
 ---
 
