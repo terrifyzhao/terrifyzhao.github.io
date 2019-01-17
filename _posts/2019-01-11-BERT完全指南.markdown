@@ -2,7 +2,7 @@
 layout: post
 title: 'BERT完全指南'
 subtitle: 'BERT从原理到实践'
-date: 2019-01-11
+date: 2019-01-17
 categories: NLP
 cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-BERT%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/cover.jpg'
 tags: NLP
