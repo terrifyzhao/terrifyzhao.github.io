@@ -1,0 +1,17 @@
+---
+layout: post
+title: '使用BERT生成句向量'
+subtitle: ''使用BERT生成句向量'
+date: 2019-01-30
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-BERT%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/cover.jpg'
+tags: NLP
+---
+
+
+
+## **简介**
+
+之前的文章介绍了BERT的原理、并用BERT做了文本分类与相似度计算，本文将会教大家用BERT来生成句向量，核心逻辑代码参考了hanxiao大神的[bert-as-service](https://github.com/hanxiao/bert-as-service)
+
+
