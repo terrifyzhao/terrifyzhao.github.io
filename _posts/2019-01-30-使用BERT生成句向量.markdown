@@ -4,7 +4,7 @@ title: '使用BERT生成句向量'
 subtitle: ''使用BERT生成句向量'
 date: 2019-01-30
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-BERT%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-30-%E4%BD%BF%E7%94%A8BERT%E7%94%9F%E6%88%90%E5%8F%A5%E5%90%91%E9%87%8F/cover.jpg'
 tags: NLP
 ---
 
@@ -14,4 +14,13 @@ tags: NLP
 
 之前的文章介绍了BERT的原理、并用BERT做了文本分类与相似度计算，本文将会教大家用BERT来生成句向量，核心逻辑代码参考了hanxiao大神的[bert-as-service](https://github.com/hanxiao/bert-as-service)
 
+## **传统的句向量**
+
+对于传统的句向量生成方式，更多的是采用word embedding的方式取加权平均，该方法有一个最大的弊端，那就是无法理解上下文的语义，同一个词在不同的语境意思可能不一样，但是却会被表示成同样的word embedding，BERT生成句向量的优点在于可理解句意，并且排除了词向量加权引起的误差。
+
+## **BERT句向量**
+
+BERT的包括两个版本，12层的transformer与24层的transformer，官方提供了12层的中文模型，下文也将会基于12层的模型来讲解。
+
+每一层transformer的输出值，理论上来说都可以作为句向量，但是到底应该取哪一层呢，根据hanxiao大神的实验数据，最佳结果是取倒数第二层，最后一层的值太接近于目标，可能存
 
