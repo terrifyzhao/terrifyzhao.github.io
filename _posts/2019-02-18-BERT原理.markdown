@@ -55,10 +55,14 @@ mml可以理解为完形填空，作者会随机mask每一个句子中15%的词�
 选择一些句子对A与B，其中50%的数据B是A的下一条句子，剩余50%的数据B是语料库中随机选择的，学习其中的相关性，添加这样的预训练的目的是目前很多NLP的任务比如QA和NLI都需要理解两个句子之间的关系，从而能让预训练的模型更好的适应这样的任务。
 
 ## **输入**
+
 bert的输入可以是单一的一个句子或者是句子对，实际的输入值是segment embedding与position embedding相加，具体的操作流程可参考之前的[transformer](https://terrifyzhao.github.io/2019/01/11/Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3.html)有详细讲解。
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-18-BERT%E7%BB%93%E6%9E%84/pic2.jpg)
 
 
+## **总结**
 
+bert开启了NLP领域的预训练学习，大大提升了模型的训练效率，相信在未来也会有更多优秀的预训练模型踊跃而出。
 
 
