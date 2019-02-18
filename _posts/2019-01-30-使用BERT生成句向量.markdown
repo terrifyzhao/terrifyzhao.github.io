@@ -22,5 +22,11 @@ tags: NLP
 
 BERT的包括两个版本，12层的transformer与24层的transformer，官方提供了12层的中文模型，下文也将会基于12层的模型来讲解。
 
-每一层transformer的输出值，理论上来说都可以作为句向量，但是到底应该取哪一层呢，根据hanxiao大神的实验数据，最佳结果是取倒数第二层，最后一层的值太接近于目标，可能存
+每一层transformer的输出值，理论上来说都可以作为句向量，但是到底应该取哪一层呢，根据hanxiao大神的实验数据，最佳结果是取倒数第二层，最后一层的值太接近于目标，前面几层的值可能语义还未充分的学习到。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-30-%E4%BD%BF%E7%94%A8BERT%E7%94%9F%E6%88%90%E5%8F%A5%E5%90%91%E9%87%8F/pic1.png)
+
+接下来我们从代码的角度来进详细讲解。
+
+（未完待续）
 
