@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'BERT原理说明'
+title: 'BERT原理'
 subtitle: 'BERT原理'
 date: 2019-02-18
 categories: NLP
@@ -65,4 +65,5 @@ bert的输入可以是单一的一个句子或者是句子对，实际的输入�
 
 bert开启了NLP领域的预训练学习，大大提升了模型的训练效率，相信在未来也会有更多优秀的预训练模型踊跃而出。
 
+如果您对BERT的实战感兴趣，请参阅我的其他博客。
 
