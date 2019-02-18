@@ -1,0 +1,64 @@
+---
+layout: post
+title: 'BERT原理说明'
+subtitle: 'BERT原理'
+date: 2019-02-18
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-11-BERT%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/cover.jpg'
+tags: NLP
+---
+
+
+
+## **简介**
+
+之前的文章从attention讲解到了transformer，本文将会针对目前大热的BERT进行讲解，bert的内部结构主要是transformer，如果您对transformer并不了解，请参阅我之前的博文。   
+
+从创新的角度来看，bert其实并没有过多的结构方面的创新点，其和GPT一样均是采用的transformer的结构，相对于GPT来说，其是双向结构的，而GPT是单向的，如下图所示
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-18-BERT%E7%BB%93%E6%9E%84/pic1.jpg)
+
+其次bert在多方面的nlp任务变现来看效果都较好，具备较强的泛化能力，对于特定的任务只需要添加一个输出层来进行fine-tuning即可。
+
+
+## **结构**
+
+先看下bert的内部结构，官网提供了两个版本，L表示的是transformer的层数，H表示输出的维度，A表示mutil-head attention的个数
+
+$$BERT_{BASE}:L=12,H=768,A=12,Total Parameters=110M$$
+$$BERT_{LARGE}:L=24, H=1024, A=16, Total Parameters=340M$$
+
+从模型的层数来说其实已经很大了，但是由于transformer的residual模块，层数并不会引起梯度消失等问题，但是并不代表层数越多效果越好，有论点认为低层偏向于语法特征学习，高层偏向于语义特征学习。
+
+## **预训练模型**
+
+首先我们要了解一下什么是预训练模型，举个例子，假设我们有大量的维基百科数据，那么我们可以用这部分巨大的数据来训练一个泛化能力很强的模型，当我们需要在特定场景使用时，例如做文本相似度计算，那么，只需要简单的修改一些输出层，再用我们自己的数据进行一个增量训练，对权重进行一个轻微的调整。
+
+预训练的好处在于在特定场景使用时不需要用大量的语料来进行训练，节约时间效率高效，bert就是这样的一个泛化能力较强的预训练模型。
+
+
+## **BERT的预训练过程**
+接下来我们看看BERT的预训练过程，BERT的预训练阶段包括两个任务，一个是Masked Language Model，还有一个是Next Sentence Prediction。
+
+### **Masked Language Model**
+mml可以理解为完形填空，作者会随机mask每一个句子中15%的词，用其上下文来做预测，例如：my dog is hairy → my dog is [MASK]
+
+此处将hairy进行了mask处理，然后采用非监督学习的方法预测mask位置的词是什么，但是该方法有一个问题，因为是mask15%的词，其数量已经很高了，这样就会导致某些词在fine-tuning阶段从未见过，为了解决这个问题，作者做了如下的处理：
++ 80%的时间是采用[mask]，my dog is hairy → my dog is [MASK]
++ 10%的时间是随机取一个词来代替mask的词，my dog is hairy -> my dog is apple
++ 10%的时间保持不变，my dog is hairy -> my dog is hairy
+
+那么为啥要以一定的概率使用随机词呢？这是因为transformer要保持对每个输入token分布式的表征，否则Transformer很可能会记住这个[MASK]就是"hairy"。至于使用随机词带来的负面影响，文章中说了,所有其他的token(即非"hairy"的token)共享15%*10% = 1.5%的概率，其影响是可以忽略不计的。
+
+
+### **Next Sentence Prediction**
+选择一些句子对A与B，其中50%的数据B是A的下一条句子，剩余50%的数据B是语料库中随机选择的，学习其中的相关性，添加这样的预训练的目的是目前很多NLP的任务比如QA和NLI都需要理解两个句子之间的关系，从而能让预训练的模型更好的适应这样的任务。
+
+## **输入**
+bert的输入可以是单一的一个句子或者是句子对，实际的输入值是segment embedding与position embedding相加，具体的操作流程可参考之前的[transformer](https://terrifyzhao.github.io/2019/01/11/Transformer%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3.html)有详细讲解。
+
+
+
+
+
+
