@@ -8,13 +8,13 @@ cover:'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/maste
 tags: NLP
 ---
 
-
+在阅读本文之前如果您对BERT并不了解，请参阅我的其他博文[BERT完全指南](https://terrifyzhao.github.io/2019/01/17/BERT%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97.html)
 
 ## **简介**
 
 之前的文章介绍了BERT的原理、并用BERT做了文本分类与相似度计算，本文将会教大家用BERT来生成句向量，核心逻辑代码参考了hanxiao大神的[bert-as-service](https://github.com/hanxiao/bert-as-service)，我的代码地址如下：
 
-#代码地址：[BERT句向量](https://github.com/terrifyzhao/bert-utils)
+代码地址：[BERT句向量](https://github.com/terrifyzhao/bert-utils)
 
 ## **传统的句向量**
 
