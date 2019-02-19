@@ -1,10 +1,10 @@
 ---
 layout: post
 title: '使用BERT生成句向量'
-subtitle: '使用BERT生成句向量'
+subtitle: 'BERT句向量'
 date: 2019-01-30
 categories: NLP
-cover:'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-30-%E4%BD%BF%E7%94%A8BERT%E7%94%9F%E6%88%90%E5%8F%A5%E5%90%91%E9%87%8F/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-01-30-%E4%BD%BF%E7%94%A8BERT%E7%94%9F%E6%88%90%E5%8F%A5%E5%90%91%E9%87%8F/cover.jpg'
 tags: NLP
 ---
 
