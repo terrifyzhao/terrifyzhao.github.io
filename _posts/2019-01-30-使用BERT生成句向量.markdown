@@ -12,7 +12,9 @@ tags: NLP
 
 ## **简介**
 
-之前的文章介绍了BERT的原理、并用BERT做了文本分类与相似度计算，本文将会教大家用BERT来生成句向量，核心逻辑代码参考了hanxiao大神的[bert-as-service](https://github.com/hanxiao/bert-as-service)
+之前的文章介绍了BERT的原理、并用BERT做了文本分类与相似度计算，本文将会教大家用BERT来生成句向量，核心逻辑代码参考了hanxiao大神的[bert-as-service](https://github.com/hanxiao/bert-as-service)，我的代码地址如下：
+
+代码地址：[BERT句向量](https://github.com/terrifyzhao/bert-utils)
 
 ## **传统的句向量**
 
@@ -28,5 +30,132 @@ BERT的包括两个版本，12层的transformer与24层的transformer，官方�
 
 接下来我们从代码的角度来进详细讲解。
 
-（未完待续）
+先看下args.py文件，该文件有几个句向量的重要参数，前几个都是路径，这里不再详细解释，这里主要说一下layer_indexes参数与max_seq_len参数，layer_indexes表示的是使用第几层的输出作为句向量，-2表示的是倒数第二层，max_seq_len表示的是序列的最大长度，因为输入的长度是不固定的，所以我们需要设置一个最大长度才能确保输出的维度是一样的，如果最大长度是20，当输入的序列长度小于20的时候，就会补0，如果大于20则会截取前面的部分 ，通常该值会取语料的长度的平均值+2，加2的原因是因为需要拼接两个占位符[CLS]（表示序列的开始）与[SEP]（表示序列的结束）
 
+```
+model_dir = os.path.join(file_path, 'chinese_L-12_H-768_A-12/')
+config_name = os.path.join(model_dir, 'bert_config.json')
+ckpt_name = os.path.join(model_dir, 'bert_model.ckpt')
+output_dir = os.path.join(model_dir, '../tmp/result/')
+vocab_file = os.path.join(model_dir, 'vocab.txt')
+data_dir = os.path.join(model_dir, '../data/')
+
+num_train_epochs = 10 
+batch_size = 32 
+learning_rate = 0.00005   
+# gpu使用率 
+gpu_memory_fraction = 0.8   
+# 默认取倒数第二层的输出值作为句向量 
+layer_indexes = [-2]
+
+# 序列的最大程度，单文本建议把该值调小 
+max_seq_len = 20
+```
+
+再来看graph.py文件，该代码的主要目的是把预训练好的模型加载进来，并修改输出层，我们一步一步来看。
+
+首先创建一个目录，该目录用于存放待输出的文件，定义bert的配置信息路径，根据路径读取配置信息转化为bert_config对象。
+```
+tensorflow.python.tools.optimize_for_inference_lib import optimize_for_inference
+tf.gfile.MakeDirs(args.output_dir)
+
+config_fp = args.config_name
+logger.info('model config: %s' % config_fp)
+
+# 加载bert配置文件 with tf.gfile.GFile(config_fp, 'r') as f:
+    bert_config = modeling.BertConfig.from_dict(json.load(f))
+```
+
+定义三个占位符，分别表示的是对应文本的index，mask与type_index，其中index表示的是在词典中的index，mask表示的是该位置是否有内容，举个例子，例如序列的最大长度是20，有效的字符只有10个字，加上[CLS]与[SEP]两个占位符，那有8个字符是空的，该8个位置设置为0其他位置设置为1，type_index表示的是是否是第一个句子，是第一个句子则设置为1，因为该项目只有一个句子，所以均为1。
+```
+logger.info('build graph...')
+input_ids = tf.placeholder(tf.int32, (None, args.max_seq_len), 'input_ids')
+input_mask = tf.placeholder(tf.int32, (None, args.max_seq_len), 'input_mask')
+input_type_ids = tf.placeholder(tf.int32, (None, args.max_seq_len), 'input_type_ids')
+```
+
+根据上面定义的三个占位符，定义好输入的张量，实例化一个model对象，该对象就是预训练好的bert模型，然后从check_point文件中初始化权重
+```
+input_tensors = [input_ids, input_mask, input_type_ids]
+
+model = modeling.BertModel(
+  config=bert_config,
+  is_training=False,
+  input_ids=input_ids,
+  input_mask=input_mask,
+  token_type_ids=input_type_ids,
+  use_one_hot_embeddings=False)
+
+tvars = tf.trainable_variables()
+
+init_checkpoint = args.ckpt_name
+(assignment_map, initialized_variable_names) = modeling.get_assignment_map_from_checkpoint(tvars, init_checkpoint)
+
+tf.train.init_from_checkpoint(init_checkpoint, assignment_map)
+```
+
+接下来判断一下args.index_layeres参数的长度，如果长度为1，则只取改层的输出，否则遍历需要取的层，把所有层的weight取出来并拼接成一个768*层数的张量
+```
+with tf.variable_scope("pooling"):
+  if len(args.layer_indexes) == 1:
+        encoder_layer = model.all_encoder_layers[args.layer_indexes[0]]
+  else:
+        all_layers = [model.all_encoder_layers[l] for l in args.layer_indexes]
+        encoder_layer = tf.concat(all_layers, -1)
+```
+
+接下来是句向量生成的核心代码，这里定义了两个方法，一个mul_mask 和一个masked_reduce_mean，我们先看`masked_reduce_mean(encoder_layer, input_mask)`这里调用方法时传入的是encoder_layer即输出值，与input_mask即是否有有效文本，`masked_reduce_mean `方法中又调用了`mul_mask`方法，即先把input_mask进行了一个维度扩展，然后与encoder_layer相乘，为什么要维度扩展呢，我们看下两个值的维度，我们还是假设序列的最大长度是20，那么encoder_layer的维度为`[20,768]`，为了把无效的位置的内容置为0，input_mask的维度为`[20]`，扩充之后变成了`[20，1]`，两个值相乘，便把input_mask为0的位置的encoder_layer的值改为了0， 然后把相乘得到的值在axis=1的位置进行相加最后除以input_mask在axis=1的维度的和，然后把得到的结果添加一个别名`final_encodes`
+```
+mul_mask = lambda x, m: x * tf.expand_dims(m, axis=-1)
+masked_reduce_mean = lambda x, m: tf.reduce_sum(mul_mask(x, m), axis=1) / (
+        tf.reduce_sum(m, axis=1, keepdims=True) + 1e-10)
+
+input_mask = tf.cast(input_mask, tf.float32)
+pooled = masked_reduce_mean(encoder_layer, input_mask)
+pooled = tf.identity(pooled, 'final_encodes')
+
+output_tensors = [pooled]
+tmp_g = tf.get_default_graph().as_graph_def()
+```
+
+最后把得到的句向量重新添加进graph中，并返回graph的路径。
+```
+config = tf.ConfigProto(allow_soft_placement=True)
+with tf.Session(config=config) as sess:
+    logger.info('load parameters from checkpoint...')
+    sess.run(tf.global_variables_initializer())
+    logger.info('freeze...')
+    tmp_g = tf.graph_util.convert_variables_to_constants(sess, tmp_g, [n.name[:-2] for n in output_tensors])
+    dtypes = [n.dtype for n in input_tensors]
+    logger.info('optimize...')
+    tmp_g = optimize_for_inference(
+        tmp_g,
+  [n.name[:-2] for n in input_tensors],
+  [n.name[:-2] for n in output_tensors],
+  [dtype.as_datatype_enum for dtype in dtypes],
+ False)
+tmp_file = tempfile.NamedTemporaryFile('w', delete=False, dir=args.output_dir).name
+logger.info('write graph to a tmp file: %s' % tmp_file)
+with tf.gfile.GFile(tmp_file, 'wb') as f:
+    f.write(tmp_g.SerializeToString())
+return tmp_file
+```
+
+实际的使用和BERT做文本分类的方法类似，只是在返回的`EstimatorSpec`不太一样，具体细节不在详解，可参考我的具体代码。
+```
+with tf.gfile.GFile(self.graph_path, 'rb') as f:
+    graph_def = tf.GraphDef()
+    graph_def.ParseFromString(f.read())
+
+input_names = ['input_ids', 'input_mask', 'input_type_ids']
+
+output = tf.import_graph_def(graph_def,
+                             input_map={k + ':0': features[k] for k in input_names},
+                             return_elements=['final_encodes:0'])
+
+return EstimatorSpec(mode=mode, predictions={
+    'encodes': output[0]
+})
+```
+
+最后再贴一下代码地址[BERT生成句向量](https://github.com/terrifyzhao/bert-utils)
