@@ -9,6 +9,8 @@ tags: NLP
 ---
 
 
+本文是对《Language Models are Unsupervised Multitask Learners》的翻译，部分内容可能会存在理解错误，如有错误欢迎指正交流。
+
 
 ## **简介**
 
@@ -71,19 +73,27 @@ BPE是一种介于字符级和字级之间的实用语言模型，它能有效�
 ## **3.实验**
 
 我们一共训练测试了4个模型，其结构如下图：
-[](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-19-GPT2.0%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic1.jpg)
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-19-GPT2.0%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic1.jpg)
 
 最小的模型规模和GPT是一样的，第二小的和最大的BERT规模一样，我们最大的模型叫做GPT-2，其具有比GPT多一个数量级的参数。每个模型的学习率在5%的WebText保留样本上手工调整以获得最佳的值。所有的模型目前在WebText上都还存在欠拟合的情况，如果给更多的时间去训练的话效果还能进一步的提升。
 
 ### **3.1语言建模**
 
-模型验证的第一步当然是零样本任务，我们对WebText训练的语言模型在在一些基本任务零样本的情况下的效果很感兴趣，因为我们的模型是在字节级别操作的，因此并不需要做预处理或者说是分词，我能能够在任何语言模型的基准上进行评估。语言建模数据集上的结果通常以每个标准单元(字符、字节或者词)的平均负样本对数概率的比例或指数作为评判标准。我们的评判标准是：对数概率除以标准节点的个数。对于这些数据集来说，WebText语言模型能明显的测出out-of分布，它能找出没有联系的标点符号、缩进、打乱的句子，甚至<UNK>，不做这个在WebText中出现的次数极少，400亿字节中只出现了26次。下图是我们的模型在各项任务的表现，我们尽可能的把人为的预处理过程移除了。
+模型验证的第一步当然是零样本任务，我们对WebText训练的语言模型在在一些基本任务零样本的情况下的效果很感兴趣。我们的模型是在字节级别做的处理，因此并不需要做预处理或者说是分词，我们能够在任何语言模型的基准上进行评估。语言建模数据集上的结果通常以每个标准单元(字符、字节或者词)的平均负样本对数概率的比例或指数作为评判标准。我们的评判标准是：对数概率除以标准节点的个数。对于这些数据集来说，WebText语言模型能明显的测出out-of分布，它能找出没有联系的标点符号、缩进、打乱的句子，甚至<UNK>，不过这个在WebText中出现的次数极少，400亿字节中只出现了26次。下图是我们的模型在各项任务的表现，我们采用了invertible de-tokenizers并尽可能的把人为的预处理过程移除了。
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-19-GPT2.0%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic2.jpg)
 
-[](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-19-GPT2.0%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic1.jpg)
+正是由于采用了invertible de-tokenizers，我们仍然可以计算数据集的对数概率值，该值可以被认为是一种简单的域自适应结果。我们发现GPT-2在invertible de-tokenizers作用下PPL的值降低了2.5-5个点。
 
+WebText语言模型跨越了不同的领域与数据集，在零样本的情况下8个数据集测试情况中有7个取得了最好的结果，如果在WiliText-2这样的只有1、2百万训练数据的数据集上微调的话效果会有巨大的提升，对于有长期依赖关系的数据集也有很大的提升。但是我们的模型在One Billion Word Benchmark上效果并不如之前做的好，可能是由于我们预训练阶段数据集太大，打乱了其long-range的结构。
 
+### **3.2-3.8**
+各项任务的详细测评，这里不再详细介绍，感兴趣的小伙伴请参阅原文。
 
+## **泛化与记忆**
+
+...
+未完待续
 
 
 
