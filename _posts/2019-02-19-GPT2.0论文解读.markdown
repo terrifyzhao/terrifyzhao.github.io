@@ -4,7 +4,7 @@ title: 'GPT2.0 解读 Language Models are Unsupervised Multitask Learners'
 subtitle: 'Language Models are Unsupervised Multitask Learners'
 date: 2019-02-18
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-18-BERT%E7%BB%93%E6%9E%84/cover.png'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-19-GPT2.0%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/cover.jpg'
 tags: NLP
 ---
 
