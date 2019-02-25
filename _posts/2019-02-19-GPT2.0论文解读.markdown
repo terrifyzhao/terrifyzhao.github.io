@@ -9,7 +9,8 @@ tags: NLP
 ---
 
 
-本文是对《Language Models are Unsupervised Multitask Learners》的部分翻译与理解，内容可能会存在理解错误，如有错误欢迎指正交流。
+本文是对[《Language Models are Unsupervised Multitask Learners》](https://d4mucfpksywv.cloudfront.net/better-language-models/language-models.pdf)的翻译，部分内容可能会存在理解错误，如有错误欢迎指正交流。
+
 
 
 ## **个人对论文的理解**
