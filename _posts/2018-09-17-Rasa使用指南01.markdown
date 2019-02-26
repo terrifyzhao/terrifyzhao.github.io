@@ -16,7 +16,7 @@ Rasa是一个基于多轮对话的框架，其中包含两个模块Rasa core与R
 
 Rasa nlu是用来理解语义的，包括意图识别，实体识别，它会把用户的输入转换为结构化的数据，例如在下图的例子中，nlu会识别出用户打算发一封邮件（意图），邮箱地址amy@example.com（实体）。Rasa Core是一个对话管理的平台，它的工作是决定接下来机器该返回什么内容给用户，这里给用户返回了Should we make that your primary email?
 
-![rasa](https://rasa.com/docs/getting-started/_static/images/rasa_stack_explained.png)
+![rasa](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2018-09-17-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9701/rasa4.jpg)
 
 在接下来的内容中，我们会基于一个简单的多轮对话带领大家搭建一个Rasa平台，为了理解起来简单，我们暂时不考虑填槽。
 
