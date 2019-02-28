@@ -14,7 +14,7 @@ tags: NLP
 
 ## **简述**
 
-本节的内容主要是再深入讲解一下Rasa core并把上一节未提到的Slot即填槽讲解一下。
+本节的内容主要是再深入讲解一下Rasa core并把上一节未提到的Slot即填槽讲解一下。Slot和Action是先关联的，我们这里先把Action详细理一下，再来说Slot。
 
 ## **Actions**
 
@@ -31,6 +31,11 @@ tags: NLP
 
 default actions包含三个`action_listen`, `action_restart`, `action_default_fallback`
 
++ action_listen，表示停止预测，等待用户的输入
++ action_restart，表示重置整个会话
++ action_default_fallback，撤消最后一条用户消息，并返回机器人不理解该消息
+
+
 ### **utter actions**
 
 如果你要给用户直接返回一条文本信息，那么action需要用`UtterAction`，并且采用`utter_`的前缀，如果没有这个前缀，那这个action就会被识别为custom actions，系统就没法直接把action中定义好的文本返回给用户。
@@ -39,13 +44,55 @@ default actions包含三个`action_listen`, `action_restart`, `action_default_fa
 
 custom actions表示的是用户自定义的action，这个action需要配合代码一起使用，它能返回任何你想返回的内容，甚至一些操作，例如你的对话系统连接到了你的灯泡，你可以通过custom actions来自动打开灯，当然了，你也可以用该方法来反问文本，达到和utter actions一样的效果。
 
-custom actions还有一种用法，`action_endpoint`，你可采用这种方法来直接调用服务端的接口，接口可以用任何语言编写，该方法需要定义在`endpoints.yml`文件中
+官方还提供了一个小的python sdk来方便用户编写自定义的action，首先需要安装一下对应的`rasa_core_sdk`
+
 ```
-action_endpoint:
-  url: "http://localhost:5055/webhook"
+pip install rasa_core_sdk
 ```
 
-当然，官方也提供了一个小的python sdk来编写这样的接口，我们来看一下
+然后是代码编写，这里以寻找餐厅为例，其中Action是父类，需要重写其中的两个方法，`name`与`run`，`name`方法是用来返回当前action的名字，`run`方法包括三个参数，分别是`dispatcher`、`tracker`、`domain`，通过`tracker`可以获取到槽值与用户最近输入的内容，如果想把详细返回给用户，可以使用`dispatcher`，调用 `dispatcher.utter_template`, `dispatcher.utter_message`或者`rasa_core_sdk.executor.CollectingDispatcher` 方法。`run`方法返回的是具体执行什么动作。
+
+```
+from rasa_core_sdk import Action
+from rasa_core_sdk.events import SlotSet
+
+class ActionCheckRestaurants(Action):
+   def name(self):
+      return "action_check_restaurants"
+
+   def run(self, dispatcher, tracker, domain):
+      return [SlotSet("matches", ['kfc', 'starbucks'])]
+```
+
+编写好后把`action_check_restaurants`添加到domain文件中才会生效。
+
+custom actions还有一种用法，`action_endpoint`，你可采用这种方法来直接调用服务端的接口，接口可以用任何语言编写，该方法需要定义在`endpoints.yml`文件中，并且在执行脚本的时候添加额外的命令`--endpoints endpoints.yml`
+```
+action_endpoint:
+  url: 'http://localhost:5055/webhook'
+```
+
+
+接下来我们看下词槽Slot
+
+## **Slot**
+
+在开始之前我们先简单介绍一下什么是词槽，词槽其实就是你的机器人的记忆力，它会以key-value的形式去存储用户提供的外部信息，大多数情况下，槽值都会影响整个对话。不同的用户行为，需要使用不同类型的词槽来存储，Rasa还为准备了几种类型的词槽：
+
++ Text Slot 文本类型
++ Boolean Slot 布尔类型
++ Categorical Slot 分类类型，举个例子，用户预定咖啡，咖啡分为Tall，Grande和Venti三种杯型，这时候只允许用户从这三种类型中选一个
++ Float Slot 浮点类型
++ List Slot 列表类型
++ Unfeaturized Slot 该类型的词槽表示那些你想保存下来的信息，但是这些信息对于对话流程来说没有任何影响。
+
+举个例子，例如用户问今天天气怎么样，这个时候，如果我们要回答用户的问题，首先需要知道用户 问的天气是指的什么地点什么时间，这里的时间和地点就是所谓的词槽，在多轮对话中，主要任务就是把词槽的值填上，所以这个时候机器需要反问用户，询问的天气是什么地点，什么时间，当机器判断槽已经填满了，就可以把答案返回给用户了。而这里的地点，就应该采用Text类型的Slot，
+
+
+
+
+
+
 
 
 ## 未完待续...本周内会更新完
