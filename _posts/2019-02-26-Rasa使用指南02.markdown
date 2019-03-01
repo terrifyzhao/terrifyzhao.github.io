@@ -14,17 +14,59 @@ tags: NLP
 
 ## **简述**
 
-本节的内容主要是再深入讲解一下Rasa core并把上一节未提到的Slot即填槽讲解一下。Slot和Action是先关联的，我们这里先把Action详细理一下，再来说Slot。
+本节的内容主要是再深入讲解一下Rasa core并把上一节未提到的Slot即填槽讲解一下。在开始之前，我们先来看一下Rasa处理对话时的一个流程图。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-26-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9702/pic1.png)
+
+1、首先接受用户消息，并将该消息送到`Interpreter`，可以理解为一个解析器，它会把用户的输入内容转变为一个字典，其中包括原始信息，意图，实体等等，其实就是Rasa的NLU模块所做的事情。
+2、接下来会把字典送给`Tracker`，这个是用来记录对话状态并跟踪对话进度的。
+3、`Policy`会接收到`Tracker`当前的状态，并根据这个状态选择一个合适的`Action`
+4、`Action`一方面会把信息发送给`Tracker`，让它记录下当前的状态，另一方面还会给用户发送信息。
+
+整个流程理解起来可能会有点复杂，没关系，在下文我会举一个实例来讲述总的流程细节。在此之前，我们要先看一些基础概念Slot与Action。
+
+
+## **Slot**
+
+词槽是机器人的记忆力，它会以key-value的形式去存储用户提供的外部信息，大多数情况下，槽值都会影响整个对话。例如用户问今天天气怎么样，这个时候，如果我们要回答用户的问题，首先需要知道用户 问的天气是指的什么地点什么时间，这里的时间和地点就是所谓的词槽，在多轮对话中，主要任务就是把词槽的值填上，所以这个时候机器需要反问用户，询问的天气是什么地点，什么时间，当机器判断槽已经填满了，就可以把答案返回给用户了。而这里的地点，就应该采用Text类型的Slot。`Policy`是不会读取槽值里面的内容的，它只能判断是否有值。
+
+不同的用户行为，需要使用不同类型的词槽来存储，Rasa有以下几种类型的词槽：
+
++ Text Slot 文本类型
++ Boolean Slot 布尔类型
++ Categorical Slot 分类类型，举个例子，用户预定咖啡，咖啡分为Tall，Grande和Venti三种杯型，这时候只允许用户从这三种类型中选一个
++ Float Slot 浮点类型
++ List Slot 列表类型
++ Unfeaturized Slot 该类型的词槽表示那些你想保存下来的信息，但是这些信息对于对话流程来说没有任何影响。
+
+### **定义Slot**
+
+在`domain`文件中以以下格式定义slot，city是词槽的key，type是词槽的类型，initial_value是默认值，默认值是可选项，可不加。
+```
+slots:
+  city:
+    type: text
+    initial_value: "深圳"
+```
+对于Categorical 类型的slot定义方式如下：
+```
+slots:
+   account_type:
+      type: categorical
+      values:
+      - premium
+      - basic
+```
+
+slot的使用需要action的配合，接下来先看下action再以一个例子把这两者串起来。
 
 ## **Actions**
 
-说到多轮会话那肯定离不开填槽，但是怎么根据槽值来返回答案也是一个问题，所以在开始讲解slot之前，我们要先看一下actions。
-
-回忆一下domain，domain当中有一个属性叫做actions，actions是根据用户的输入返回给用户的答案，我们在上文中提到，actions是以utter开头的，但其实actions并不只有这一种定义方法，在Rasa Core中有三种类型的actions，分别为
+回忆一下domain，domain当中有一个属性叫做actions，actions是**接下来要执行的操作**，包括返回给用户的信息。我们在上一篇博客中提到过，actions是以utter开头的，但其实actions并不只有这一种定义方法，在Rasa Core中有三种类型的actions，分别为
 
 + **default actions** ，系统默认提供的action
-+ **utter actions**, 以 `utter_`作为开头, 该action只能用于给用户返回信息
-+ **custom actions** - 自定义的action，该action可运行任意的代码
++ **utter actions**，以 utter_作为开头, 该action只能用于给用户返回信息
++ **custom actions** ，自定义的action，该action可执行任何的操作
 
 
 ### **default actions**
@@ -38,11 +80,11 @@ default actions包含三个`action_listen`, `action_restart`, `action_default_fa
 
 ### **utter actions**
 
-如果你要给用户直接返回一条文本信息，那么action需要用`UtterAction`，并且采用`utter_`的前缀，如果没有这个前缀，那这个action就会被识别为custom actions，系统就没法直接把action中定义好的文本返回给用户。
+如果你只需要给用户直接返回一条文本信息而没有其他的操作的话，那么action需要用`UtterAction`，并且采用`utter_`的前缀，如果没有这个前缀，那这个action就会被识别为custom actions。
 
 ### **custom actions**
 
-custom actions表示的是用户自定义的action，这个action需要配合代码一起使用，它能返回任何你想返回的内容，甚至一些操作，例如你的对话系统连接到了你的灯泡，你可以通过custom actions来自动打开灯，当然了，你也可以用该方法来反问文本，达到和utter actions一样的效果。
+custom actions表示的是用户自定义的action，这个action多轮的关键点。custom action需要配合代码一起使用，它能返回任何你想返回的内容，甚至一些操作，例如你的对话系统连接到了你的灯泡，你可以通过custom actions来自动打开灯，当然了，你也可以用该方法来返回文本信息，达到和utter actions一样的效果。
 
 官方还提供了一个小的python sdk来方便用户编写自定义的action，首先需要安装一下对应的`rasa_core_sdk`
 
@@ -50,43 +92,63 @@ custom actions表示的是用户自定义的action，这个action需要配合代
 pip install rasa_core_sdk
 ```
 
-然后是代码编写，这里以寻找餐厅为例，其中Action是父类，需要重写其中的两个方法，`name`与`run`，`name`方法是用来返回当前action的名字，`run`方法包括三个参数，分别是`dispatcher`、`tracker`、`domain`，通过`tracker`可以获取到槽值与用户最近输入的内容，如果想把详细返回给用户，可以使用`dispatcher`，调用 `dispatcher.utter_template`, `dispatcher.utter_message`或者`rasa_core_sdk.executor.CollectingDispatcher` 方法。`run`方法返回的是具体执行什么动作。
+然后是代码编写，custom actions必须继承于Action类，并重写其中的两个方法，`name`与`run`，`name`方法是用来返回当前action的名字，**这个名字必须和定义在stories中的action名字一样**。`run`方法包括三个参数，分别是`dispatcher`、`tracker`、`domain`，通过`tracker`可以获取到槽值与用户最近输入的内容，如果想给用户返回信息，可以使用`dispatcher`，调用 `dispatcher.utter_template`, `dispatcher.utter_message`或者`rasa_core_sdk.executor.CollectingDispatcher` 方法。`run`方法返回的是给下一个action用的槽值，注意返回值必须是`[SlotSet(key,value)]`的格式。
 
-```
-from rasa_core_sdk import Action
-from rasa_core_sdk.events import SlotSet
-
-class ActionCheckRestaurants(Action):
-   def name(self):
-      return "action_check_restaurants"
-
-   def run(self, dispatcher, tracker, domain):
-      return [SlotSet("matches", ['kfc', 'starbucks'])]
-```
-
-编写好后把`action_check_restaurants`添加到domain文件中才会生效。
-
-custom actions还有一种用法，`action_endpoint`，你可采用这种方法来直接调用服务端的接口，接口可以用任何语言编写，该方法需要定义在`endpoints.yml`文件中，并且在执行脚本的时候添加额外的命令`--endpoints endpoints.yml`
+`custom actions`在Rasa中的使用方式并不是直接调用，而是采用服务的形式，所以如果想使用自定义的action，还需要定义一个`endpoints.yml`文件，文件内容如下：
 ```
 action_endpoint:
   url: 'http://localhost:5055/webhook'
 ```
+在启动会话的时候添加额外的命令`--endpoints endpoints.yml`，该命令会在5055端口启动一个服务，这个服务就是我们定义的action。
 
 
-接下来我们看下词槽Slot
+## **Slot与Action的配合使用**
 
-## **Slot**
+接下来我们来看一个例子，我们这里以询问天气为例，该例子我们不考虑时间，只引入了一个“位置”的槽。
 
-在开始之前我们先简单介绍一下什么是词槽，词槽其实就是你的机器人的记忆力，它会以key-value的形式去存储用户提供的外部信息，大多数情况下，槽值都会影响整个对话。不同的用户行为，需要使用不同类型的词槽来存储，Rasa还为准备了几种类型的词槽：
 
-+ Text Slot 文本类型
-+ Boolean Slot 布尔类型
-+ Categorical Slot 分类类型，举个例子，用户预定咖啡，咖啡分为Tall，Grande和Venti三种杯型，这时候只允许用户从这三种类型中选一个
-+ Float Slot 浮点类型
-+ List Slot 列表类型
-+ Unfeaturized Slot 该类型的词槽表示那些你想保存下来的信息，但是这些信息对于对话流程来说没有任何影响。
+首先定义自定义的aciton，其中`name`方法返回了该action的名字`action_ask_weather`，`run`方法中，先给用户输出了一段文本信息：“您问的天气地点是哪里呢”，这里是在引导用户来填槽，因为还没涉及到实体识别，所以无法读取到用户输入的实体内容，我们这里先默认返回一个槽值即`[SlotSet('city', '深圳')]`
 
-举个例子，例如用户问今天天气怎么样，这个时候，如果我们要回答用户的问题，首先需要知道用户 问的天气是指的什么地点什么时间，这里的时间和地点就是所谓的词槽，在多轮对话中，主要任务就是把词槽的值填上，所以这个时候机器需要反问用户，询问的天气是什么地点，什么时间，当机器判断槽已经填满了，就可以把答案返回给用户了。而这里的地点，就应该采用Text类型的Slot，
+````
+```python
+from rasa_core_sdk import Action
+from rasa_core_sdk.events import SlotSet
+
+class ActionAskWeather(Action):
+    def name(self):
+        return 'action_ask_weather'    
+    
+    def run(self, dispatcher, tracker, domain):
+        dispatcher.utter_message(f'您问的天气地点是哪里呢')
+        return [SlotSet('city', '深圳')]
+```
+````
+
+编写好后把`action_check_restaurants`添加到domain文件的actions中，然后编写story
+
+```
+## story_ask_weather 
+* ask_weather
+  - action_ask_weather
+* weather_city
+  - utter_weather_good
+```
+
+我们在自定义的`action_ask_weather`中返回了一个槽值，那么怎么才能获取到这个槽值呢，两种方法，一种发放是在下一个custom action中采用`city = tracker.get_slot("city")`方法来获取，还有一种方法是使用utter_action，在
+templates中直接以{}的方式输出即可。
+```
+templates:
+  utter_weather_good:
+    - text: &#34;{city}天气很好呢&#34;
+```
+
+
+
+
+
+
+
+
 
 
 
@@ -96,20 +158,6 @@ action_endpoint:
 
 
 ## 未完待续...本周内会更新完
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
