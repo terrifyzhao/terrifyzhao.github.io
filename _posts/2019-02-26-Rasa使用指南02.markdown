@@ -139,8 +139,10 @@ templates中直接以{}的方式输出即可。
 ```
 templates:
   utter_weather_good:
-    - text: &#34;{city}天气很好呢&#34;
+    - text: "{city}天气很好呢"
 ```
+
+在我们的这个例子里，就是直接采用第二种方法，最后的运行结果如下图：
 
 
 
