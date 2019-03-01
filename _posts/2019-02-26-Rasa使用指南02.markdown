@@ -144,22 +144,18 @@ templates:
 
 在我们的这个例子里，就是直接采用第二种方法，最后的运行结果如下图：
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-26-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9702/pic2.png)
+
+### 最后给一下例子的[github](https://github.com/terrifyzhao/rasa-tutorial)地址
+
+额外提一点，在
+
+本文讲解的内容虽然不多，例子也比较简单，但是对于其中action与slot的定义以及使用都需要读者好好消化，这也是多轮对话的关键点，下一篇博客（近期就会更新）将会为大家介绍怎么做实体识别与自动填槽。
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-## 未完待续...本周内会更新完
 
 
 
