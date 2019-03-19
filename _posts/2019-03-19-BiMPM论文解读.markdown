@@ -13,9 +13,40 @@ tags: NLP
 
 本文是对论文[BiMPM：BilateralMulti-PerspectiveMatchingforNaturalLanguageSentences](https://arxiv.org/pdf/1702.03814.pdf)的解读。该模型主要用于做文本匹配，即计算文本相似度。
 
-文本匹配是NLP领域较为常见的技术，但是大部分的匹配方法都是从单一的角度去做匹配，例如ANCNN把两个句子通过同样权重的网络结构，把得到的向量进行相似度计算。BiMPM这个模型最大的创新点在于采用了多角度匹配，不单单只考虑一个维度，采用了matching-aggregation的结构，把两个句子之间的单元做相似度计算，最后经过全连接层与softamx层得到最终的结果。
+文本匹配是NLP领域较为常见的技术，但是大部分的匹配方法都是从单一的角度去做匹配，例如ANCNN把两个句子通过同样权重的网络结构，把得到的向量进行相似度计算。BiMPM这个模型最大的创新点在于采用了双向多角度匹配，不单单只考虑一个维度，采用了matching-aggregation的结构，把两个句子之间的单元做相似度计算，最后经过全连接层与softamx层得到最终的结果，不可这也成了其缺点，慢。
 
 
 ## **结构**
 
-BiMPM的主要结构
+BiMPM的主要结构如图
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic1.jpg)
+
+可以看到，该模型一共包含五层，每一层各尽其职，接下来我们把这五层分开来详细说明。
+
+### **Word Representation Layer**
+
+该层的目标是把输入的序列P与Q转变为d维的向量表示，该向量由两个部分组成，分别是普通的词向量和由字符构成的向量，字符向量的值是把所有的字符输入到LSTM中得到的结果。本层实际上即是文本的向量化表示embedding。
+
+
+
+### **ContextRepresentationLayer**
+
+本层主要是用于提取P与Q的上下文信息，把上一层拿到的embedding输入到BiLSTM中，分别得到两个方向不同时刻的context embedding
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
