@@ -4,7 +4,7 @@ title: 'BiMPMï¼šBilateralMulti-PerspectiveMatchingforNaturalLanguageSentences è®
 subtitle: 'BiMPM'
 date: 2019-03-19
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-26-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9702/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/cover.jpg'
 tags: NLP
 ---
 
