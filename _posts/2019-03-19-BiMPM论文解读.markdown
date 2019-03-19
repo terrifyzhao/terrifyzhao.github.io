@@ -34,19 +34,81 @@ BiMPM的主要结构如图
 
 本层主要是用于提取P与Q的上下文信息，把上一层拿到的embedding输入到BiLSTM中，分别得到两个方向不同时刻的context embedding
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic2.jpg)
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic3.jpg)
 
 
+### **Matching Layer**
+
+Matching Layer是该模型的核心层，多维度匹配，该层的目标是把每一个序列不同时刻的context与另一个序列的所有时刻的context做一个比较，并且考虑了两个方向，这里设计了一种 multi-perspective 的匹配方法，用于获取两个句子细粒度的联系信息，其中具体的比较细节我们会在下文讲解。
 
 
+### **Aggregation Layer**
+
+本层的目的就是把上一层的结果聚集在一起，合并成一个固定长度的向量，采用的依旧是BiLSTM模型。
 
 
+### **Prediction Layer**
+
+最后就是预测层了，这个阶段包括两个全连接层与一个softmax层或sigmoid层，具体看业务场景。
 
 
+## **多维度匹配**
+
+接下来我们会把**Matching Layer**中提到的匹配机制进行一个详细说明，首先作者定义了一个多角度匹配的相似度函数
+
+$$m = f_m(v_1,v_2;w)$$
+
+其中$v_1$与$v_2$表示的是两个$d$维度的向量，$W \in R^{l×d}$是权重，其维度为$(l,d)$其中$l$表示的是匹配的角度数量，结果$m$是一个$l$维度的向量，$m=[m_1,...,m_k,...,m_l]$，每一个$m_k$表示的是第$k$个角度的匹配结果，其值的相似度计算方法如下
+
+$$m_k=cosine(W_k·v_1,W_k·v_2)$$
+
+$f_m$实际上又有四种策略来求相似度，分别看下
+
+### **Full-Matching**
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic5.jpg)
 
 
+该方法会把每一个时刻的context与另一个序列的尾的context做一个相似度计算
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic4.jpg)
 
+### **Maxpooling-Matching**
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic6.jpg)
 
+该方法会把P序列所有时刻的context与Q序列所有时刻的context做一个相似度计算，最后只保留相似度最大的那个值，
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic9.jpg)
+
+ ### **Attentive-Matching**
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic7.jpg)
+
+该方法首先会计算P序列每一个时刻的context与Q序列每一个时刻的context的相似度
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic10.jpg)
+
+然后把得到的相似度作为对应时刻的权重与另一个序列做加权平均，针对整个序列计算出attentive vector
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic11.jpg)
+
+最后把每一个时刻的context与attentive vector做一个相似度计算
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic12.jpg)
+
+  ### **Max-Attentive-Matching**
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic8.jpg)
+
+该方法其实和**Attentive-Matching**方法类似，不过是把最后生成attentive vector的方法改为了求最大值而不是加权平均
+
+序列的每一个时间步长都通过这四种策略得到相似度的值，由于是双向的，最终将生成的8个向量串联起来作为的每个时间步长的匹配向量。
+
+## **总结**
+
+BiMPM有两个优化的点，第一个是不单单只考虑词向量，同时兼顾了字向量，其次其更加注重句子之间交互信息，从不同层次不同粒度来匹配待比较的句子，加大了比较范围，效果必然是会有一定的提升，但是也因此引入了
 
 
