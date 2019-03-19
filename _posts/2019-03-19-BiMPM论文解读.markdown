@@ -1,0 +1,21 @@
+---
+layout: post
+title: 'BiMPM：BilateralMulti-PerspectiveMatchingforNaturalLanguageSentences 论文解读'
+subtitle: 'BiMPM'
+date: 2019-03-19
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-02-26-Rasa%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%9702/cover.jpg'
+tags: NLP
+---
+
+
+## **简介**
+
+本文是对论文[BiMPM：BilateralMulti-PerspectiveMatchingforNaturalLanguageSentences](https://arxiv.org/pdf/1702.03814.pdf)的解读。该模型主要用于做文本匹配，即计算文本相似度。
+
+文本匹配是NLP领域较为常见的技术，但是大部分的匹配方法都是从单一的角度去做匹配，例如ANCNN把两个句子通过同样权重的网络结构，把得到的向量进行相似度计算。BiMPM这个模型最大的创新点在于采用了多角度匹配，不单单只考虑一个维度，采用了matching-aggregation的结构，把两个句子之间的单元做相似度计算，最后经过全连接层与softamx层得到最终的结果。
+
+
+## **结构**
+
+BiMPM的主要结构
