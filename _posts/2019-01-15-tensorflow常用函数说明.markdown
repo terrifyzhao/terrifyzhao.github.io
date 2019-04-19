@@ -46,6 +46,7 @@ Tensor("ExpandDims:0", shape=(1, 10), dtype=int32)
 
 `tf.tile()`
 张量扩展，如果现有一个形状如[`width`, `height`]的张量，需要得到一个基于原张量的，形状如[`batch_size`,`width`,`height`]的张量，其中每一个batch的内容都和原张量一模一样
+
 ```
 a = tf.expand_dims(tf.range(10), 0)
 print(a)
@@ -59,6 +60,7 @@ Tensor("Tile:0", shape=(32, 10), dtype=int32)
 
 `tf.linalg.LinearOperatorLowerTriangular()`
 给张量设置一个全是0的上三角
+
 ```
 a = np.arange(1, 10).reshape(3, 3)
 a = tf.convert_to_tensor(a, tf.float32)
@@ -75,6 +77,7 @@ out:
 
 `tf.where(tf.equal(a, 0),b,c)`
 a中为0的位置取b的值，不为0的位置取c的值
+
 ```
 a = [[1, 1, 0], [0, 1, 0], [0, 0, 1]]
 b = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]
@@ -88,5 +91,22 @@ out:
  [1 2 1]
  [1 1 2]]
 ```
+`tile(a, [2, 3])`
+把a进行扩展，扩展后的结果维度不变，扩展的内容是继续接在每一个维度的值的后面
 
+```
+a = tf.constant([[1, 2], [3, 4]], dtype=tf.float32)
+b = tf.tile(a, [2, 3])
+with tf.Session() as sess:
+    print(sess.run(b))
+    
+out:
+[[1. 2.]
+ [3. 4.]]
+ 
+[[1. 2. 1. 2. 1. 2.]
+ [3. 4. 3. 4. 3. 4.]
+ [1. 2. 1. 2. 1. 2.]
+ [3. 4. 3. 4. 3. 4.]]
+```
 
