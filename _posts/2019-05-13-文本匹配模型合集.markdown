@@ -1,7 +1,7 @@
 ---
 layout: post
 title: '文本匹配模型合集'
-subtitle: 'BiMPM'
+subtitle: '文本匹配模型'
 date: 2019-05-13
 categories: NLP
 cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E5%90%88%E9%9B%86/cover.jpg'
@@ -15,7 +15,7 @@ tags: NLP
 
 项目持续更新中
 
-## [ABCNN详解]()
+## [ABCNN详解](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN.html)
 
 测试集结果对比：
 
