@@ -4,7 +4,7 @@ title: '2019-05-13-文本匹配模型之ABCNN'
 subtitle: 'BiMPM'
 date: 2019-05-13
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/cover.jpg'
+cover: '[https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/cover.jpg](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/cover.jpg)'
 tags: NLP
 ---
 

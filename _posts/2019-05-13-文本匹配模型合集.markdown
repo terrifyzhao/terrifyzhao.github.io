@@ -1,0 +1,29 @@
+---
+layout: post
+title: '2019-05-13-文本匹配模型合集'
+subtitle: 'BiMPM'
+date: 2019-05-13
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/cover.jpg'
+tags: NLP
+---
+
+
+# 文本匹配模型
+
+本文将会整合近几年来比较热门的一些文本匹配模型，并以`QA_corpus`为测试基准，分别进行测试，代码均采用tensorflow进行实现，每个模型均会有理论讲解与代码实现，现已添加到我的[github](https://github.com/terrifyzhao/text_matching)欢迎star
+
+项目持续更新中
+
+## [ABCNN详解]()
+
+测试集结果对比：
+
+模型 | loss | acc | 论文地址
+:-: | :-: | :-: | :-: |
+DSSM | 0.7613157 | 0.6864 | [DSSM](https://posenhuang.github.io/papers/cikm2013_DSSM_fullversion.pdf) |
+ConvNet | 0.6872447 | 0.6977 | [ConvNet](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.723.6492&rep=rep1&type=pdf) |
+ESIM | 0.55444807| 0.736 | [ESIM](https://arxiv.org/pdf/1609.06038.pdf) |
+BiMPM | 0.0| 0.0 | [BiMPM](https://arxiv.org/pdf/1702.03814.pdf) |
+
+
