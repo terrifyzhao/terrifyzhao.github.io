@@ -25,16 +25,28 @@ BCNN的结构如下图所示
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/pic1.jpg)
 
-可以看到BCNN包括四层，分别是Input Layer、Convolution Layer、Average Pooling Layer、Output Layer。
+可以看到BCNN包括四部分，分别是Input Layer、Convolution Layer、Average Pooling Layer、Output Layer，第一层为Input Layer，第二层与第三层为卷积与池化层，最后是用LR作为Output Layer
 
 ### **Input Layer**
 Input Layer即输入层，该层主要是做词嵌入，论文中作者采用的是word2vec的方法，当然，也可以采用glove，elom等其他方法，或者直接输入one-hot，并添加embedding层，在我的代码中采用的是该方案。作者设置的词向量维度是300维，图中所示，左边序列是5个词维度为[5,300]，右边序列是7个词维度为[7,300]，注意这里作者输入的维度是不固定的，后续的池化层会将维度处理为一样的，在我的代码里会与这里不同一样，我设置了序列最大长度。
 
 ### **Convolution Layer**
-Convolution Layer即卷积层，这里的卷积层和大家平时使用的卷积不太一样，这里采用了Wide Convolution，我们看个图
+Convolution Layer即卷积层，在文本处理中，卷积核的大小通常为[n, embedding_size]，n指的是节点的个数，可以理解为n-gram，从而从字/词特征中提取出短语特征，而这里的卷积层和大家平时使用的卷积还不太一样，这里采用了Wide Convolution宽卷积，我们看个图
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/pic2.png)
 
+对于左边的图，一共有7个节点，卷积的width是5，进行了三次卷积，即我们上文提到的n这里是3，可以看到$S_1$与$S_S$节点只进行了一次卷积，显然不满足我们上文说的，其特征提取的效果肯定是有一定影响的，而宽卷积会在周围进行padding操作补0，如右图所示，这样就保证了边缘的值进行了多次卷积，考虑一下，如果是采用宽卷积，输出维度是啥， 以作者的图为例，我们的卷积核是3，输入序列长度是5，为了边缘卷积次数为3，我们需要在头和尾添加4个维度的0，输入维度变为9，最终输出维度就是9-3+1=7，设输入序列长度是S，卷积核宽度是W，那么输出维度为：`2(n-1)+S-W+1`即`S-W+2n-1`
 
+### **Average Pooling Layer**
+Average Pooling Layer即平均池化层，仔细看，图中的第二层和第三层的池化层是不一样的，第二层的池化层是w-ap，第三层是all-ap，有什么区别呢，w-ap的核大小是可以自己定义的即[n, 300]，其操作过程类似卷积，只不过是取平均值，而all-ap的核大小是和输入的值的维度相同的，这样也就保证了输出的维度是[1, 300]，从而使两个序列在比较的时候的值的维度是相同的。
 
+### **Output Layer**
+Output Layer即输出层，很简单的LR做一个二分类，不再赘述。
 
+这就是BCNN的全部内容，接下来我们看加了attention的BCNN即ABCNN
+
+## **ABCNN**
+ABCNN作者提出了三种结构，我们分别讲解。
+
+### **ABCNN-1**
 
