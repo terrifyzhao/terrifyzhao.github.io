@@ -13,6 +13,8 @@ tags: NLP
 
 本文将会介绍以CNN与attention机制做文本匹配的模型即ABCNN，这里给出论文地址[ABCNN](https://arxiv.org/pdf/1512.05193.pdf)
 
+### [这里是我的代码实现](https://github.com/terrifyzhao/text_matching)
+
 在文本任务上，大部分模型均是采用以LSTM为主的结构，本文的作者采用了CNN的结构来提取特征，并用attention机制进行进一步的特征处理，作者一共提出了三种attention的建模方法，下文会详细介绍。
 
 在开始讲解之前，我们简单说明下attention机制，例如我们有两个序列A与B，当我们需要进行相似度比较时，A序列某个时刻的值该和B序列哪个时刻比较最合适呢，而attention机制就是为了解决这个问题的，把B序列的每个时刻的值做了一个加权平均，用加权平均之后的值与A进行比较，说白了attention就是一个加权平均的过程，其中的权重就是BP过程中不断更新得到的，如果你想要了解更多attention的内容，欢迎阅读我的另外一篇博客[Attention机制详解](https://blog.csdn.net/u012526436/article/details/86293981)
@@ -49,4 +51,32 @@ Output Layer即输出层，很简单的LR做一个二分类，不再赘述。
 ABCNN作者提出了三种结构，我们分别讲解。
 
 ### **ABCNN-1**
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/pic3.jpg)
 
+第一种attention的方法是对representation进行了处理，首先，针对两个不同的序列，生成attention matrix A，如图中所示，这个矩阵可以保存了序列0与序列1每一个词/字向量的相似度，论文中作者采用的是欧氏距离，其计算过程为$\frac {1}{1+|x-y|}$，还是以图中为例，0序列的长度是5，序列的长度是7，我们需要计算的是0序列中5个节点分别与1序列的7个节点的相似度的值，所以A最终的维度是[5, 7]，这个相似度的值我个人认为还可以采用余弦相似度或者直接两个矩阵相乘（归一化后的值直接相乘就是余弦相似度，所以两个矩阵直接相乘得到的结果理论上来说也可以表示相似度），不过论文中提到欧式距离效果更好一些。
+
+attention matrix生成好后，就能计算attention feature了，计算方法是定义一个权重矩阵W，如图中所示0序列对应的是$W_0$ 1序列对应的是$W_1$，W的维度为[d, s]，d表示的是词/字向量维度，论文中是300，s表示的是序列长度，然后用这个权重矩阵和attention matrix相乘，所以最终的attention feature为
+
+$$
+F_{0,a} = W_0 · A^T，F_{1,a} = W_1 · A
+$$
+
+最终得到的attention feature维度和representation feature的维度是相同的。
+
+### **ABCNN-2**
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/pic4.jpg)
+
+第二种attention是对卷积之后的结果进行操作，attention matrix的生成方法和1的一样，生成完成后，会分别针对列与行进行求和，还是以图中为例，卷积0的维度为[7, 300]，卷积1的维度为[9,300]，matrix的维度是[7, 9]，生成的求和权重为[7, 1]与[1, 9]，之后的pooling的操作不是简单的求平均，而是换成了把对应的行和求和的权重进行对位相乘，所以最后池化后的结果维度和输入维度是相同的。
+
+ABCNN1与ABCNN2有三个主要的区别
++ 1是对卷积之前的值进行处理，2是对池化之前的值进行处理
++ 1需要两个权重矩阵$W_0$与$W_1$，参数多一些，更容易过拟合，2不存在这个问题
++ 由于池化是在卷积之后执行的，因此其处理的粒度单元比卷积大，在卷积阶段，获取到的是词/字向量，而池化层获取到的是短语向量，而这个短语向量的维度主要看卷积层的卷积核大小，因此，1和2其实是在不同的粒度上进行了处理。
+
+### **ABCNN-3**
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/pic5.jpg)
+
+第三种方式相信大家已经明白了，没错就是把第一种和第二种方式结合起来，如图所示，这里不再赘述。
+
+## **代码实现**
+最后给出我的tensorflow版本的[代码实现](https://github.com/terrifyzhao/text_matching)，该项目也会包括其他匹配模型的，持续更新中，欢迎star
