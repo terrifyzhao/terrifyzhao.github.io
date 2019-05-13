@@ -16,6 +16,10 @@ tags: NLP
 项目持续更新中
 
 ## [ABCNN详解](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN.html)
+## [DSSM详解] 待更新
+## [ConvNet详解] 待更新
+## [ESIM详解] 待更新
+## [BiMPM详解] 待更新
 
 测试集结果对比：
 
@@ -26,4 +30,6 @@ ConvNet | 0.6872447 | 0.6977 | [ConvNet](http://citeseerx.ist.psu.edu/viewdoc/do
 ESIM | 0.55444807| 0.736 | [ESIM](https://arxiv.org/pdf/1609.06038.pdf) |
 BiMPM | 0.0| 0.0 | [BiMPM](https://arxiv.org/pdf/1702.03814.pdf) |
 
+## [代码地址](https://github.com/terrifyzhao/text_matching)
 
+代码或论文讲解如果有写错的地方，欢迎指正，感谢各位
