@@ -1,0 +1,24 @@
+---
+layout: post
+title: '2019-05-13-文本匹配模型之ABCNN'
+subtitle: 'BiMPM'
+date: 2019-05-13
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/cover.jpg'
+tags: NLP
+---
+
+
+## **简介**
+
+本文将会介绍以CNN与attention机制做文本匹配的模型即ABCNN，这里给出论文地址[ABCNN](https://arxiv.org/pdf/1512.05193.pdf)
+
+在文本任务上，大部分模型均是采用以LSTM为主的结构，本文的作者采用了CNN的结构来提取特征，并用attention机制进行进一步的特征处理，作者一共提出了三种attention的建模方法，下文会详细介绍。
+
+在开始讲解之前，我们简单说明下attention机制，例如我们有两个序列A与B，当我们需要进行相似度比较时，A序列某个时刻的值该和B序列哪个时刻比较最合适呢，而attention机制就是为了解决这个问题的，把B序列的每个时刻的值做了一个加权平均，用加权平均之后的值与A进行比较，说白了attention就是一个加权平均的过程，其中的权重就是BP过程中不断更新得到的，如果你想要了解更多attention的内容，欢迎阅读我的另外一篇博客[Attention机制详解](https://blog.csdn.net/u012526436/article/details/86293981)
+
+论文中，作者分为了两个部分进行介绍，首先是没有attention仅有CNN的基础模型BCNN，后续又介绍了添加了attention的ABCNN，其中又分别介绍了三种模式，下文也会以该顺序进行讲解。
+
+## **BCNN**
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic1.jpg)
