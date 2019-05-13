@@ -21,4 +21,20 @@ tags: NLP
 
 ## **BCNN**
 
-![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-03-19-BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/pic1.jpg)
+BCNN的结构如下图所示
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/pic1.jpg)
+
+可以看到BCNN包括四层，分别是Input Layer、Convolution Layer、Average Pooling Layer、Output Layer。
+
+### **Input Layer**
+Input Layer即输入层，该层主要是做词嵌入，论文中作者采用的是word2vec的方法，当然，也可以采用glove，elom等其他方法，或者直接输入one-hot，并添加embedding层，在我的代码中采用的是该方案。作者设置的词向量维度是300维，图中所示，左边序列是5个词维度为[5,300]，右边序列是7个词维度为[7,300]，注意这里作者输入的维度是不固定的，后续的池化层会将维度处理为一样的，在我的代码里会与这里不同一样，我设置了序列最大长度。
+
+### **Convolution Layer**
+Convolution Layer即卷积层，这里的卷积层和大家平时使用的卷积不太一样，这里采用了Wide Convolution，我们看个图
+
+
+
+
+
+
