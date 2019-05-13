@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '2019-05-13-文本匹配模型合集'
+title: '文本匹配模型合集'
 subtitle: 'BiMPM'
 date: 2019-05-13
 categories: NLP
