@@ -8,12 +8,13 @@ cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/mast
 tags: NLP
 ---
 
+本文是我的匹配模型合集的其中一期，如果你想了解更多的匹配模型，欢迎参阅我的另一篇博文[匹配模型合集](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E5%90%88%E9%9B%86.html)
+
+所有的模型均采用tensorflow进行了实现，欢迎start，[代码地址](https://github.com/terrifyzhao/text_matching)
 
 ## **简介**
 
 本文将会介绍以CNN与attention机制做文本匹配的模型即ABCNN，这里给出论文地址[ABCNN](https://arxiv.org/pdf/1512.05193.pdf)
-
-### [这里是我的代码实现](https://github.com/terrifyzhao/text_matching)
 
 在文本任务上，大部分模型均是采用以LSTM为主的结构，本文的作者采用了CNN的结构来提取特征，并用attention机制进行进一步的特征处理，作者一共提出了三种attention的建模方法，下文会详细介绍。
 
@@ -78,5 +79,4 @@ ABCNN1与ABCNN2有三个主要的区别
 
 第三种方式相信大家已经明白了，没错就是把第一种和第二种方式结合起来，如图所示，这里不再赘述。
 
-## **代码实现**
-最后给出我的tensorflow版本的[代码实现](https://github.com/terrifyzhao/text_matching)，该项目也会包括其他匹配模型的，持续更新中，欢迎star
+
