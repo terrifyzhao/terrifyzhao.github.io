@@ -4,7 +4,7 @@ title: '文本匹配模型之DSSM'
 subtitle: 'DSSM详解'
 date: 2019-05-14
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-14-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDSSM/cover.jpg'
 tags: NLP
 ---
 
