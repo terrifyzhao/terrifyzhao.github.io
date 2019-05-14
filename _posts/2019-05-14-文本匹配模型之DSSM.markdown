@@ -1,0 +1,16 @@
+---
+layout: post
+title: '文本匹配模型之DSSM'
+subtitle: 'DSSM详解'
+date: 2019-05-14
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-13-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN/cover.jpg'
+tags: NLP
+---
+
+
+## **简介**
+
+DSSM是2013年提出来的模型，主要应用场景为query与doc的匹配，在这之前，用的更多的还是一些传统的机器学习算法，例如LSA，BM25等。DSSM也算是深度学习在文本匹配领域中的一个先驱者，接下来我们会先从其结构开始讲起，并简单介绍下其变体。
+
+## **简介**
