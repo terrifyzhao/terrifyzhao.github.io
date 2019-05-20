@@ -1,0 +1,26 @@
+---
+layout: post
+title: '文本匹配模型之ESIM'
+subtitle: 'ESIM详解'
+date: 2019-05-20
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-14-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDSSM/cover.jpg'
+tags: NLP
+---
+
+本文是我的匹配模型合集的其中一期，如果你想了解更多的匹配模型，欢迎参阅我的另一篇博文[匹配模型合集](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E5%90%88%E9%9B%86.html)
+
+所有的模型均采用tensorflow进行了实现，欢迎start，[代码地址](https://github.com/terrifyzhao/text_matching)
+
+## **简介**
+
+ESIM模型主要是用来做文本推理的，给定一个前提premise $p$ 推导出假设hypothesis $h$，其损失函数的目标是判断$p$与$h$是否有关联，即是否可以由$p$推导出$h$，因此，该模型也可以做文本匹配，只是损失函数的目标是两个序列是否是同义句。接下来我们就从模型的结构开始讲解其原理。
+
+
+## **结构**
+
+ESIM的论文中，作者提出了两种结构，如下图所示，左边是自然语言理解模型ESIM，右边是基于语法树结构的tree LSTM，我的代码实现主要以ESIM为主，本文也主要讲解ESIM的结构。
+
+
+
+
