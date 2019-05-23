@@ -23,4 +23,8 @@ $$
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic1.jpg)
 
 ## **如何设置初始学习率**
-通常来说，初始学习率以 0.01 ~ 0.001 为宜，但这也只是经验之谈，这里为大家介绍一种较为科学的设置方法。该方法是Leslie N. Smith 在2015年的一篇论文[Cyclical Learning Rates for Training Neural Networks](https://link.jianshu.com/?t=https://arxiv.org/abs/1506.01186)中的3.3节提出来的一个非常棒的方法来找初始学习率。该方法很简单，首先设置一个十分小的学习率，在每个epoch之后增大学习率，并记录好每个epoch的oss，迭代的epoch越多，那被检验的学习率就越多，最后将不同学习率对应的loss进行对比，
+通常来说，初始学习率以 0.01 ~ 0.001 为宜，但这也只是经验之谈，这里为大家介绍一种较为科学的设置方法。该方法是Leslie N. Smith 在2015年的一篇论文[Cyclical Learning Rates for Training Neural Networks](https://link.jianshu.com/?t=https://arxiv.org/abs/1506.01186)中的3.3节提出来的一个非常棒的方法来找初始学习率。该方法很简单，首先设置一个十分小的学习率，在每个epoch之后增大学习率，并记录好每个epoch的oss，迭代的epoch越多，那被检验的学习率就越多，最后将不同学习率对应的loss进行对比。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic2.jpg)
+
+上图是论文中的实验结果，最小学习率是0，最大学习率是0.02，在大概0.01的位置，模型收敛地最快，因此可以把初始学习率选择为0.01。
