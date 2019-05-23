@@ -27,7 +27,7 @@ $$
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic2.jpg)
 
-上图是论文中的实验结果，最小学习率是0，最大学习率是0.02，在大概0.01的位置，模型收敛地最快，因此可以把初始学习率选择为0.01。
+上图是论文中的实验结果，最小学习率是0，最大学习率是0.02，在大概0.01的位置，模型一开始就收敛的很好，因此可以把初始学习率选择为0.01。
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic3.jpg)
 
@@ -48,4 +48,24 @@ $$
 $$
 
 ## **学习率衰减的缺点**
-虽然采用学习率衰减的方法能让模型收敛的更好，但是如果遇到鞍点的时候，模型就没法继续收敛。
+虽然采用学习率衰减的方法能让模型收敛的更好，但是如果遇到鞍点的时候，模型就没法继续收敛，如下图所示，黑点即是鞍点，如果学习率此时很小，那将永远无法走出鞍点。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic4.jpg)
+
+## **Cyclical Learning Rates(CRL)**
+那么怎么解决这个鞍点的问题，这叫要回到我们上文说到过的论文中了，这篇论文的主要内容其实就是介绍了一种方法，能在遇到鞍点时尽快从中走出去，该方法称为Cyclical Learning Rates，其思想如下，首先论文中提出了两个参数，base_lr和max_lr，我们继续以之前的图讲解，
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic2.jpg)
+
+在0.005的位置，开始出现了acc的负增长之后并趋于平缓，这个点即可作为max_lr，base_lr通常是设置为max_lr的1/3或1/4，并且结果上文提到的选择初始学习率的方法，因此0.001可以作为base_lr。
+
+接下来就根据这两个参数进行实时的学习率的计算，计算方法并不复杂且效率很高，计算公式如下
+```python
+cycle = np.floor(1+iterations/(2*step_size))
+x = np.abs(iterations/step_size - 2*cycle + 1)
+lr= base_lr + (max_lr-base_lr)*np.maximum(0, (1-x))
+```
+
+其中`iterations`表示的是当前迭代的步数，注意不是`epochs`，`step_size`表示的是每隔多少步数进行一次学习率的调整，这个值通常是每个`epoch`的步数即`batch_size`的2-8倍，例如每个`epoch`是500步，那`step_size`可以选择2000，之后按照公式来进行计算即可得到当前的学习率。
+
+除了这个更新学习率的方法外，
