@@ -95,3 +95,7 @@ $$
 
 下图是CLR和其他情况的对比，可以看到CLR的收敛速度明显优于其他方法，而其中的acc的波动也是因为学习率变大引起的，但是对最终的结果并没有影响。
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic8.jpg)
+
+
+## **参考文献**
+[Cyclical Learning Rates for Training Neural Networks](https://link.jianshu.com/?t=https://arxiv.org/abs/1506.01186)
