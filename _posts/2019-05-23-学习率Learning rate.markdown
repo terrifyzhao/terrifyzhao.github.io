@@ -28,3 +28,7 @@ $$
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic2.jpg)
 
 上图是论文中的实验结果，最小学习率是0，最大学习率是0.02，在大概0.01的位置，模型收敛地最快，因此可以把初始学习率选择为0.01。
+
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic3.jpg)
+
+再看下网上找到的另外一张图，从上图可以看到，当学习率从小到大变化的工程中，模型的loss在逐渐减小，但是速度慢，达到某个位置后又会急剧增大，这也对应了我们开头说的学习率小收敛慢，学习率大难以收敛。
