@@ -76,7 +76,7 @@ x = np.abs(iterations/step_size - 2*cycle + 1)
 lr= base_lr + (max_lr-base_lr)*np.maximum(0, (1-x))*scale_fn(x)
 ```
 
-其中`iterations`表示的是当前迭代的步数，注意不是`epochs`，`step_size`表示的是每隔多少步数进行一次学习率的调整，这个值通常是每个`epoch`的步数即`batch_size`的2-8倍，例如每个`epoch`是500步，那`step_size`可以选择2000，三种方法的不同之处就在于`scale_fn`：
+其中`iterations`表示的是当前迭代的步数，注意不是`epochs`，`step_size`表示的是每隔多少步数进行一次学习率的调整，这个值通常是每个`epoch`的步数`steps`的2-10倍，例如每个`epoch`是500步，那`step_size`可以选择2000，三种方法的不同之处就在于`scale_fn`：
 
 + triangular
 $$
@@ -85,10 +85,13 @@ $$
 
 + triangular2
 $$
-scale\_fn = \frac{1}{2^(cycle-1)}
+scale\_fn = \frac{1}{2^{(cycle-1)}}
 $$
 
 + exp range
 $$
-scale\_fn = \gamma^iterations
+scale\_fn = \gamma^{steps}
 $$
+
+下图是CLR和其他情况的对比，可以看到CLR的收敛速度明显优于其他方法，而其中的acc的波动也是因为学习率变大引起的，但是对最终的结果并没有影响。
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic8.jpg)
