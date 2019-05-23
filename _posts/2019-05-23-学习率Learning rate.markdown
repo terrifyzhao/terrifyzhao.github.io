@@ -8,8 +8,9 @@ cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/mast
 tags: NLP
 ---
 
+
 ## **前言**
-对于刚刚接触深度学习的的童鞋来说，对学习率只有一个很基础的认知，当学习率过大的时候会导致模型难以收敛，过小的时候会收敛速度过慢，但其实学习率是一个十分重要的参数，合理的学习率才能让模型收敛到最小点而非鞍点。本文后续内容将会给大家简单回顾下什么是学习率，并介绍如何改变学习率并设置一个合理的学习率。
+对于刚刚接触深度学习的的童鞋来说，对学习率只有一个很基础的认知，当学习率过大的时候会导致模型难以收敛，过小的时候会收敛速度过慢，其实学习率是一个十分重要的参数，合理的学习率才能让模型收敛到最小点而非局部最优点或鞍点。本文后续内容将会给大家简单回顾下什么是学习率，并介绍如何科学的设置学习率。
 
 ## **什么是学习率**
 首先我们简单回顾下什么是学习率，在梯度下降的过程中更新权重时的超参数，即下面公式中的$\alpha$
@@ -23,7 +24,7 @@ $$
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic1.jpg)
 
 ## **如何设置初始学习率**
-通常来说，初始学习率以 0.01 ~ 0.001 为宜，但这也只是经验之谈，这里为大家介绍一种较为科学的设置方法。该方法是Leslie N. Smith 在2015年的一篇论文[Cyclical Learning Rates for Training Neural Networks](https://link.jianshu.com/?t=https://arxiv.org/abs/1506.01186)中的3.3节提出来的一个非常棒的方法来找初始学习率。该方法很简单，首先设置一个十分小的学习率，在每个epoch之后增大学习率，并记录好每个epoch的oss，迭代的epoch越多，那被检验的学习率就越多，最后将不同学习率对应的loss进行对比。
+通常来说，初始学习率以 0.01 ~ 0.001 为宜，但这也只是经验之谈，这里为大家介绍一种较为科学的设置方法。该方法是Leslie N. Smith 在2015年的一篇论文[Cyclical Learning Rates for Training Neural Networks](https://link.jianshu.com/?t=https://arxiv.org/abs/1506.01186)中的3.3节提出来的一个非常棒的方法来找初始学习率。该方法很简单，首先设置一个十分小的学习率，在每个epoch之后增大学习率，并记录好每个epoch的loss或者acc，迭代的epoch越多，那被检验的学习率就越多，最后将不同学习率对应的loss或acc进行对比。
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic2.jpg)
 
@@ -36,7 +37,7 @@ $$
 要注意一点，选择学习的时候，是从小到大，因为当学习率小的时候对loss影响不会很大，并且学习率比上一轮大，可以看做是在原始数据进行更新，如果一开始学习率很大对loss影响是很大的，这个时候再来选择初始学习率那就是无稽之谈了。
 
 ## **学习率衰减**
-通常再训练一定epoch之后，都会对学习率进行衰减，从而让模型收敛得更好。通常学习率衰减有以下三种方式：
+通常在训练一定epoch之后，都会对学习率进行衰减，从而让模型收敛得更好。学习率衰减有以下三种方式：
 + 轮数衰减：每经过n个epochs后学习率减半
 + 指数衰减：每经过n个epochs后学习率乘以一个衰减率
 $$
@@ -57,7 +58,7 @@ $$
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic2.jpg)
 
-在0.005的位置，开始出现了acc的负增长之后并趋于平缓，这个点即可作为max_lr，base_lr通常是设置为max_lr的1/3或1/4，并且结果上文提到的选择初始学习率的方法，因此0.001可以作为base_lr。
+在0.005的位置，开始出现了acc的负增长之后并趋于平缓，这个点即可作为max_lr，base_lr通常是设置为max_lr的1/3或1/4，因此0.001可以作为base_lr。
 
 接下来就根据这两个参数进行实时的学习率的计算，论文中提到了三种更新学习率的方法：
 + triangular
@@ -99,3 +100,4 @@ $$
 
 ## **参考文献**
 [Cyclical Learning Rates for Training Neural Networks](https://link.jianshu.com/?t=https://arxiv.org/abs/1506.01186)
+
