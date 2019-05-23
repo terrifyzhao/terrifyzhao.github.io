@@ -59,13 +59,36 @@ $$
 
 在0.005的位置，开始出现了acc的负增长之后并趋于平缓，这个点即可作为max_lr，base_lr通常是设置为max_lr的1/3或1/4，并且结果上文提到的选择初始学习率的方法，因此0.001可以作为base_lr。
 
-接下来就根据这两个参数进行实时的学习率的计算，计算方法并不复杂且效率很高，计算公式如下
+接下来就根据这两个参数进行实时的学习率的计算，论文中提到了三种更新学习率的方法：
++ triangular
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic5.jpg)
++ triangular2
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic6.jpg)
++ exp range
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/pic7.jpg)
+
+从图中可以看到，第一种方法只是在最大学习率与最小学习率中进行选择，第二种和第三种方法会对max_lr进行衰减。
+
+三种计算方法其实都不复杂且效率很高，计算公式如下
 ```python
 cycle = np.floor(1+iterations/(2*step_size))
 x = np.abs(iterations/step_size - 2*cycle + 1)
-lr= base_lr + (max_lr-base_lr)*np.maximum(0, (1-x))
+lr= base_lr + (max_lr-base_lr)*np.maximum(0, (1-x))*scale_fn(x)
 ```
 
-其中`iterations`表示的是当前迭代的步数，注意不是`epochs`，`step_size`表示的是每隔多少步数进行一次学习率的调整，这个值通常是每个`epoch`的步数即`batch_size`的2-8倍，例如每个`epoch`是500步，那`step_size`可以选择2000，之后按照公式来进行计算即可得到当前的学习率。
+其中`iterations`表示的是当前迭代的步数，注意不是`epochs`，`step_size`表示的是每隔多少步数进行一次学习率的调整，这个值通常是每个`epoch`的步数即`batch_size`的2-8倍，例如每个`epoch`是500步，那`step_size`可以选择2000，三种方法的不同之处就在于`scale_fn`：
 
-除了这个更新学习率的方法外，
++ triangular
+$$
+scale\_fn = 1
+$$
+
++ triangular2
+$$
+scale\_fn = \frac{1}{2^(cycle-1)}
+$$
+
++ exp range
+$$
+scale\_fn = \gamma^iterations
+$$
