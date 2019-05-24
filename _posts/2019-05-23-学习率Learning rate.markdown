@@ -4,7 +4,7 @@ title: '你真的懂学习率了吗'
 subtitle: '学习率Learning Rate进阶讲解'
 date: 2019-05-23
 categories: 机器学习
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-20-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BESIM/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/cover.jpg'
 tags: NLP
 ---
 
