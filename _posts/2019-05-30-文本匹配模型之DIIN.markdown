@@ -1,0 +1,20 @@
+---
+layout: post
+title: '# 文本匹配模型之DIIN'
+subtitle: 'DIIN讲解'
+date: 2019-05-30
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-23-%E5%AD%A6%E4%B9%A0%E7%8E%87Learning%20rate/cover.jpg'
+tags: NLP
+---
+
+
+本文是我的匹配模型合集的其中一期，如果你想了解更多的匹配模型，欢迎参阅我的另一篇博文[匹配模型合集](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E5%90%88%E9%9B%86.html)
+
+所有的模型均采用tensorflow进行了实现，欢迎start，[代码地址](https://github.com/terrifyzhao/text_matching)
+
+## **简介**
+DIIN模型和其他匹配模型的结构都很接近，也是采用CNN与LSTM来做特征提取，但是在其输入层，作者提出了很多想法，同时采用了词向量、字向量，并且添加了一些额外的特征例如词性等，其本意在于能额外输入一些句法特征，接下来就为大家详细介绍该模型
+
+## **结构**
+
