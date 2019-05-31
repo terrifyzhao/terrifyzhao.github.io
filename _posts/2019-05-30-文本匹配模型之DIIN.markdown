@@ -70,7 +70,7 @@ Feature Extraction Layer的任务正如其名，做特征提取。这一层论�
 最后就是输出层了，全连接层+softmax层，不再赘述。
 
 ## **小结**
-DIIN相比于之前介绍的匹配模型，最大的改进点在于输入的特征变多，其次特征提取时采用了DenseNet，但在Interaction层并没有做多维度的匹配，如果结合BiMPM的结构，把该部分从多个不同的粒度进行匹配，效果应该还会进一步的提升。
+DIIN相比于之前介绍的匹配模型，最大的改进点在于输入的特征变多，其次特征提取时采用了DenseNet，但在Interaction层并没有做多维度的匹配，如果结合BiMPM的结构，把该部分从多个不同的粒度进行匹配，效果应该还会进一步的提升，和其论文标题也会更加稳合一些。
 
 ## **参考文献**
 [NATURAL LANGUAGE INFERENCE OVER INTERACTION SPACE](https://arxiv.org/pdf/1709.04348.pdf)
