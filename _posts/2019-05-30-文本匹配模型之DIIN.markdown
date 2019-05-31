@@ -14,7 +14,7 @@ tags: NLP
 所有的模型均采用tensorflow进行了实现，欢迎start，[代码地址](https://github.com/terrifyzhao/text_matching)
 
 ## **简介**
-DIIN模型和其他匹配模型的结构都很接近，也是采用CNN与LSTM来做特征提取，但是在其输入层，作者提出了很多想法，同时采用了词向量、字向量，并且添加了一些额外的特征例如词性等，其本意在于能额外输入一些句法特征，接下来就为大家详细介绍该模型
+DIIN模型和其他匹配模型的结构都很接近，也是采用CNN与LSTM来做特征提取，但是在其输入层，作者提出了很多想法，同时采用了词向量、字向量，并且添加了一些额外的特征例如词性等，其本意在于能额外输入一些句法特征，CNN部分也采用了DenseNet的结构，接下来就为大家详细介绍该模型。
 
 ## **结构**
 DIIN的结构主要分为五层，分别是Embedding Layer、Encoding Layer、Interaction Layer、Feature Extraction Layer、Output Layer，主要结构如下图所示
@@ -64,4 +64,13 @@ I_{ij} = \beta(\tilde P_i, \tilde H_i) \in R^d
 $$
 
 ### **Feature Extraction Layer**
-Feature Extraction Layer的任务正如其名，做特征提取。这一层论文主要采用的是CNN的结构，作者实验发现ResNet效果会好一些，但是最终还是选择了DenseNet，因为DenseNet能更好的保存参数，并且作者观察到ResNet如果把skip connection移除了模型就没法收敛了（ResNet的关键就在于skip connection不知道作者为什么要说明这一点）BN还会导致收敛变慢（这里应该是指针对当前这个模型来说）所以作者并没有采用ResNet。卷积采用的是relu激活函数，都是1×1的卷积核来对上文提到的相关性tensor进行缩放，并且这里引入了一个超参数$\eta$，例如输入的channel是$k$那么输出的channel就是$k×\eta$，然后把结果送到3层Dense block中，
+Feature Extraction Layer的任务正如其名，做特征提取。这一层论文主要采用的是CNN的结构，作者实验发现ResNet效果会好一些，但是最终还是选择了DenseNet，因为DenseNet能更好的保存参数，并且作者观察到ResNet如果把skip connection移除了模型就没法收敛了（ResNet的关键就在于skip connection不知道作者为什么要说明这一点）BN还会导致收敛变慢（这里应该是指针对当前这个模型来说）所以作者并没有采用ResNet。卷积采用的是relu激活函数，都是1×1的卷积核来对上文提到的相关性tensor进行缩放，并且这里引入了一个超参数$\eta$，例如输入的channel是$k$那么输出的channel就是$k×\eta$，然后把结果送到3层Dense block中，Dense block包含了n个3×3的卷积核，成长率是$g$，transition layer采用了1×1的卷积核来做channel的缩减，然后跟上一个步长为2的最大池化层，transition layer的缩减率用$\theta$表示。这一层的关键就在于DenseNet，对DenseNet不清楚的小伙伴一定要先去了解该网络的结构原理，这也是为啥作者会把该模型取名为Densely Interactive Inference Network
+
+### **Output Layer**
+最后就是输出层了，全连接层+softmax层，不再赘述。
+
+## **小结**
+DIIN相比于之前介绍的匹配模型，最大的改进点在于输入的特征变多，其次特征提取时采用了DenseNet，但在Interaction层并没有做多维度的匹配，如果结合BiMPM的结构，把该部分从多个不同的粒度进行匹配，效果应该还会进一步的提升。
+
+## **参考文献**
+[NATURAL LANGUAGE INFERENCE OVER INTERACTION SPACE](https://arxiv.org/pdf/1709.04348.pdf)
