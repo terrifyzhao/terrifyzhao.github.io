@@ -30,7 +30,7 @@ $$
 
 
 ### **attentively connected RNN**
-本层也是该模型的关键所在，这里作者采用了5层BiLSTM堆叠在一起加上DenseNet的结构，我们详细看一下，$l$表示的是BiLSTM的层数，$t$表示的是时刻，其隐藏状态的值为：
+本层也是该模型的关键所在，这里作者采用了5层BiLSTM堆叠在一起加上DenseNet的结构并循环了4次，我们详细看一下，$l$表示的是BiLSTM的层数，$t$表示的是时刻，其隐藏状态的值为：
 
 $$
 h_t^l = H(x_t^l,h_{t-1}^l) \\
@@ -59,15 +59,28 @@ e_{i,j} = cos(h_{p_i},h_{h_i}) \\
 a_{p_i} = \sum^J_{j=1} \alpha_{i,j}h_{h_j}
 $$
 
-此时，输入到下一层的值就是由三部分构成了，我们再看下隐藏状态
+此时，输入到下一层的值就是由三部分构成了，即下图红色部分所示，隐藏状态值为：
 
 $$
 h_t^l = H(x_t^l,h_{t-1}^l) \\
 x_t^l = [h_t^{l-1};a_t^{l-1};x_t^{l-1}]
 $$
 
-## **小结**
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-06-03-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDRCN/pic2.jpg)
 
+此时得到的值其实维度是很大的，并且参数量很大，作者为了压缩维度加入了一个autoencoder，作者设置的是200个隐藏节点的RNN结构网络，代码中我会使用LSTM。
+
+### **interaction and prediction layer**
+本层的内容就很简单了，首先把上一层得到的值经过最大池化层，然后池化后的结果做一个相关处理，作者采用了三种关联策略，分别是对位相加，对位相减，对位取模，别和原来的值拼接在一起。
+
+$$
+v = [p;h;p+h;p-h;|p-h|]
+$$
+
+最后把得到的结果送入2个带relu激活函数的全连接层1个不带的全连接层和softmax层。
+
+## **小结**
+DRCN在我看来就是DIIN的一个增强版本，把DIIN每一个模块的结构都变得更加复杂化。这也反应出了目前深度学习论文质量的参差不齐（此处并没有diss作者的意思），在没有理论支撑下，只要少量的结构改动参数就会变多，在保证不过拟合的情况下必然能对结果有进一步提升，希望在未来能看到更多像transformer这样的网络结构，而不是简单的组件模块堆砌。
 
 ## **参考文献**
-[Semantic Sentence Matching with Densely-connected Recurrent and Co-attentive Information]([https://arxiv.org/pdf/1805.11360.pdf](https://arxiv.org/pdf/1805.11360.pdf))
+[Semantic Sentence Matching with Densely-connected Recurrent and Co-attentive Information]([https://arxiv.org/pdf/1805.11360.pdf](https://arxiv.org/pdf/1805.11360.pdf)
