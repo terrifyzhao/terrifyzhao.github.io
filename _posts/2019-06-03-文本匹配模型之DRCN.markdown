@@ -1,0 +1,29 @@
+---
+layout: post
+title: '# 文本匹配模型之DRCN'
+subtitle: 'DIIN讲解'
+date: 2019-05-30
+categories: NLP
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-05-30-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDIIN/cover.jpg'
+tags: NLP
+---
+
+
+本文是我的匹配模型合集的其中一期，如果你想了解更多的匹配模型，欢迎参阅我的另一篇博文[匹配模型合集](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E5%90%88%E9%9B%86.html)
+
+所有的模型均采用tensorflow进行了实现，欢迎start，[代码地址](https://github.com/terrifyzhao/text_matching)
+
+## **简介**
+DRCN和DIIN的结构十分相似，包括输入层与特征提取层，  DRCN在特征提取阶段结合了DenseNet的连接策略与Attention机制，在interaction阶段，也、采取了更加多样化的交互策略，接下来就为大家详细介绍一下。
+
+## **结构**
+DRCN分为三层，word representation layer、attentively connected RNN与interaction and prediction layer，其最核心的结构还是在于attentively connected RNN，总体结构如下图所示
+
+
+
+
+## **小结**
+
+
+## **参考文献**
+[Semantic Sentence Matching with Densely-connected Recurrent and Co-attentive Information]([https://arxiv.org/pdf/1805.11360.pdf](https://arxiv.org/pdf/1805.11360.pdf))
