@@ -19,8 +19,52 @@ DRCN和DIIN的结构十分相似，包括输入层与特征提取层，  DRCN在
 ## **结构**
 DRCN分为三层，word representation layer、attentively connected RNN与interaction and prediction layer，其最核心的结构还是在于attentively connected RNN，总体结构如下图所示
 
+![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-06-03-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDRCN/pic1.jpg)
+
+### **word representation layer**
+输入层包括四个部分，预训练的词向量，字向量与一个exact match flag，词向量采用w2v或glove，并且词向量还分为了固定形式和更新形式，固定模式即不修改预训练的词向量，更新模式是指根据当前任务动态调整embedding matrix，字向量采用的是embedding层来生成，然后过了一下卷积层和最大池化层，exact match flag是一个标志位，如果两个序列中有相同的词就标记位1，否则标记位0，最后将这四部分拼接起来。
+
+$$
+p_i = [e_{p_i}^{tr};e_{p_i}^{fix};c_{p_i};f_{p_i}]
+$$
 
 
+### **attentively connected RNN**
+本层也是该模型的关键所在，这里作者采用了5层BiLSTM堆叠在一起加上DenseNet的结构，我们详细看一下，$l$表示的是BiLSTM的层数，$t$表示的是时刻，其隐藏状态的值为：
+
+$$
+h_t^l = H(x_t^l,h_{t-1}^l) \\
+x_t^l = h_t^{l-1}
+$$
+
+我们知道这样的结构在结构很深的时候很容易出现梯度消失或者梯度爆炸的情况，因此提出来了ResNet来解决这个问题，隐藏状态的值也变为了：
+
+$$
+h_t^l = H(x_t^l,h_{t-1}^l) \\
+x_t^l = h_t^{l-1}+x_t^{l-1}
+$$
+
+然而残缺网络的结构也存在一定的弊端，其会阻碍信息在网络间的传递，因此DenseNet应运而生，其尾部不是相加的结构，而是拼接，这样既不阻碍信息的传递，也能保留原有信息，即使是第一层的输出值也能有效传递到最后一层，避免了防止梯度消失等问题，其隐藏状态为：
+
+$$
+h_t^l = H(x_t^l,h_{t-1}^l) \\
+x_t^l = [h_t^{l-1};x_t^{l-1}]
+$$
+
+除了DenseNet的结构以外，这一层还引入了attention机制，attention在很多领域都取得了不错的成绩包括nlp。设经过BiLSTM之后的值为$h_{p_i}$与$h_{h_i}$，首先计算attention matrix，采用的是余弦相似度，然后经过softmax处理后计算出加权后的值，注意$p$加权后的值是和$h$相乘。
+
+$$
+e_{i,j} = cos(h_{p_i},h_{h_i}) \\
+\alpha_{i,j} = \frac{exp(e_{i,j})}{\sum^J_{k=1}exp(e_{i,k})} \\
+a_{p_i} = \sum^J_{j=1} \alpha_{i,j}h_{h_j}
+$$
+
+此时，输入到下一层的值就是由三部分构成了，我们再看下隐藏状态
+
+$$
+h_t^l = H(x_t^l,h_{t-1}^l) \\
+x_t^l = [h_t^{l-1};a_t^{l-1};x_t^{l-1}]
+$$
 
 ## **小结**
 
