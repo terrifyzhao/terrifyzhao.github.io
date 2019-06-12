@@ -4,7 +4,7 @@ title: 'tensorflow word2vec源码分析'
 subtitle: 'word2vec源码分析'
 date: 2019-06-11
 categories: NLP
-cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-06-03-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDRCN/cover.jpg'
+cover: 'https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-06-11-tensorflow%20word2vec%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/cover.jpg'
 tags: NLP
 ---
 
@@ -238,4 +238,4 @@ def nce_loss(weights, biases, inputs, labels, num_sampled, num_classes,
 
 最后给出tensorflow官方对于[字词的向量表示法](https://tensorflow.google.cn/tutorials/representation/word2vec)的讲解
 
-
+官方的代码输入数据是一个整段的文本，如果对于一行一行的文本数据，需要对数据处理部分进行代码的修改，如果您不知道该如何处理，不妨参考下[我的代码](https://github.com/terrifyzhao/text_matching/blob/master/w2v.py)
