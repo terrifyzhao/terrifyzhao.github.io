@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '# 文本匹配模型之DRCN'
+title: '文本匹配模型之DRCN'
 subtitle: 'DIIN讲解'
 date: 2019-05-30
 categories: NLP
@@ -9,7 +9,9 @@ tags: NLP
 ---
 
 
-本文是我的匹配模型合集的其中一期，如果你想了解更多的匹配模型，欢迎参阅我的另一篇博文[匹配模型合集](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E5%90%88%E9%9B%86.html)
+
+
+本文是我的匹配模型合集的其中一期，如果你想了解更多的匹配模型，欢迎参阅我的另一篇博文[匹配模型合集](https://blog.csdn.net/u012526436/article/details/90179466)
 
 所有的模型均采用tensorflow进行了实现，欢迎start，[代码地址](https://github.com/terrifyzhao/text_matching)
 
@@ -22,7 +24,7 @@ DRCN分为三层，word representation layer、attentively connected RNN与inter
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-06-03-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDRCN/pic1.jpg)
 
 ### **word representation layer**
-输入层包括四个部分，预训练的词向量，字向量与一个exact match flag，词向量采用w2v或glove，并且词向量还分为了固定形式和更新形式，固定模式即不修改预训练的词向量，更新模式是指根据当前任务动态调整embedding matrix，字向量采用的是embedding层来生成，然后过了一下卷积层和最大池化层，exact match flag是一个标志位，如果两个序列中有相同的词就标记位1，否则标记位0，最后将这四部分拼接起来。
+输入层包括四个部分，预训练的词向量，字向量与一个exact match flag，词向量采用w2v或glove，并且词向量还分为了静态与动态形式，静态形式即不修改预训练的词向量，动态形式是指根据当前任务动态调整embedding matrix，字向量采用的是embedding层来生成，然后过了一下卷积层和最大池化层，exact match flag是一个标志位，如果两个序列中有相同的词就标记位1，否则标记位0，最后将这四部分拼接起来。
 
 $$
 p_i = [e_{p_i}^{tr};e_{p_i}^{fix};c_{p_i};f_{p_i}]
@@ -68,10 +70,10 @@ $$
 
 ![](https://raw.githubusercontent.com/terrifyzhao/terrifyzhao.github.io/master/assets/img/2019-06-03-%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDRCN/pic2.jpg)
 
-此时得到的值其实维度是很大的，并且参数量很大，作者为了压缩维度加入了一个autoencoder，作者设置的是200个隐藏节点的RNN结构网络，代码中我会使用LSTM。
+此时得到的值其实维度是很大的，并且参数量也很大，作者为了压缩维度加入了一个200个节点的autoencoder来降低维度。
 
 ### **interaction and prediction layer**
-本层的内容就很简单了，首先把上一层得到的值经过最大池化层，然后池化后的结果做一个相关处理，作者采用了三种关联策略，分别是对位相加，对位相减，对位取模，别和原来的值拼接在一起。
+本层的内容就很简单了，首先把上一层得到的值经过最大池化层，然后池化后的结果做一个相关处理，作者采用了三种关联策略，分别是对位相加，对位相减，对位取模，并和原来的值拼接在一起。
 
 $$
 v = [p;h;p+h;p-h;|p-h|]
@@ -80,7 +82,8 @@ $$
 最后把得到的结果送入2个带relu激活函数的全连接层1个不带的全连接层和softmax层。
 
 ## **小结**
-DRCN在我看来就是DIIN的一个增强版本，把DIIN每一个模块的结构都变得更加复杂化。这也反应出了目前深度学习论文质量的参差不齐（此处并没有diss作者的意思），在没有理论支撑下，只要少量的结构改动参数就会变多，在保证不过拟合的情况下必然能对结果有进一步提升，希望在未来能看到更多像transformer这样的网络结构，而不是简单的组件模块堆砌。
+DRCN在我看来就是DIIN的一个增强版本，把DIIN每一个模块的结构都变得更加复杂化。这也反应出了目前深度学习论文的一个现状，在没有理论支撑下，只要少量的结构改动参数就会变多，在保证不过拟合的情况下必然能对结果有进一步提升，希望在未来能看到更多像transformer这样的网络结构，而不是简单的组件模块堆砌。
 
 ## **参考文献**
 [Semantic Sentence Matching with Densely-connected Recurrent and Co-attentive Information]([https://arxiv.org/pdf/1805.11360.pdf](https://arxiv.org/pdf/1805.11360.pdf)
+

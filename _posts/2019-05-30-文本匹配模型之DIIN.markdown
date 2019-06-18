@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '# 文本匹配模型之DIIN'
+title: '文本匹配模型之DIIN'
 subtitle: 'DIIN讲解'
 date: 2019-05-30
 categories: NLP

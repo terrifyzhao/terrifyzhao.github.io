@@ -17,20 +17,25 @@ tags: NLP
 
 项目持续更新中
 
+## [DSSM详解](https://terrifyzhao.github.io/2019/05/14/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDSSM.html)
+## [ESIM详解](https://terrifyzhao.github.io/2019/05/20/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BESIM.html)
 ## [ABCNN详解](https://terrifyzhao.github.io/2019/05/13/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BABCNN.html)
-## [DSSM详解] 待更新
-## [ConvNet详解] 待更新
-## [ESIM详解] 待更新
-## [BiMPM详解] 待更新
+## [BiMPM详解](https://terrifyzhao.github.io/2019/03/19/BiMPM%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB.html)
+## [DIIN详解](https://terrifyzhao.github.io/2019/05/30/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDIIN.html)
+## [DRCN详解](https://terrifyzhao.github.io/2019/05/30/%E6%96%87%E6%9C%AC%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%9E%8B%E4%B9%8BDRCN.html)
 
 测试集结果对比：
 
-模型 | loss | acc | 论文地址
-:-: | :-: | :-: | :-: |
-DSSM | 0.7613157 | 0.6864 | [DSSM](https://posenhuang.github.io/papers/cikm2013_DSSM_fullversion.pdf) |
-ConvNet | 0.6872447 | 0.6977 | [ConvNet](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.723.6492&rep=rep1&type=pdf) |
-ESIM | 0.55444807| 0.736 | [ESIM](https://arxiv.org/pdf/1609.06038.pdf) |
-BiMPM | 0.0| 0.0 | [BiMPM](https://arxiv.org/pdf/1702.03814.pdf) |
+
+模型 | loss | acc | 输入说明 | 论文地址
+:-: | :-: | :-: | :-: | :-: |
+DSSM | 0.7613157 | 0.6864 | 字向量 | [DSSM](https://posenhuang.github.io/papers/cikm2013_DSSM_fullversion.pdf) |
+ConvNet | 0.6872447 | 0.6977 | 字向量 | [ConvNet](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.723.6492&rep=rep1&type=pdf) |
+ESIM | 0.55444807| 0.736 | 字向量 | [ESIM](https://arxiv.org/pdf/1609.06038.pdf) |
+ABCNN | 0.5771452| 0.7503 | 字向量 | [ABCNN](https://arxiv.org/pdf/1512.05193.pdf) |
+BiMPM | 0.4852| 0.764 | 字向量+静态词向量 | [BiMPM](https://arxiv.org/pdf/1702.03814.pdf) |
+DIIN | 0.48298636| 0.7694 | 字向量+动态词向量 | [DIIN](https://arxiv.org/pdf/1709.04348.pdf) |
+DRCN | 0.6549849 | 0.7811 | 字向量+静态词向量+动态词向量+是否有相同词 | [DRCN](https://arxiv.org/pdf/1805.11360.pdf) |
 
 ## [代码地址](https://github.com/terrifyzhao/text_matching)
 
